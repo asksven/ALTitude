@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Values for the update interval. -->
+    <string-array name="intervalLabels" translatable="false">
+        <item>Never</item>
+        <item>5 Min.</item>
+        <item>15 Min.</item>
+        <item>30 Min.</item>
+        <item>60 Min.</item>
+        <item>Automatically</item>
+    </string-array>
+ 
+     <string-array name="intervalValues">
+        <item name="0">-1</item>
+        <item name="1">5</item>
+        <item name="2">15</item>
+        <item name="3">30</item>
+        <item name="4">60</item>
+        <item name="5">0</item>
+    </string-array>
+
+</resources>

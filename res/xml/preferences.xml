@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen
+  xmlns:android="http://schemas.android.com/apk/res/android">
+	<CheckBoxPreference 
+		android:key="start_on_boot"
+		android:summary="Start service on boot"
+		android:title="Start Service on Boot" 
+		android:defaultValue="false"
+    />    
+
+	<CheckBoxPreference 
+		android:key="hide_since"
+		android:summary="Hide or show the time since the stat is computed"
+		android:title="Hide time since stat begin" 
+		android:defaultValue="true"
+    />    
+    <ListPreference 
+            android:key="update_interval"
+            android:title="Update Interval"
+            android:summary="How often will the service update Latitude"
+            android:defaultValue="0" 
+            android:entries="@array/intervalLabels"
+            android:entryValues="@array/intervalValues"
+        />
+        
+        
+</PreferenceScreen>
