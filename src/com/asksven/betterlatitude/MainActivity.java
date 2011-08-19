@@ -257,7 +257,7 @@ public class MainActivity extends Activity implements LocationListener
 	{
 		try
 		{
-			DataStorage.LogToFile(LocationService.LOGFILE, TAG + " Service Updating Latitude with position Lat: "
+			Logger.i(TAG, " Service Updating Latitude with position Lat: "
 					+ String.valueOf(m_dLat)
 					+ " Long: " + String.valueOf(m_dLong));
 			

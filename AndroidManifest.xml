@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="1" android:versionName="0.1.0.0"
+<manifest android:versionCode="1" android:versionName="0.1.1.0"
     package="com.asksven.betterlatitude" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="7"/>
     
@@ -26,5 +26,11 @@
         <activity android:name=".PreferencesActivity"/>
         
         <service android:name=".LocationService"/>
+        
+        <receiver android:name=".broadcast.BroadcastHandler">
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+		</receiver>
     </application>
 </manifest>

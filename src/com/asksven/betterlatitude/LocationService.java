@@ -18,23 +18,10 @@ package com.asksven.betterlatitude;
 
 
 
-import com.asksven.android.common.utils.DataStorage;
-import com.asksven.betterlatitude.credentials.CredentialStore;
-import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
-import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
-import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson.JacksonFactory;
-import com.google.api.services.latitude.Latitude;
-import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
-
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.location.Criteria;
 import android.location.Location;
@@ -46,6 +33,16 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+import com.asksven.betterlatitude.credentials.CredentialStore;
+import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
+import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+import com.google.api.client.http.HttpTransport;
+import com.google.api.client.http.javanet.NetHttpTransport;
+import com.google.api.client.json.JsonFactory;
+import com.google.api.client.json.jackson.JacksonFactory;
+import com.google.api.services.latitude.Latitude;
+import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
 
 
 /**
@@ -61,7 +58,7 @@ public class LocationService extends Service implements LocationListener
 
 	String m_strLocProvider;
 	private LocationManager m_LocationManager;
-	public static final String LOGFILE = "BetterLatitude.log";
+
 	public static final int LOC_INTERVAL = 15 * 60 * 1000; // 15 Minutes
 	public static final int LOC_ACCURACY = 2000;
 	private static final String TAG = "LocationService";
@@ -174,7 +171,7 @@ public class LocationService extends Service implements LocationListener
 	{
 		try
 		{
-			DataStorage.LogToFile(LOGFILE, TAG + " Service Updating Latitude with position Lat: "
+			Logger.i(TAG, " Service Updating Latitude with position Lat: "
 					+ String.valueOf(m_dLat)
 					+ " Long: " + String.valueOf(m_dLong));
 			JsonFactory jsonFactory = new JacksonFactory();
@@ -200,9 +197,9 @@ public class LocationService extends Service implements LocationListener
 		}
 		catch (Exception ex)
 		{
-			DataStorage.LogToFile(LOGFILE, "An error occured in setLocationApiCall()");
-			DataStorage.LogToFile(LOGFILE, ex.getStackTrace());
-			ex.printStackTrace();
+			Logger.i(TAG, "An error occured in setLocationApiCall() " +  ex.getMessage());
+//			Logger.i(TAG, ex.getStackTrace());
+			
 		}
 	}
 
