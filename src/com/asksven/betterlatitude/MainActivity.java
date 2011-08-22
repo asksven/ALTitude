@@ -25,6 +25,7 @@ import android.widget.Toast;
 
 
 import com.asksven.android.common.utils.DataStorage;
+import com.asksven.batterlatitude.utils.Logger;
 import com.asksven.betterlatitude.credentials.CredentialStore;
 import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.R;
@@ -47,10 +48,11 @@ public class MainActivity extends Activity implements LocationListener
 	/**
 	 * Constants for menu items
 	 */
-	private final int MENU_ITEM_0 = 0;
-	private final int MENU_ITEM_1 = 1;
-	private final int MENU_ITEM_2 = 2;
-	private final int MENU_ITEM_3 = 3;
+	private final int MENU_ITEM_UPDATE_LATITUDE = 0;
+	private final int MENU_ITEM_GET_LATITUDE_LOC = 1;
+	private final int MENU_ITEM_GET_CELL_LOC = 2;
+	private final int MENU_ITEM_PREFS = 3;
+	private final int MENU_ITEM_MAP = 4;
 	
 	private SharedPreferences prefs;
 	private TextView textViewLatitude;
@@ -168,11 +170,11 @@ public class MainActivity extends Activity implements LocationListener
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-    	menu.add(0, MENU_ITEM_0, 0, "Update Location");
-    	menu.add(0, MENU_ITEM_1, 0, "Request Location from Latitude");
-    	menu.add(0, MENU_ITEM_2, 0, "Show Location from Cell");
-    	
-    	menu.add(0, MENU_ITEM_3, 0, "Preferences");
+    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Location");
+    	menu.add(0, MENU_ITEM_GET_LATITUDE_LOC, 0, "Request Location from Latitude");
+    	menu.add(0, MENU_ITEM_GET_CELL_LOC, 0, "Show Location from Cell");
+    	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
+    	menu.add(0, MENU_ITEM_MAP, 0, "Map");
     	
     	return true;
     }
@@ -186,18 +188,22 @@ public class MainActivity extends Activity implements LocationListener
     {  
         switch (item.getItemId())
         {  
-	        case MENU_ITEM_0: // update location  
+	        case MENU_ITEM_UPDATE_LATITUDE: // update location  
 	        	setLocationApiCall(); //performApiCall();
 	        	break;	
-	        case MENU_ITEM_1: // retrieve location from Latitude  
+	        case MENU_ITEM_GET_LATITUDE_LOC: // retrieve location from Latitude  
 	        	getLocationApiCall(); //performApiCall();
 	        	break;
-	        case MENU_ITEM_2: // retrieve location from Cell  
+	        case MENU_ITEM_GET_CELL_LOC: // retrieve location from Cell  
 	        	showLocation(); // getLocationApiCall(); //performApiCall();
 	        	break;	
-	        case MENU_ITEM_3: // prefs  
+	        case MENU_ITEM_PREFS: // prefs  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
 	            this.startActivity(intentPrefs);
+	        	break;	
+	        case MENU_ITEM_MAP: // map  
+	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
+	            this.startActivity(intentMap);
 	        	break;	
 
         }

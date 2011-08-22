@@ -1,7 +1,7 @@
 /**
  * 
  */
-package com.asksven.betterlatitude;
+package com.asksven.batterlatitude.utils;
 
 import android.util.Log;
 

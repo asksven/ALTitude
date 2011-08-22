@@ -33,6 +33,8 @@ import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.asksven.batterlatitude.utils.Logger;
 import com.asksven.betterlatitude.credentials.CredentialStore;
 import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
