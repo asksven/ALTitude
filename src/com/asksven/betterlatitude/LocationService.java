@@ -60,6 +60,8 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
 public class LocationService extends Service implements LocationListener, PropertyChangeListener
 {
 	private NotificationManager mNM;
+	
+	public static String SERVICE_NAME = "com.asksven.betterlatitude.LocationService";
 
 	String m_strLocProvider;
 	private LocationManager m_LocationManager;
@@ -185,8 +187,6 @@ public class LocationService extends Service implements LocationListener, Proper
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override

@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import android.app.Activity;
+import android.app.ActivityManager;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -72,6 +74,7 @@ public class MainActivity extends Activity implements LocationListener
 	private TextView textViewLatitude;
 	private TextView textViewLatitudeLoc;
 	private TextView textViewCellLoc;
+	private TextView textViewServiceStatus;
 
 	private double m_dLat = -1;
 	private double m_dLong = -1;
@@ -97,6 +100,8 @@ public class MainActivity extends Activity implements LocationListener
 		this.textViewLatitudeLoc = (TextView) findViewById(R.id.latitude_loc);
 		this.textViewLatitude = (TextView) findViewById(R.id.response_code);
 		this.textViewCellLoc = (TextView) findViewById(R.id.cell_loc);
+		this.textViewServiceStatus = (TextView) findViewById(R.id.service_status);
+		
 		// Launch the OAuth flow to get an access token required to do authorized API calls.
 		// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
 		launchOauth.setOnClickListener(new View.OnClickListener()
@@ -221,7 +226,15 @@ public class MainActivity extends Activity implements LocationListener
 	        	break;	
 	        case MENU_ITEM_GET_LOC: // retrieve location from Latitude  
 	        	getLocationApiCall();
-	        	getCellLocation(); 
+	        	getCellLocation();
+	        	if (isMyServiceRunning())
+	        	{
+	        		textViewCellLoc.setText("Started");
+	        	}
+	        	else
+	        	{
+	        		textViewCellLoc.setText("Stopped");
+	        	}
 	        	break;	
 	        case MENU_ITEM_PREFS: // prefs  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
@@ -356,11 +369,33 @@ public class MainActivity extends Activity implements LocationListener
 		else
 		{
 			Intent i = new Intent();
-			i.setClassName( "com.asksven.betterlatitude", "com.asksven.betterlatitude.LocationService" );
+			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
 			startService( i );
 			Log.i(getClass().getSimpleName(), "startService()");
 			m_bIsStarted = true;
+        	if (isMyServiceRunning())
+        	{
+        		textViewCellLoc.setText("Started");
+        	}
+        	else
+        	{
+        		textViewCellLoc.setText("Stopped");
+        	}
+
 		}
+	}
+	
+	private boolean isMyServiceRunning()
+	{
+	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+	    {
+	        if (LocationService.SERVICE_NAME.equals(service.service.getClassName()))
+	        {
+	            return true;
+	        }
+	    }
+	    return false;
 	}
 
 }

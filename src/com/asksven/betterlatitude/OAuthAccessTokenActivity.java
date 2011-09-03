@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2011 asksven
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.asksven.betterlatitude;
 
 import java.io.IOException;
@@ -26,14 +41,16 @@ import com.google.api.client.json.jackson.JacksonFactory;
  * After the request is authorized by the user, the callback URL will be intercepted here.
  * 
  */
-public class OAuthAccessTokenActivity extends Activity {
+public class OAuthAccessTokenActivity extends Activity
+{
 
 	final String TAG = getClass().getName();
 	
 	private SharedPreferences prefs;
 
 	@Override
-	public void onCreate(Bundle savedInstanceState) {
+	public void onCreate(Bundle savedInstanceState)
+	{
 		super.onCreate(savedInstanceState);
         Log.i(TAG, "Starting task to retrieve request token.");
         this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
@@ -43,7 +60,8 @@ public class OAuthAccessTokenActivity extends Activity {
 	}
 	
 	@Override
-	protected void onResume() {
+	protected void onResume()
+	{
 		super.onResume();
 		WebView webview = new WebView(this);
         webview.getSettings().setJavaScriptEnabled(true);  
@@ -52,19 +70,25 @@ public class OAuthAccessTokenActivity extends Activity {
         String authorizationUrl = new GoogleAuthorizationRequestUrl(OAuth2ClientCredentials.CLIENT_ID, OAuth2ClientCredentials.REDIRECT_URI, OAuth2ClientCredentials.SCOPE).build();
         
         /* WebViewClient must be set BEFORE calling loadUrl! */  
-        webview.setWebViewClient(new WebViewClient() {  
+        webview.setWebViewClient(new WebViewClient()
+        {  
 
         	@Override  
-            public void onPageStarted(WebView view, String url,Bitmap bitmap)  {  
+            public void onPageStarted(WebView view, String url,Bitmap bitmap) 
+        	{  
         		System.out.println("onPageStarted : " + url);
             }
         	@Override  
-            public void onPageFinished(WebView view, String url)  {  
+            public void onPageFinished(WebView view, String url) 
+        	{  
             	
-            	if (url.startsWith(OAuth2ClientCredentials.REDIRECT_URI)) {
-            		try {
+            	if (url.startsWith(OAuth2ClientCredentials.REDIRECT_URI))
+            	{
+            		try
+            		{
 						
-            			if (url.indexOf("code=")!=-1) {
+            			if (url.indexOf("code=")!=-1)
+            			{
             			
 	            			String code = extractCodeFromUrl(url);
 							
@@ -79,13 +103,17 @@ public class OAuthAccessTokenActivity extends Activity {
 				  		      credentialStore.write(accessTokenResponse);
 				  		      view.setVisibility(View.INVISIBLE);
 				  		      startActivity(new Intent(OAuthAccessTokenActivity.this,MainActivity.class));
-            			} else if (url.indexOf("error=")!=-1) {
+            			}
+            			else if (url.indexOf("error=")!=-1)
+            			{
             				view.setVisibility(View.INVISIBLE);
             				new SharedPreferencesCredentialStore(prefs).clearCredentials();
             				startActivity(new Intent(OAuthAccessTokenActivity.this,MainActivity.class));
             			}
             			
-					} catch (IOException e) {
+					}
+            		catch (IOException e)
+            		{
 						e.printStackTrace();
 					}
 
@@ -93,7 +121,9 @@ public class OAuthAccessTokenActivity extends Activity {
                 System.out.println("onPageFinished : " + url);
   		      
             }
-			private String extractCodeFromUrl(String url) {
+			
+        	private String extractCodeFromUrl(String url)
+			{
 				return url.substring(OAuth2ClientCredentials.REDIRECT_URI.length()+7,url.length());
 			}  
         });  
