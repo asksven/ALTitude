@@ -6,21 +6,22 @@
 		android:summary="Start service on boot"
 		android:title="Start Service on Boot" 
 		android:defaultValue="false"
-    />    
-
-	<CheckBoxPreference 
-		android:key="hide_since"
-		android:summary="Hide or show the time since the stat is computed"
-		android:title="Hide time since stat begin" 
-		android:defaultValue="true"
-    />    
+    android:enabled="false"/>    
     <ListPreference 
             android:key="update_interval"
-            android:title="Update Interval"
+            android:title="Interval"
             android:summary="How often will the service update Latitude"
             android:defaultValue="0" 
             android:entries="@array/intervalLabels"
             android:entryValues="@array/intervalValues"
+        />
+    <ListPreference 
+            android:key="update_accuracy"
+            android:title="Accuracy"
+            android:summary="With what precision will the service update Latitude"
+            android:defaultValue="0" 
+            android:entries="@array/accuracyLabels"
+            android:entryValues="@array/accuracyValues"
         />
         
         
