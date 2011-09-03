@@ -1,3 +1,18 @@
+/*
+ * Copyright (C) 2011 asksven
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *      http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
 package com.asksven.betterlatitude;
 
 import java.text.DateFormat;
@@ -49,14 +64,14 @@ public class MainActivity extends Activity implements LocationListener
 	 * Constants for menu items
 	 */
 	private final int MENU_ITEM_UPDATE_LATITUDE = 0;
-	private final int MENU_ITEM_GET_LATITUDE_LOC = 1;
-	private final int MENU_ITEM_GET_CELL_LOC = 2;
-	private final int MENU_ITEM_PREFS = 3;
-	private final int MENU_ITEM_MAP = 4;
+	private final int MENU_ITEM_GET_LOC = 1;
+	private final int MENU_ITEM_PREFS = 2;
+	private final int MENU_ITEM_MAP = 3;
 	
 	private SharedPreferences prefs;
 	private TextView textViewLatitude;
-	private TextView textViewLoc;
+	private TextView textViewLatitudeLoc;
+	private TextView textViewCellLoc;
 
 	private double m_dLat = -1;
 	private double m_dLong = -1;
@@ -79,8 +94,9 @@ public class MainActivity extends Activity implements LocationListener
 		Button launchOauth = (Button) findViewById(R.id.btn_launch_oauth);
 		Button clearCredentials = (Button) findViewById(R.id.btn_clear_credentials);
 
+		this.textViewLatitudeLoc = (TextView) findViewById(R.id.latitude_loc);
 		this.textViewLatitude = (TextView) findViewById(R.id.response_code);
-		this.textViewLoc = (TextView) findViewById(R.id.loc_info);
+		this.textViewCellLoc = (TextView) findViewById(R.id.cell_loc);
 		// Launch the OAuth flow to get an access token required to do authorized API calls.
 		// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
 		launchOauth.setOnClickListener(new View.OnClickListener()
@@ -123,8 +139,23 @@ public class MainActivity extends Activity implements LocationListener
 	protected void onResume()
 	{
 		super.onResume();
-		// max every 5 minutes or when moved by 1 Km
-		m_LocationManager.requestLocationUpdates(m_strLocProvider, LocationService.LOC_INTERVAL, LocationService.LOC_INTERVAL, this);
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	String strInterval = prefs.getString("update_interval", "15");
+    	String strAccuracy = prefs.getString("update_accuracy", "2000");
+    	    	
+		int iInterval = 15 * 60 * 1000;
+		int iAccuracy = 2000;
+		try
+    	{
+			iInterval = Integer.valueOf(strInterval);
+			iAccuracy = Integer.valueOf(strAccuracy);
+    	}
+    	catch (Exception e)
+    	{
+    		Logger.e(TAG, "Error reading prefernces, using defaults");
+    	}
+
+		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
 	}
 
 	/* Remove the locationlistener updates when Activity is paused */
@@ -145,8 +176,6 @@ public class MainActivity extends Activity implements LocationListener
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
-		// TODO Auto-generated method stub
-
 	}
 
 	@Override
@@ -171,8 +200,7 @@ public class MainActivity extends Activity implements LocationListener
     public boolean onCreateOptionsMenu(Menu menu)
     {  
     	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Location");
-    	menu.add(0, MENU_ITEM_GET_LATITUDE_LOC, 0, "Request Location from Latitude");
-    	menu.add(0, MENU_ITEM_GET_CELL_LOC, 0, "Show Location from Cell");
+    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Request Location");
     	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
     	menu.add(0, MENU_ITEM_MAP, 0, "Map");
     	
@@ -191,11 +219,9 @@ public class MainActivity extends Activity implements LocationListener
 	        case MENU_ITEM_UPDATE_LATITUDE: // update location  
 	        	setLocationApiCall(); //performApiCall();
 	        	break;	
-	        case MENU_ITEM_GET_LATITUDE_LOC: // retrieve location from Latitude  
-	        	getLocationApiCall(); //performApiCall();
-	        	break;
-	        case MENU_ITEM_GET_CELL_LOC: // retrieve location from Cell  
-	        	showLocation(); // getLocationApiCall(); //performApiCall();
+	        case MENU_ITEM_GET_LOC: // retrieve location from Latitude  
+	        	getLocationApiCall();
+	        	getCellLocation(); 
 	        	break;	
 	        case MENU_ITEM_PREFS: // prefs  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
@@ -247,11 +273,13 @@ public class MainActivity extends Activity implements LocationListener
 		    
 			LatitudeCurrentlocationResourceJson currentLocation = latitude.currentLocation.get().execute();
 			String locationAsString = convertLocationToString(currentLocation);
-			textViewLatitude.setText(locationAsString);
+			textViewLatitudeLoc.setText(locationAsString);
+			textViewLatitude.setText("OK");
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
+			textViewLatitudeLoc.setText("");
 			textViewLatitude.setText("Error occured : " + ex.getMessage());
 		}
 	}
@@ -287,20 +315,22 @@ public class MainActivity extends Activity implements LocationListener
 		    currentLocation.set("longitude", m_dLong);
 			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
 			String locationAsString = convertLocationToString(insertedLocation);
-			textViewLatitude.setText(locationAsString);
+			textViewLatitudeLoc.setText(locationAsString);
+			textViewLatitude.setText("OK");
 		}
 		catch (Exception ex)
 		{
 			ex.printStackTrace();
+			textViewLatitudeLoc.setText("");
 			textViewLatitude.setText("Error occured : " + ex.getMessage());
 		}
 	}
 
-	public void showLocation()
+	public void getCellLocation()
 	{
-		if (textViewLoc != null)
+		if (textViewCellLoc != null)
 		{
-			textViewLoc.setText("Lat: " + String.valueOf(m_dLat) + " Long: " + String.valueOf(m_dLong));
+			textViewCellLoc.setText("Lat: " + String.valueOf(m_dLat) + " Long: " + String.valueOf(m_dLong));
 		}
 	}
 	
