@@ -18,6 +18,9 @@ package com.asksven.betterlatitude;
 
 
 
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -54,15 +57,13 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
  * @author sven
  *
  */
-public class LocationService extends Service implements LocationListener
+public class LocationService extends Service implements LocationListener, PropertyChangeListener
 {
 	private NotificationManager mNM;
 
 	String m_strLocProvider;
 	private LocationManager m_LocationManager;
 
-	public static final int LOC_INTERVAL = 15 * 60 * 1000; // 15 Minutes
-	public static final int LOC_ACCURACY = 2000;
 	private static final String TAG = "LocationService";
 	
 	private boolean m_bRegistered = false;
@@ -90,23 +91,57 @@ public class LocationService extends Service implements LocationListener
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         
-        Criteria criteria = new Criteria();
-        
+        // register the location listener
+        this.registerLocationListener();
+   }
+
+    private void registerLocationListener()
+    {
+    	if (m_bRegistered)
+    	{
+        	// unregister the receiver
+    		m_LocationManager.removeUpdates(this);    		
+    	}
+
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	String strInterval = prefs.getString("update_interval", "15");
+    	String strAccuracy = prefs.getString("update_accuracy", "2000");
+    	    	
+		int iInterval = 15 * 60 * 1000;
+		int iAccuracy = 2000;
+		try
+    	{
+			iInterval = Integer.valueOf(strInterval);
+			iAccuracy = Integer.valueOf(strAccuracy);
+    	}
+    	catch (Exception e)
+    	{
+    		Logger.e(TAG, "Error reading prefernces, using defaults");
+    	}
+    	
+    	Criteria criteria = new Criteria();
+
 		// Get the location manager
 		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
         m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
-        // tried to fix bug http://code.google.com/p/android/issues/detail?id=3259
-		// by programmatically registering to the event
-        if (!m_bRegistered)
-        {
-        	// max every 5 minutes or when moved by 1 Km
-    		m_LocationManager.requestLocationUpdates(m_strLocProvider, LOC_INTERVAL, LOC_ACCURACY, this);
+		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
+	
+        m_bRegistered = true;
+            
+    }
+    
+    public void propertyChange(PropertyChangeEvent event)
+    {
+    	String strPropertyName = event.getPropertyName();
     	
-            m_bRegistered = true;
-        }
-   }
-
+    	if (strPropertyName.equals("update_interval") || strPropertyName.equals("update_accuracy"))
+    	{
+    		Logger.i(TAG, "Preferences have change. Register location listener again");
+    		// re-register location listener with new prefs
+    		this.registerLocationListener();
+    	}
+    }
     /** 
      * Called when service is started
      */
@@ -124,7 +159,7 @@ public class LocationService extends Service implements LocationListener
      */
     public void onDestroy()
     {        
-    	// unregister the broadcastreceiver
+    	// unregister the receiver
 		m_LocationManager.removeUpdates(this);
 
     }
