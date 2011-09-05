@@ -26,6 +26,7 @@ import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -57,7 +58,7 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
  * @author sven
  *
  */
-public class LocationService extends Service implements LocationListener, PropertyChangeListener
+public class LocationService extends Service implements LocationListener, OnSharedPreferenceChangeListener
 {
 	private NotificationManager mNM;
 	
@@ -95,6 +96,11 @@ public class LocationService extends Service implements LocationListener, Proper
         
         // register the location listener
         this.registerLocationListener();
+
+        // Set up a listener whenever a key changes
+    	PreferenceManager.getDefaultSharedPreferences(this)
+                .registerOnSharedPreferenceChangeListener(this);
+
    }
 
     private void registerLocationListener()
@@ -133,12 +139,11 @@ public class LocationService extends Service implements LocationListener, Proper
             
     }
     
-    public void propertyChange(PropertyChangeEvent event)
+    public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
-    	String strPropertyName = event.getPropertyName();
-    	
-    	if (strPropertyName.equals("update_interval") || strPropertyName.equals("update_accuracy"))
+    	if (key.equals("update_interval") || key.equals("update_accuracy"))
     	{
+    		
     		Logger.i(TAG, "Preferences have change. Register location listener again");
     		// re-register location listener with new prefs
     		this.registerLocationListener();
@@ -155,6 +160,7 @@ public class LocationService extends Service implements LocationListener, Proper
         
         return Service.START_STICKY;
     }
+    
     @Override
     /**
      * Called when Service is terminated
@@ -163,6 +169,9 @@ public class LocationService extends Service implements LocationListener, Proper
     {        
     	// unregister the receiver
 		m_LocationManager.removeUpdates(this);
+        // Unregister the listener whenever a key changes
+        PreferenceManager.getDefaultSharedPreferences(this)
+                .unregisterOnSharedPreferenceChangeListener(this);
 
     }
 
@@ -175,7 +184,8 @@ public class LocationService extends Service implements LocationListener, Proper
     // This is the object that receives interactions from clients.  See
     // RemoteService for a more complete example.
     private final IBinder mBinder = new LocalBinder();
-	@Override
+	
+    @Override
 	public void onLocationChanged(Location location)
 	{
 		m_dLat = location.getLatitude();
