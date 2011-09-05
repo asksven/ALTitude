@@ -11,7 +11,7 @@
             android:key="update_interval"
             android:title="Interval"
             android:summary="How often will the service update Latitude"
-            android:defaultValue="0" 
+            android:defaultValue="15" 
             android:entries="@array/intervalLabels"
             android:entryValues="@array/intervalValues"
         />
@@ -19,7 +19,7 @@
             android:key="update_accuracy"
             android:title="Accuracy"
             android:summary="With what precision will the service update Latitude"
-            android:defaultValue="0" 
+            android:defaultValue="2000" 
             android:entries="@array/accuracyLabels"
             android:entryValues="@array/accuracyValues"
         />
