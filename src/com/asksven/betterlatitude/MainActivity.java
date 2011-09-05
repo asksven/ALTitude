@@ -69,6 +69,7 @@ public class MainActivity extends Activity implements LocationListener
 	private final int MENU_ITEM_GET_LOC = 1;
 	private final int MENU_ITEM_PREFS = 2;
 	private final int MENU_ITEM_MAP = 3;
+	private final int MENU_ITEM_ABOUT = 4;
 	
 	private SharedPreferences prefs;
 	private TextView textViewLatitude;
@@ -204,10 +205,11 @@ public class MainActivity extends Activity implements LocationListener
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Location");
-    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Request Location");
+    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Latitude");
+    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Refresh");
     	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
     	menu.add(0, MENU_ITEM_MAP, 0, "Map");
+    	menu.add(0, MENU_ITEM_ABOUT, 0, "About");
     	
     	return true;
     }
@@ -229,11 +231,11 @@ public class MainActivity extends Activity implements LocationListener
 	        	getCellLocation();
 	        	if (isMyServiceRunning())
 	        	{
-	        		textViewCellLoc.setText("Started");
+	        		textViewServiceStatus.setText("Started");
 	        	}
 	        	else
 	        	{
-	        		textViewCellLoc.setText("Stopped");
+	        		textViewServiceStatus.setText("Stopped");
 	        	}
 	        	break;	
 	        case MENU_ITEM_PREFS: // prefs  
@@ -243,6 +245,10 @@ public class MainActivity extends Activity implements LocationListener
 	        case MENU_ITEM_MAP: // map  
 	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
 	            this.startActivity(intentMap);
+	        	break;	
+	        case MENU_ITEM_ABOUT: // About  
+	        	Intent intentAbout = new Intent(this, AboutActivity.class);
+	            this.startActivity(intentAbout);
 	        	break;	
 
         }
@@ -351,9 +357,9 @@ public class MainActivity extends Activity implements LocationListener
 			LatitudeCurrentlocationResourceJson currentLocation)
 	{
 		String timestampMs = (String) currentLocation.get("timestampMs");
-		DateFormat df= new  SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+		DateFormat df= new  SimpleDateFormat("HH:mm:ss");
 		Date d = new Date(Long.valueOf(timestampMs));
-		String locationAsString = "Current location : " + currentLocation.get("latitude") + " - " + currentLocation.get("longitude") + " at " + df.format(d);
+		String locationAsString = "Lat: " + currentLocation.get("latitude") + ", Long: " + currentLocation.get("longitude") + " @ " + df.format(d);
 		return locationAsString;
 	}
 	
@@ -375,11 +381,11 @@ public class MainActivity extends Activity implements LocationListener
 			m_bIsStarted = true;
         	if (isMyServiceRunning())
         	{
-        		textViewCellLoc.setText("Started");
+        		textViewServiceStatus.setText("Started");
         	}
         	else
         	{
-        		textViewCellLoc.setText("Stopped");
+        		textViewServiceStatus.setText("Stopped");
         	}
 
 		}
