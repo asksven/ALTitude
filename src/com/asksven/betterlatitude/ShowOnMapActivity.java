@@ -25,6 +25,8 @@ import android.os.Bundle;
 import android.os.Message;
 import android.view.Window;
 import android.widget.RelativeLayout;
+
+import com.asksven.betterlatitude.utils.Logger;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.google.android.maps.GeoPoint;
@@ -41,12 +43,17 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 	private LocationManager m_locationManager;
 	private PositionOverlay m_friendsOverlay;
 
+	/**
+	 * The logging TAG
+	 */
+	private static final String TAG = "ShowOnMapActivity";
+
 	public void onCreate(Bundle bundle)
 	{
 		super.onCreate(bundle);
 		setContentView(R.layout.map); // bind the layout to the activity
 
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
+//		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		// create a map view
 		RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mainlayout);
@@ -64,10 +71,20 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		m_mapController.setZoom(14); // Zoon 1 is world view
 		
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, //PASSIVE_PROVIDER, 
+		m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
 				60, 500, this);
 
 	}
+	
+	/* Remove the locationlistener updates when Activity is paused */
+	@Override
+	protected void onPause()
+	{
+		super.onPause();
+		m_locationManager.removeUpdates(this);
+		Logger.i(TAG, "Activity paused, removing location listener");
+	}
+
 
 	@Override
 	protected boolean isRouteDisplayed()
