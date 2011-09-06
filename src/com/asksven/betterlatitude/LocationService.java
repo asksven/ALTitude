@@ -90,6 +90,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Log.i(getClass().getSimpleName(), "onCreate called");
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
+        notifyStatus("Service started");
         
         // register the location listener
         this.registerLocationListener();
