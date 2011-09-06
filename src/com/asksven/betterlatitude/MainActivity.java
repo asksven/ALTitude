@@ -21,6 +21,7 @@ import java.util.Date;
 
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
@@ -29,6 +30,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.test.PerformanceTestCase;
@@ -42,9 +44,9 @@ import android.widget.Toast;
 
 
 import com.asksven.android.common.utils.DataStorage;
-import com.asksven.batterlatitude.utils.Logger;
 import com.asksven.betterlatitude.credentials.CredentialStore;
 import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.utils.Logger;
 import com.asksven.betterlatitude.R;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
@@ -77,6 +79,11 @@ public class MainActivity extends Activity implements LocationListener
 	private TextView textViewCellLoc;
 	private TextView textViewServiceStatus;
 
+	/**
+	 * a progess dialog to be used for long running tasks
+	 */
+	ProgressDialog m_progressDialog;
+	
 	private double m_dLat = -1;
 	private double m_dLong = -1;
 	
@@ -136,7 +143,8 @@ public class MainActivity extends Activity implements LocationListener
 		// Define the exactitude and update interval
 		m_LocationManager.requestLocationUpdates(m_strLocProvider, 400, 1, this);
 		// Performs an authorized API call.
-		getLocationApiCall();
+		new OauthLogin().execute("");
+		//getLocationApiCall();
 
 	}
 
@@ -170,11 +178,13 @@ public class MainActivity extends Activity implements LocationListener
 	{
 		super.onPause();
 		m_LocationManager.removeUpdates(this);
+		Logger.i(TAG, "Activity paused, removing location listener");
 	}
 
 	@Override
 	public void onLocationChanged(Location location)
 	{
+		Logger.i(TAG, "onLocationChanged called");
 		m_dLat = location.getLatitude();
 		m_dLong = location.getLongitude();
 	}
@@ -224,7 +234,8 @@ public class MainActivity extends Activity implements LocationListener
         switch (item.getItemId())
         {  
 	        case MENU_ITEM_UPDATE_LATITUDE: // update location  
-	        	setLocationApiCall(); //performApiCall();
+	        	new OauthLogin().execute("");
+	        	//setLocationApiCall(); //performApiCall();
 	        	break;	
 	        case MENU_ITEM_GET_LOC: // retrieve location from Latitude  
 	        	getLocationApiCall();
@@ -272,6 +283,7 @@ public class MainActivity extends Activity implements LocationListener
      */
 	private void getLocationApiCall()
 	{
+		Logger.i(TAG, "getLocationApiCall called");
 		try
 		{
 			JsonFactory jsonFactory = new JacksonFactory();
@@ -292,58 +304,18 @@ public class MainActivity extends Activity implements LocationListener
 		    
 			LatitudeCurrentlocationResourceJson currentLocation = latitude.currentLocation.get().execute();
 			String locationAsString = convertLocationToString(currentLocation);
-			textViewLatitudeLoc.setText(locationAsString);
-			textViewLatitude.setText("OK");
+//			textViewLatitudeLoc.setText(locationAsString);
+//			textViewLatitude.setText("OK");
 		}
 		catch (Exception ex)
 		{
+			Logger.e(TAG, "Exception in getLocationApiCall");
 			ex.printStackTrace();
-			textViewLatitudeLoc.setText("");
-			textViewLatitude.setText("Error occured : " + ex.getMessage());
+//			textViewLatitudeLoc.setText("");
+//			textViewLatitude.setText("Error occured : " + ex.getMessage());
 		}
 	}
 
-    /**
-     * Performs an authorized API call to retrieve the current location.
-     */
-	private void setLocationApiCall()
-	{
-		try
-		{
-			Logger.i(TAG, " Service Updating Latitude with position Lat: "
-					+ String.valueOf(m_dLat)
-					+ " Long: " + String.valueOf(m_dLong));
-			
-			JsonFactory jsonFactory = new JacksonFactory();
-			HttpTransport transport = new NetHttpTransport();
-			
-			CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
-			AccessTokenResponse accessTokenResponse = credentialStore.read();
-			
-			GoogleAccessProtectedResource accessProtectedResource = new GoogleAccessProtectedResource(accessTokenResponse.accessToken,
-			        transport,
-			        jsonFactory,
-			        OAuth2ClientCredentials.CLIENT_ID,
-			        OAuth2ClientCredentials.CLIENT_SECRET,
-			        accessTokenResponse.refreshToken);
-			
-		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
-		    latitude.apiKey = OAuth2ClientCredentials.API_KEY;
-		    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
-		    currentLocation.set("latitude", m_dLat);
-		    currentLocation.set("longitude", m_dLong);
-			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
-			String locationAsString = convertLocationToString(insertedLocation);
-			textViewLatitudeLoc.setText(locationAsString);
-			textViewLatitude.setText("OK");
-		}
-		catch (Exception ex)
-		{
-			ex.printStackTrace();
-			textViewLatitudeLoc.setText("");
-			textViewLatitude.setText("Error occured : " + ex.getMessage());
-		}
-	}
 
 	public void getCellLocation()
 	{
@@ -403,5 +375,38 @@ public class MainActivity extends Activity implements LocationListener
 	    }
 	    return false;
 	}
+	
+	// @see http://code.google.com/p/makemachine/source/browse/trunk/android/examples/async_task/src/makemachine/android/examples/async/AsyncTaskExample.java
+	// for more details
+	private class OauthLogin extends AsyncTask
+	{
+		@Override
+	    protected Object doInBackground(Object... params)
+	    {
+			MainActivity.this.getLocationApiCall();
+			
+	        return true;
+	    }
+		
+		@Override
+		protected void onPostExecute(Object o)
+	    {
+			super.onPostExecute(o);
+	        // update hourglass
+    		m_progressDialog.hide();
+	    }
+	    @Override
+	    protected void onPreExecute()
+	    {
+	        // update hourglass
+	    	m_progressDialog = new ProgressDialog(MainActivity.this);
+	    	m_progressDialog.setMessage("Logging in...");
+	    	m_progressDialog.setIndeterminate(true);
+	    	m_progressDialog.setCancelable(false);
+	    	m_progressDialog.show();
+	    }
+	}
+	
+
 
 }

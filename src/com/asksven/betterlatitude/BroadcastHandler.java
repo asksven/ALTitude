@@ -16,7 +16,7 @@
 
 package com.asksven.betterlatitude;
 
-import com.asksven.batterlatitude.utils.Logger;
+import com.asksven.betterlatitude.utils.Logger;
 
 import android.content.BroadcastReceiver;
 import android.content.Context;

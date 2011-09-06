@@ -16,11 +16,6 @@
 
 package com.asksven.betterlatitude;
 
-
-
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 import android.app.NotificationManager;
 import android.app.Service;
 import android.content.Context;
@@ -38,9 +33,9 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.asksven.batterlatitude.utils.Logger;
 import com.asksven.betterlatitude.credentials.CredentialStore;
 import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.http.HttpTransport;
@@ -134,7 +129,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 
         m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
 		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
-	
+		Logger.i(TAG, "Changed location settings to interval, accuracy = (" + iInterval + ", " + iAccuracy + ")");
         m_bRegistered = true;
             
     }
@@ -188,6 +183,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     @Override
 	public void onLocationChanged(Location location)
 	{
+    	Logger.i(TAG, "onLocationChanged called");
 		m_dLat = location.getLatitude();
 		m_dLong = location.getLongitude();
 		setLocationApiCall();
