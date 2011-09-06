@@ -16,7 +16,9 @@
 
 package com.asksven.betterlatitude;
 
+import android.app.Notification;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
@@ -114,7 +116,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		int iAccuracy = 2000;
 		try
     	{
-			iInterval = Integer.valueOf(strInterval);
+			iInterval = Integer.valueOf(strInterval) * 60 * 1000;
 			iAccuracy = Integer.valueOf(strAccuracy);
     	}
     	catch (Exception e)
@@ -143,6 +145,23 @@ public class LocationService extends Service implements LocationListener, OnShar
     		// re-register location listener with new prefs
     		this.registerLocationListener();
     	}
+
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	
+    	if (key.equals("notify_status"))
+    	{
+    		// activate / deactivate the notification
+    		if (prefs.getBoolean("notify_status", true))
+    		{
+    			notifyStatus("Notification activated");
+    		}
+    		else
+    		{
+    	        // Cancel the persistent notification.
+    	        mNM.cancel(R.string.app_name);
+
+    		}
+    	}
     }
     /** 
      * Called when service is started
@@ -152,7 +171,7 @@ public class LocationService extends Service implements LocationListener, OnShar
         Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
-        
+        notifyStatus("Service started");
         return Service.START_STICKY;
     }
     
@@ -162,6 +181,8 @@ public class LocationService extends Service implements LocationListener, OnShar
      */
     public void onDestroy()
     {        
+        // Cancel the persistent notification.
+        mNM.cancel(R.string.app_name);
     	// unregister the receiver
 		m_LocationManager.removeUpdates(this);
         // Unregister the listener whenever a key changes
@@ -187,6 +208,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		m_dLat = location.getLatitude();
 		m_dLong = location.getLongitude();
 		setLocationApiCall();
+		notifyStatus("Location updated");
 		
 	}
 
@@ -246,5 +268,26 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 	}
 
+	/**
+	 * Notify status change in notification bar (if enabled)
+	 */
+	void notifyStatus(String strStatus)
+	{
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean bNotify = prefs.getBoolean("notify_status", true);
+    	
+    	if (bNotify)
+    	{
+	    	Notification notification = new Notification(
+	    			R.drawable.icon, strStatus, System.currentTimeMillis());
+	    	PendingIntent contentIntent = PendingIntent.getActivity(
+	    			this, 0, new Intent(this, MainActivity.class), 0);
+	    	notification.setLatestEventInfo(
+	    			this, getText(R.string.app_name), strStatus, contentIntent);
+	    	mNM.notify(R.string.app_name, notification);
+    	}
+
+	}
+	
 }
 
