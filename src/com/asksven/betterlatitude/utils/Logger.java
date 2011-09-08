@@ -15,6 +15,11 @@
  */
 package com.asksven.betterlatitude.utils;
 
+import android.content.SharedPreferences;
+import android.preference.PreferenceManager;
+import android.util.Log;
+
+import com.asksven.android.common.utils.DataStorage;
 import com.asksven.android.common.utils.GenericLogger;
 
 /**
@@ -27,7 +32,8 @@ public class Logger
 
 	/** The application's own logfile */
 	public static String LOGFILE = "betterlatitude.log";
-	
+
+	Boolean bLogToFile = null;
 	/**
 	 * 
 	 */
@@ -45,5 +51,23 @@ public class Logger
 	{
 		GenericLogger.d(LOGFILE, strTag, strMessage);
 	}
-
+	
+	public static void e(String strTag, StackTraceElement[] stack)
+	{
+		Log.e(strTag, "An Exception occured. Stacktrace:");
+		for (int i=0; i < stack.length; i++)
+		{
+			Log.e(strTag, stack[i].toString());
+		}
+		DataStorage.LogToFile(LOGFILE, stack);
+	}
+	
+//	private boolean logToFile()
+//	{
+//		if (bLogToFile == null)
+//		{
+//			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences();
+//			bLogToFile = prefs.getBoolean("own_logfile", true);
+//
+//	}
 }

@@ -19,7 +19,7 @@ package com.asksven.betterlatitude;
  * OAuth 2 credentials found in the <a
  * href="https://code.google.com/apis/console">Google apis console</a>.
  */
-public class OAuth2ClientCredentials
+public class OAuth2ClientConstants
 {
 
 	// see https://code.google.com/apis/console

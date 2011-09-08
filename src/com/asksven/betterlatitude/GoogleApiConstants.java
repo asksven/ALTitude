@@ -13,14 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.asksven.betterlatitude.credentials;
+package com.asksven.betterlatitude;
 
-import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
-
-public interface CredentialStore
+/**
+ * @author sven
+ *
+ */
+public class GoogleApiConstants
 {
+	// see https://code.google.com/apis/console
 
-  AccessTokenResponse read();
-  void write(AccessTokenResponse response);
-  void clearCredentials();
+	/** Latitude API key */
+	public static final String API_KEY = "0ygvLb1dIQqFksSnu3kUBqaaKPP-sepIepT5JVw";
+
 }

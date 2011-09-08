@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.asksven.betterlatitude.credentials;
+package com.asksven.betterlatitude.credentialstore;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.Editor;

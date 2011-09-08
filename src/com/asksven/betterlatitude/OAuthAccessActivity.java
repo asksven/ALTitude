@@ -28,8 +28,8 @@ import android.view.View;
 import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
-import com.asksven.betterlatitude.credentials.CredentialStore;
-import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.credentialstore.CredentialStore;
+import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessTokenRequest.GoogleAuthorizationCodeGrant;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAuthorizationRequestUrl;
@@ -41,7 +41,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
  * After the request is authorized by the user, the callback URL will be intercepted here.
  * 
  */
-public class OAuthAccessTokenActivity extends Activity
+public class OAuthAccessActivity extends Activity
 {
 
 	final String TAG = getClass().getName();
@@ -67,7 +67,7 @@ public class OAuthAccessTokenActivity extends Activity
         webview.getSettings().setJavaScriptEnabled(true);  
         webview.setVisibility(View.VISIBLE);
         setContentView(webview);
-        String authorizationUrl = new GoogleAuthorizationRequestUrl(OAuth2ClientCredentials.CLIENT_ID, OAuth2ClientCredentials.REDIRECT_URI, OAuth2ClientCredentials.SCOPE).build();
+        String authorizationUrl = new GoogleAuthorizationRequestUrl(OAuth2ClientConstants.CLIENT_ID, OAuth2ClientConstants.REDIRECT_URI, OAuth2ClientConstants.SCOPE).build();
         
         /* WebViewClient must be set BEFORE calling loadUrl! */  
         webview.setWebViewClient(new WebViewClient()
@@ -82,7 +82,7 @@ public class OAuthAccessTokenActivity extends Activity
             public void onPageFinished(WebView view, String url) 
         	{  
             	
-            	if (url.startsWith(OAuth2ClientCredentials.REDIRECT_URI))
+            	if (url.startsWith(OAuth2ClientConstants.REDIRECT_URI))
             	{
             		try
             		{
@@ -94,21 +94,21 @@ public class OAuthAccessTokenActivity extends Activity
 							
 				  		      AccessTokenResponse accessTokenResponse = new GoogleAuthorizationCodeGrant(new NetHttpTransport(),
 										      new JacksonFactory(),
-										      OAuth2ClientCredentials.CLIENT_ID,
-										      OAuth2ClientCredentials.CLIENT_SECRET,
+										      OAuth2ClientConstants.CLIENT_ID,
+										      OAuth2ClientConstants.CLIENT_SECRET,
 										      code,
-										      OAuth2ClientCredentials.REDIRECT_URI).execute();
+										      OAuth2ClientConstants.REDIRECT_URI).execute();
 				
 				  		      CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
 				  		      credentialStore.write(accessTokenResponse);
 				  		      view.setVisibility(View.INVISIBLE);
-				  		      startActivity(new Intent(OAuthAccessTokenActivity.this,MainActivity.class));
+				  		      startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
             			}
             			else if (url.indexOf("error=")!=-1)
             			{
             				view.setVisibility(View.INVISIBLE);
             				new SharedPreferencesCredentialStore(prefs).clearCredentials();
-            				startActivity(new Intent(OAuthAccessTokenActivity.this,MainActivity.class));
+            				startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
             			}
             			
 					}
@@ -124,7 +124,7 @@ public class OAuthAccessTokenActivity extends Activity
 			
         	private String extractCodeFromUrl(String url)
 			{
-				return url.substring(OAuth2ClientCredentials.REDIRECT_URI.length()+7,url.length());
+				return url.substring(OAuth2ClientConstants.REDIRECT_URI.length()+7,url.length());
 			}  
         });  
         
