@@ -9,6 +9,10 @@ package com.asksven.android.common.privateapiproxies;
 
 public final class R {
     public static final class array {
+        /**  Values for the update precision. 
+         */
+        public static final int accuracyLabels=0x7f060002;
+        public static final int accuracyValues=0x7f060003;
         /**  Values for the update interval. 
          */
         public static final int intervalLabels=0x7f060000;
@@ -20,13 +24,27 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int btn_clear_credentials=0x7f070001;
-        public static final int btn_launch_oauth=0x7f070000;
-        public static final int loc_info=0x7f070003;
-        public static final int response_code=0x7f070002;
+        public static final int btn_clear_credentials=0x7f070005;
+        public static final int btn_launch_oauth=0x7f070004;
+        public static final int cell_loc=0x7f070008;
+        public static final int imageView1=0x7f070002;
+        public static final int label=0x7f070006;
+        public static final int latitude_loc=0x7f070007;
+        public static final int mainlayout=0x7f07000b;
+        public static final int mapview=0x7f07000c;
+        public static final int response_code=0x7f070009;
+        public static final int service_status=0x7f07000a;
+        public static final int tableRow1=0x7f070003;
+        public static final int textView1=0x7f070000;
+        public static final int textViewVersion=0x7f070001;
+        public static final int webview=0x7f07000d;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
+        public static final int about=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int map_debug=0x7f030002;
+        public static final int map_release=0x7f030003;
+        public static final int webview=0x7f030004;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
