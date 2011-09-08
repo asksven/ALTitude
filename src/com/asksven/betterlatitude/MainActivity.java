@@ -15,6 +15,7 @@
  */
 package com.asksven.betterlatitude;
 
+import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -26,6 +27,7 @@ import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.content.pm.PackageInfo;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -44,8 +46,8 @@ import android.widget.Toast;
 
 
 import com.asksven.android.common.utils.DataStorage;
-import com.asksven.betterlatitude.credentials.CredentialStore;
-import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.credentialstore.CredentialStore;
+import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Logger;
 import com.asksven.betterlatitude.R;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
@@ -57,7 +59,8 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
 import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
 
-public class MainActivity extends Activity implements LocationListener
+public class MainActivity extends Activity
+//implements LocationListener
 {
 	/**
 	 * The logging TAG
@@ -72,13 +75,10 @@ public class MainActivity extends Activity implements LocationListener
 	private final int MENU_ITEM_PREFS = 2;
 	private final int MENU_ITEM_MAP = 3;
 	private final int MENU_ITEM_ABOUT = 4;
+	private final int MENU_ITEM_BROWSER = 5;
+	private final int MENU_ITEM_LOGON = 6;
+	private final int MENU_ITEM_LOGOFF = 7;
 	
-	private SharedPreferences prefs;
-	private TextView textViewLatitude;
-	private TextView textViewLatitudeLoc;
-	private TextView textViewCellLoc;
-	private TextView textViewServiceStatus;
-
 	/**
 	 * a progess dialog to be used for long running tasks
 	 */
@@ -91,57 +91,39 @@ public class MainActivity extends Activity implements LocationListener
 	/** 
 	 * The location provider delivers the loc info
 	 */
-	private LocationManager m_LocationManager;
-	String m_strLocProvider;
+//	private LocationManager m_LocationManager;
+//	String m_strLocProvider;
 
 	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.main);
-		this.prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		setContentView(R.layout.about);
 
-		Button launchOauth = (Button) findViewById(R.id.btn_launch_oauth);
-		Button clearCredentials = (Button) findViewById(R.id.btn_clear_credentials);
-
-		this.textViewLatitudeLoc = (TextView) findViewById(R.id.latitude_loc);
-		this.textViewLatitude = (TextView) findViewById(R.id.response_code);
-		this.textViewCellLoc = (TextView) findViewById(R.id.cell_loc);
-		this.textViewServiceStatus = (TextView) findViewById(R.id.service_status);
-		
-		// Launch the OAuth flow to get an access token required to do authorized API calls.
-		// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
-		launchOauth.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				startActivity(new Intent().setClass(v.getContext(),OAuthAccessTokenActivity.class));
-			}
-		});
-
-		// Clearing the credentials and performing an API call to see the unauthorized message.
-		clearCredentials.setOnClickListener(new View.OnClickListener()
-		{
-			public void onClick(View v)
-			{
-				clearCredentials();
-				getLocationApiCall();
-			}
-
-		});
-		
+        // retrieve the version name and display it
+        try
+        {
+        	PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+        	TextView versionTextView = (TextView) findViewById(R.id.textViewVersion);
+        	versionTextView.setText(pinfo.versionName);
+        }
+        catch (Exception e)
+        {
+        	Log.e(TAG, "An error occured retrieveing the version info: " + e.getMessage());
+        }
+        		
 		startService();
 		// Get the location manager
-		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+//		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// Define the criteria how to select the locatioin provider -> use
 		// default
-		Criteria criteria = new Criteria();
-		m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
-		Location location = m_LocationManager.getLastKnownLocation(m_strLocProvider);
-		
-		// Define the exactitude and update interval
-		m_LocationManager.requestLocationUpdates(m_strLocProvider, 400, 1, this);
+//		Criteria criteria = new Criteria();
+//		m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
+//		Location location = m_LocationManager.getLastKnownLocation(m_strLocProvider);
+//		
+//		// Define the exactitude and update interval
+//		m_LocationManager.requestLocationUpdates(m_strLocProvider, 400, 1, this);
 		// Performs an authorized API call.
 		new OauthLogin().execute("");
 		//getLocationApiCall();
@@ -169,7 +151,7 @@ public class MainActivity extends Activity implements LocationListener
     		Logger.e(TAG, "Error reading prefernces, using defaults");
     	}
 
-		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
+//		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
 	}
 
 	/* Remove the locationlistener updates when Activity is paused */
@@ -177,37 +159,24 @@ public class MainActivity extends Activity implements LocationListener
 	protected void onPause()
 	{
 		super.onPause();
-		m_LocationManager.removeUpdates(this);
-		Logger.i(TAG, "Activity paused, removing location listener");
+//		m_LocationManager.removeUpdates(this);
+//		Logger.i(TAG, "Activity paused, removing location listener");
 	}
 
-	@Override
-	public void onLocationChanged(Location location)
-	{
-		Logger.i(TAG, "onLocationChanged called");
-		m_dLat = location.getLatitude();
-		m_dLong = location.getLongitude();
-	}
+//	@Override
+//	public void onLocationChanged(Location location)
+//	{
+//		Logger.i(TAG, "onLocationChanged called");
+//		m_dLat = location.getLatitude();
+//		m_dLong = location.getLongitude();
+//	}
+//
+//	@Override
+//	public void onStatusChanged(String provider, int status, Bundle extras)
+//	{
+//	}
 
-	@Override
-	public void onStatusChanged(String provider, int status, Bundle extras)
-	{
-	}
 
-	@Override
-	public void onProviderEnabled(String provider)
-	{
-		Toast.makeText(this, "Enabled new provider " + provider,
-				Toast.LENGTH_SHORT).show();
-
-	}
-
-	@Override
-	public void onProviderDisabled(String provider)
-	{
-		Toast.makeText(this, "Disenabled provider " + provider,
-				Toast.LENGTH_SHORT).show();
-	}	
 	/** 
      * Add menu items
      * 
@@ -215,11 +184,14 @@ public class MainActivity extends Activity implements LocationListener
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Latitude");
-    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Refresh");
+//    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Latitude");
+//    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Refresh");
     	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
-    	menu.add(0, MENU_ITEM_MAP, 0, "Map");
-    	menu.add(0, MENU_ITEM_ABOUT, 0, "About");
+    	menu.add(0, MENU_ITEM_MAP, 0, "Show on Map");
+    	menu.add(0, MENU_ITEM_LOGON, 0, "Log on");
+    	menu.add(0, MENU_ITEM_LOGOFF, 0, "Log off");
+//    	menu.add(0, MENU_ITEM_BROWSER, 0, "Browser");
+//    	menu.add(0, MENU_ITEM_ABOUT, 0, "About");
     	
     	return true;
     }
@@ -239,15 +211,15 @@ public class MainActivity extends Activity implements LocationListener
 	        	break;	
 	        case MENU_ITEM_GET_LOC: // retrieve location from Latitude  
 	        	getLocationApiCall();
-	        	getCellLocation();
-	        	if (isMyServiceRunning())
-	        	{
-	        		textViewServiceStatus.setText("Started");
-	        	}
-	        	else
-	        	{
-	        		textViewServiceStatus.setText("Stopped");
-	        	}
+//	        	getCellLocation();
+//	        	if (isMyServiceRunning())
+//	        	{
+//	        		textViewServiceStatus.setText("Started");
+//	        	}
+//	        	else
+//	        	{
+//	        		textViewServiceStatus.setText("Stopped");
+//	        	}
 	        	break;	
 	        case MENU_ITEM_PREFS: // prefs  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
@@ -257,9 +229,22 @@ public class MainActivity extends Activity implements LocationListener
 	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
 	            this.startActivity(intentMap);
 	        	break;	
+	        case MENU_ITEM_BROWSER: // browse maps.google.com
+	        	Intent intentBrowser = new Intent(this, BrowserActivity.class);
+	            this.startActivity(intentBrowser);
+	        	break;	
+
 	        case MENU_ITEM_ABOUT: // About  
 	        	Intent intentAbout = new Intent(this, AboutActivity.class);
 	            this.startActivity(intentAbout);
+	        	break;	
+
+	        case MENU_ITEM_LOGON:  
+	        	logOn();
+	        	break;	
+
+	        case MENU_ITEM_LOGOFF: 
+	        	logOff();
 	        	break;	
 
         }
@@ -267,6 +252,22 @@ public class MainActivity extends Activity implements LocationListener
         return true;
     }
     
+	// Launch the OAuth flow to get an access token required to do authorized API calls.
+	// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
+	public void logOn()
+	{
+		startActivity(new Intent().setClass(
+				this,
+				OAuthAccessActivity.class));
+	}
+
+
+	// Clearing the credentials and performing an API call to see the unauthorized message.
+	void logOff()
+	{
+		clearCredentials();
+		getLocationApiCall();
+	}
 
     /**
 	 * Clears our credentials (token and token secret) from the shared preferences.
@@ -275,56 +276,57 @@ public class MainActivity extends Activity implements LocationListener
 	 */
     private void clearCredentials()
     {
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	new SharedPreferencesCredentialStore(prefs).clearCredentials();
     }
 	
     /**
      * Performs an authorized API call to retrieve the current location.
      */
-	private void getLocationApiCall()
+	private boolean getLocationApiCall()
 	{
+		boolean bRet = true;
 		Logger.i(TAG, "getLocationApiCall called");
 		try
 		{
 			JsonFactory jsonFactory = new JacksonFactory();
 			HttpTransport transport = new NetHttpTransport();
 			
+	    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
 			AccessTokenResponse accessTokenResponse = credentialStore.read();
-			
+
+			// check if token is valid (not empty)
+			if (accessTokenResponse.accessToken.equals(""))
+			{
+				bRet = false;
+				return bRet;				
+			}
+
 			GoogleAccessProtectedResource accessProtectedResource = new GoogleAccessProtectedResource(accessTokenResponse.accessToken,
 			        transport,
 			        jsonFactory,
-			        OAuth2ClientCredentials.CLIENT_ID,
-			        OAuth2ClientCredentials.CLIENT_SECRET,
+			        OAuth2ClientConstants.CLIENT_ID,
+			        OAuth2ClientConstants.CLIENT_SECRET,
 			        accessTokenResponse.refreshToken);
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
-		    latitude.apiKey = OAuth2ClientCredentials.API_KEY;
+		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    
-			LatitudeCurrentlocationResourceJson currentLocation = latitude.currentLocation.get().execute();
-			String locationAsString = convertLocationToString(currentLocation);
-//			textViewLatitudeLoc.setText(locationAsString);
-//			textViewLatitude.setText("OK");
+			LatitudeCurrentlocationResourceJson currentLocation = 
+				latitude.currentLocation.get().execute();
 		}
-		catch (Exception ex)
+		catch (IOException ex)
 		{
 			Logger.e(TAG, "Exception in getLocationApiCall");
+			bRet = false;
 			ex.printStackTrace();
-//			textViewLatitudeLoc.setText("");
-//			textViewLatitude.setText("Error occured : " + ex.getMessage());
 		}
+		
+		return bRet;
 	}
 
 
-	public void getCellLocation()
-	{
-		if (textViewCellLoc != null)
-		{
-			textViewCellLoc.setText("Lat: " + String.valueOf(m_dLat) + " Long: " + String.valueOf(m_dLong));
-		}
-	}
-	
 	private String convertLocationToString(
 			LatitudeCurrentlocationResourceJson currentLocation)
 	{
@@ -351,15 +353,6 @@ public class MainActivity extends Activity implements LocationListener
 			startService( i );
 			Log.i(getClass().getSimpleName(), "startService()");
 			m_bIsStarted = true;
-        	if (isMyServiceRunning())
-        	{
-        		textViewServiceStatus.setText("Started");
-        	}
-        	else
-        	{
-        		textViewServiceStatus.setText("Stopped");
-        	}
-
 		}
 	}
 	
@@ -376,8 +369,12 @@ public class MainActivity extends Activity implements LocationListener
 	    return false;
 	}
 	
-	// @see http://code.google.com/p/makemachine/source/browse/trunk/android/examples/async_task/src/makemachine/android/examples/async/AsyncTaskExample.java
-	// for more details
+	/**
+	 * Connect to latitude and retrieve location in a thread 
+	 * @author sven
+	 * @see http://code.google.com/p/makemachine/source/browse/trunk/android/examples/async_task/src/makemachine/android/examples/async/AsyncTaskExample.java
+	 * for more details
+	 */
 	private class OauthLogin extends AsyncTask
 	{
 		@Override
@@ -400,13 +397,25 @@ public class MainActivity extends Activity implements LocationListener
 	    {
 	        // update hourglass
 	    	m_progressDialog = new ProgressDialog(MainActivity.this);
-	    	m_progressDialog.setMessage("Logging in...");
+	    	m_progressDialog.setMessage("Retrieving location...");
 	    	m_progressDialog.setIndeterminate(true);
 	    	m_progressDialog.setCancelable(false);
 	    	m_progressDialog.show();
 	    }
 	}
-	
+
+//	/**
+//	 * Do nothing, those methods must be here because of the implemented interface
+//	 */
+//	@Override
+//	public void onProviderEnabled(String provider)
+//	{
+//	}
+//
+//	@Override
+//	public void onProviderDisabled(String provider)
+//	{
+//	}	
 
 
 }

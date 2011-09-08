@@ -16,6 +16,8 @@
 
 package com.asksven.betterlatitude;
 
+import java.io.IOException;
+
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -35,8 +37,8 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
-import com.asksven.betterlatitude.credentials.CredentialStore;
-import com.asksven.betterlatitude.credentials.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.credentialstore.CredentialStore;
+import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
@@ -208,8 +210,10 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Logger.i(TAG, "onLocationChanged called");
 		m_dLat = location.getLatitude();
 		m_dLong = location.getLongitude();
-		setLocationApiCall();
-		notifyStatus("Location updated");
+		if (setLocationApiCall())
+		{	
+			notifyStatus("Location updated");
+		}
 		
 	}
 
@@ -233,8 +237,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 				Toast.LENGTH_SHORT).show();
 	}	
 
-	private void setLocationApiCall()
+	private boolean setLocationApiCall()
 	{
+		boolean bRet = true;
+
 		try
 		{
 			Logger.i(TAG, " Service Updating Latitude with position Lat: "
@@ -247,26 +253,39 @@ public class LocationService extends Service implements LocationListener, OnShar
 			CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
 			AccessTokenResponse accessTokenResponse = credentialStore.read();
 			
+			// check if token is valid (not empty)
+			if (accessTokenResponse.accessToken.equals(""))
+			{
+				notifyError("Access to latitude was not granted. Please log on");
+				bRet = false;
+				return bRet;				
+			}
+			
 			GoogleAccessProtectedResource accessProtectedResource = new GoogleAccessProtectedResource(accessTokenResponse.accessToken,
 			        transport,
 			        jsonFactory,
-			        OAuth2ClientCredentials.CLIENT_ID,
-			        OAuth2ClientCredentials.CLIENT_SECRET,
+			        OAuth2ClientConstants.CLIENT_ID,
+			        OAuth2ClientConstants.CLIENT_SECRET,
 			        accessTokenResponse.refreshToken);
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
-		    latitude.apiKey = OAuth2ClientCredentials.API_KEY;
+		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
 		    currentLocation.set("latitude", m_dLat);
 		    currentLocation.set("longitude", m_dLong);
 			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
 		}
-		catch (Exception ex)
+		catch (IOException ex)
 		{
-			Logger.i(TAG, "An error occured in setLocationApiCall() " +  ex.getMessage());
+			bRet = false;
+			Logger.i(TAG, "An error occured in setLocationApiCall() '" +  ex.getMessage() + "'");
+			
+			notifyError("Updating Latitude failed with error '" + ex.getMessage() + "'");
 //			Logger.i(TAG, ex.getStackTrace());
 			
 		}
+		
+		return bRet;
 	}
 
 	/**
@@ -288,6 +307,20 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    	mNM.notify(R.string.app_name, notification);
     	}
 
+	}
+
+	/**
+	 * Notify status change in notification bar (if enabled)
+	 */
+	void notifyError(String strStatus)
+	{
+    	Notification notification = new Notification(
+    			R.drawable.icon, strStatus, System.currentTimeMillis());
+    	PendingIntent contentIntent = PendingIntent.getActivity(
+    			this, 0, new Intent(this, MainActivity.class), 0);
+    	notification.setLatestEventInfo(
+    			this, getText(R.string.app_name), strStatus, contentIntent);
+    	mNM.notify(R.string.app_name, notification);
 	}
 	
 }
