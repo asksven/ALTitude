@@ -6,7 +6,15 @@
 		android:summary="Start service on boot"
 		android:title="Start Service on Boot" 
 		android:defaultValue="false"
-    android:enabled="false"/>    
+    android:enabled="false"/>
+    
+    	<CheckBoxPreference 
+		android:key="notify_status"
+		android:summary="Show notification icon with status"
+		android:title="Show notification" 
+		android:defaultValue="false"
+    android:enabled="true"/>    
+        
     <ListPreference 
             android:key="update_interval"
             android:title="Interval"
@@ -24,5 +32,11 @@
             android:entryValues="@array/accuracyValues"
         />
         
+    	<CheckBoxPreference 
+		android:key="own_logfile"
+		android:summary="Write additional logfile to /"
+		android:title="Own logfile" 
+		android:defaultValue="false"
+    android:enabled="true"/>    
         
 </PreferenceScreen>
