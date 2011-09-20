@@ -113,7 +113,7 @@ public class MainActivity extends Activity
         	Log.e(TAG, "An error occured retrieveing the version info: " + e.getMessage());
         }
         		
-		startService();
+		
 		// Get the location manager
 //		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 		// Define the criteria how to select the locatioin provider -> use
@@ -135,7 +135,10 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	
+		startService();
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	String strInterval = prefs.getString("update_interval", "15");
     	String strAccuracy = prefs.getString("update_accuracy", "2000");
     	    	
