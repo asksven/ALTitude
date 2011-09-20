@@ -17,6 +17,7 @@ package com.asksven.betterlatitude;
         
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
@@ -26,6 +27,7 @@ import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Message;
+import android.preference.PreferenceManager;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
@@ -116,8 +118,19 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		int lat = (int) (location.getLatitude() * 1E6);
 		int lng = (int) (location.getLongitude() * 1E6);
 		GeoPoint point = new GeoPoint(lat, lng);
-		m_mapController.animateTo(point);
-
+		
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean bCenterMap = prefs.getBoolean("center_map", false);
+    	
+    	// depending on preferences either animate or center map on new location
+    	if (!bCenterMap)
+    	{
+    		m_mapController.animateTo(point);
+    	}
+    	else
+    	{
+    		m_mapController.setCenter(point);
+    	}
 		
 
 		OverlayItem overlayitem = new OverlayItem(point, "Me", "here");
