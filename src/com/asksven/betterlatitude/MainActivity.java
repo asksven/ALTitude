@@ -87,7 +87,7 @@ public class MainActivity extends Activity
 	private double m_dLat = -1;
 	private double m_dLong = -1;
 	
-	boolean m_bIsStarted;
+//	boolean m_bIsStarted;
 	/** 
 	 * The location provider delivers the loc info
 	 */
@@ -114,19 +114,8 @@ public class MainActivity extends Activity
         }
         		
 		
-		// Get the location manager
-//		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		// Define the criteria how to select the locatioin provider -> use
-		// default
-//		Criteria criteria = new Criteria();
-//		m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
-//		Location location = m_LocationManager.getLastKnownLocation(m_strLocProvider);
-//		
-//		// Define the exactitude and update interval
-//		m_LocationManager.requestLocationUpdates(m_strLocProvider, 400, 1, this);
-		// Performs an authorized API call.
-		new OauthLogin().execute("");
-		//getLocationApiCall();
+//		// Performs an authorized API call.
+//		new OauthLogin().execute("");
 
 	}
 
@@ -135,6 +124,9 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
+
+		// Performs an authorized API call.
+		new OauthLogin().execute("");
     	
 		startService();
 		
@@ -345,7 +337,7 @@ public class MainActivity extends Activity
      */
 	private void startService()
 	{
-		if( m_bIsStarted )
+		if( isMyServiceRunning() )
 		{
 			Toast.makeText(this, "Service already started", Toast.LENGTH_SHORT).show();
 		}
@@ -355,7 +347,7 @@ public class MainActivity extends Activity
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
 			startService( i );
 			Log.i(getClass().getSimpleName(), "startService()");
-			m_bIsStarted = true;
+//			m_bIsStarted = true;
 		}
 	}
 	
@@ -400,7 +392,7 @@ public class MainActivity extends Activity
 	    {
 	        // update hourglass
 	    	m_progressDialog = new ProgressDialog(MainActivity.this);
-	    	m_progressDialog.setMessage("Retrieving location...");
+	    	m_progressDialog.setMessage("Retrieving current location...");
 	    	m_progressDialog.setIndeterminate(true);
 	    	m_progressDialog.setCancelable(false);
 	    	m_progressDialog.show();

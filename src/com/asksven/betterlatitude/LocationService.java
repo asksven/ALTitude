@@ -166,17 +166,17 @@ public class LocationService extends Service implements LocationListener, OnShar
     		}
     	}
     }
-    /** 
-     * Called when service is started
-     */
-    public int onStartCommand(Intent intent, int flags, int startId)
-    {
-        Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
-        // We want this service to continue running until it is explicitly
-        // stopped, so return sticky.
-        notifyStatus("Service started");
-        return Service.START_STICKY;
-    }
+//    /** 
+//     * Called when service is started
+//     */
+//    public int onStartCommand(Intent intent, int flags, int startId)
+//    {
+//        Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
+//        // We want this service to continue running until it is explicitly
+//        // stopped, so return sticky.
+//        notifyStatus("Service started");
+//        return Service.START_STICKY;
+//    }
     
     @Override
     /**
