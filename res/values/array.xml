@@ -32,4 +32,47 @@
         <item name="5">5000</item>
     </string-array>
 
+    <string-array name="mapLocProviderLabels" translatable="false">
+        <item>* Passive</item>
+        <item>Cell based</item>
+        <item>GPS based</item>
+    </string-array>
+ 
+     <string-array name="mapLocProviderValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
+
+    <string-array name="mapLocProviderIntervalLabels" translatable="false">
+        <item>5 Min.</item>
+        <item>*15 Min.</item>
+        <item>30 Min.</item>
+        <item>60 Min.</item>
+    </string-array>
+ 
+     <string-array name="mapLocProviderIntervalValues">
+        <item name="1">5</item>
+        <item name="2">15</item>
+        <item name="3">30</item>
+        <item name="4">60</item>
+    </string-array>
+
+    <!-- Values for the update precision. -->
+    <string-array name="mapLocProviderAccuracyLabels" translatable="false">
+        <item>100 m</item>
+        <item>500 m</item>
+        <item>1 Km</item>
+        <item>*2 Km</item>
+        <item>5 Km</item>
+    </string-array>
+ 
+     <string-array name="mapLocProviderAccuracyValues">
+        <item name="1">100</item>
+        <item name="2">500</item>
+        <item name="3">1000</item>
+        <item name="4">2000</item>
+        <item name="5">5000</item>
+    </string-array>
+
 </resources>

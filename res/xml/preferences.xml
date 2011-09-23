@@ -8,12 +8,12 @@
 		android:defaultValue="false"
     android:enabled="false"/>
     
-    	<CheckBoxPreference 
+    <CheckBoxPreference 
 		android:key="notify_status"
 		android:summary="Show notification icon with status"
 		android:title="Show notification" 
 		android:defaultValue="false"
-    android:enabled="true"/>    
+    	android:enabled="true"/>    
         
     <ListPreference 
             android:key="update_interval"
@@ -32,11 +32,45 @@
             android:entryValues="@array/accuracyValues"
         />
         
-    	<CheckBoxPreference 
+    <CheckBoxPreference 
 		android:key="own_logfile"
 		android:summary="Write additional logfile to /"
 		android:title="Own logfile" 
 		android:defaultValue="false"
-    android:enabled="true"/>    
+    	android:enabled="true"
+    />
+    <CheckBoxPreference 
+		android:key="center_map"
+		android:summary="Center map on current position"
+		android:title="Center map" 
+		android:defaultValue="false"
+    	android:enabled="true"
+    />    
+
+    <ListPreference 
+            android:key="map_loc_provider"
+            android:title="Map location provider"
+            android:summary="Location provider used on map"
+            android:defaultValue="0" 
+            android:entries="@array/mapLocProviderLabels"
+            android:entryValues="@array/mapLocProviderValues"
+        />
+
+    <ListPreference 
+            android:key="map_update_interval"
+            android:title="Interval"
+            android:summary="How often will the service update Latitude"
+            android:defaultValue="15" 
+            android:entries="@array/mapLocProviderIntervalLabels"
+            android:entryValues="@array/mapLocProviderIntervalValues"
+        />
+    <ListPreference 
+            android:key="map_update_accuracy"
+            android:title="Accuracy"
+            android:summary="With what precision will the service update Latitude"
+            android:defaultValue="2000" 
+            android:entries="@array/mapLocProviderAccuracyLabels"
+            android:entryValues="@array/mapLocProviderAccuracyValues"
+        />
         
 </PreferenceScreen>
