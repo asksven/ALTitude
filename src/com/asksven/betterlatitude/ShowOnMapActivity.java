@@ -79,18 +79,62 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		m_mapView.setBuiltInZoomControls(true);
 		m_mapView.setEnabled(true);
 		
-		List<Overlay> mapOverlays = m_mapView.getOverlays();
         Drawable drawable = this.getResources().getDrawable(R.drawable.icon);
-
+        
+        List<Overlay> mapOverlays = m_mapView.getOverlays();
+        
+        // delete any existing overlay
+        mapOverlays.clear();
+        m_mapView.postInvalidate();
+        
 		m_friendsOverlay = new PositionOverlay(drawable, this);
 		mapOverlays.add(m_friendsOverlay);
 
 		m_mapController = m_mapView.getController();
-		m_mapController.setZoom(14); // Zoon 1 is world view
+		m_mapController.setZoom(14); // Zoom 1 is world view
 		
-		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
-		m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
-				60, 500, this);
+		// retrieve prefs for creating the LocationManager
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	String strLocProvider 		= prefs.getString("map_loc_provider", "0");
+    	String strMapUpdateInterval = prefs.getString("map_update_interval", "0");
+    	String strMapUpdateAccuracy = prefs.getString("map_map_update_accuracy", "0");
+    	
+    	int iLocProvider 		= 0;
+    	int iMapUpdateInterval 	= 0;
+    	int iMapUpdateAccuracy 	= 0;
+    	try
+    	{
+    		iLocProvider = Integer.valueOf(strLocProvider);
+    		iMapUpdateInterval = Integer.valueOf(strMapUpdateInterval);
+    		iMapUpdateAccuracy = Integer.valueOf(strMapUpdateAccuracy);		
+    	}
+    	catch (Exception e)
+    	{
+    		// do noting, defaults are set
+    	}
+    	
+    	m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+    	switch (iLocProvider)
+    	{
+    		case 0: // passive
+    			m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
+    					iMapUpdateInterval, iMapUpdateAccuracy, this);
+    			break;
+    		case 1:	// cell
+    			m_locationManager.requestLocationUpdates(LocationManager.NETWORK_PROVIDER, 
+    					iMapUpdateInterval, iMapUpdateAccuracy, this);
+    			break;
+    		case 2:	// gps
+    			m_locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER, 
+    					iMapUpdateInterval, iMapUpdateAccuracy, this);
+    			break;
+    	}
+    	Logger.i(TAG, "LocationMAnager was set: type=" + iLocProvider
+    			+ " interval=" + iMapUpdateInterval
+    			+ " accuracy=" + iMapUpdateAccuracy);
+//		
+//		m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
+//				60, 500, this);
 
 	}
 	
@@ -105,6 +149,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 
 
 	@Override
+	
 	protected boolean isRouteDisplayed()
 	{
 		return false;
