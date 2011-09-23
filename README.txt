@@ -2,7 +2,7 @@ Credits: ddewaele for providing an insight into OAuth together with a sample pro
 that I used as a starting point for this project
 http://blog.doityourselfandroid.com/2011/08/06/oauth-2-0-flow-android/
 
-
+	
 Following dependencies are required in order to run the application (in project's lib dir):
 commons-codec-1.3.jar
 commons-logging-1.1.1.jar
