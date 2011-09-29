@@ -41,6 +41,7 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -48,6 +49,7 @@ import android.widget.Toast;
 import com.asksven.android.common.utils.DataStorage;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.asksven.betterlatitude.R;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
@@ -58,10 +60,12 @@ import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
 import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
+import com.google.ads.*;
 
 public class MainActivity extends Activity
 //implements LocationListener
 {
+//	private AdView adView;
 	/**
 	 * The logging TAG
 	 */
@@ -100,8 +104,31 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.about);
+		
+		// detect free/full version and enable/disable ads
+		if (Configuration.isFullVersion(this))
+		{
+			
+		}
+		else
+		{
+			
+		}
+		 // Create the adView
+//	    adView = new AdView(this, AdSize.BANNER, "a14e836ef862284");
 
+	    // Lookup your LinearLayout assuming it’s been given
+	    // the attribute android:id="@+id/mainLayout"
+//	    LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
+
+	    // Add the adView to it
+//	    layout.addView(adView);
+
+	    // Initiate a generic request to load it with an ad
+//	    adView.loadAd(new AdRequest());
         // retrieve the version name and display it
+		
+		
         try
         {
         	PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -156,6 +183,13 @@ public class MainActivity extends Activity
 		super.onPause();
 //		m_LocationManager.removeUpdates(this);
 //		Logger.i(TAG, "Activity paused, removing location listener");
+	}
+	
+	@Override
+	public void onDestroy()
+	{
+//	    adView.destroy();
+	    super.onDestroy();
 	}
 
 //	@Override
@@ -321,16 +355,6 @@ public class MainActivity extends Activity
 		return bRet;
 	}
 
-
-	private String convertLocationToString(
-			LatitudeCurrentlocationResourceJson currentLocation)
-	{
-		String timestampMs = (String) currentLocation.get("timestampMs");
-		DateFormat df= new  SimpleDateFormat("HH:mm:ss");
-		Date d = new Date(Long.valueOf(timestampMs));
-		String locationAsString = "Lat: " + currentLocation.get("latitude") + ", Long: " + currentLocation.get("longitude") + " @ " + df.format(d);
-		return locationAsString;
-	}
 	
 	/** 
      * Starts the service 
