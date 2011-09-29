@@ -31,6 +31,7 @@ import android.preference.PreferenceManager;
 import android.view.Window;
 import android.widget.RelativeLayout;
 
+import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
@@ -71,7 +72,6 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		{
 			setContentView(R.layout.map_release);
 		}
-//		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
 		
 		// create a map view
 		RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mainlayout);
@@ -99,6 +99,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	String strMapUpdateInterval = prefs.getString("map_update_interval", "0");
     	String strMapUpdateAccuracy = prefs.getString("map_map_update_accuracy", "0");
     	
+    	
     	int iLocProvider 		= 0;
     	int iMapUpdateInterval 	= 0;
     	int iMapUpdateAccuracy 	= 0;
@@ -112,6 +113,15 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	{
     		// do noting, defaults are set
     	}
+    	
+    	// whatever Prefs say, the free version does not give any choice
+    	if (!Configuration.isFullVersion(this))
+		{
+    		iLocProvider 		= 0;
+        	iMapUpdateInterval 	= 0;
+        	iMapUpdateAccuracy 	= 0;
+        	
+		}
     	
     	m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
     	switch (iLocProvider)
@@ -132,10 +142,6 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	Logger.i(TAG, "LocationMAnager was set: type=" + iLocProvider
     			+ " interval=" + iMapUpdateInterval
     			+ " accuracy=" + iMapUpdateAccuracy);
-//		
-//		m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 
-//				60, 500, this);
-
 	}
 	
 	/* Remove the locationlistener updates when Activity is paused */
