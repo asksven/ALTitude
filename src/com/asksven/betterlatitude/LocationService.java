@@ -39,6 +39,7 @@ import android.widget.Toast;
 
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
@@ -127,6 +128,14 @@ public class LocationService extends Service implements LocationListener, OnShar
     		Logger.e(TAG, "Error reading prefernces, using defaults");
     	}
     	
+		// whatever Prefs say, the free version does not give any choice
+    	if (!Configuration.isFullVersion(this))
+		{
+    		iInterval = 15 * 60 * 1000;
+    		iAccuracy = 2000;
+    		
+        	
+		}
     	Criteria criteria = new Criteria();
 
 		// Get the location manager
@@ -243,13 +252,22 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		try
 		{
-			Logger.i(TAG, " Service Updating Latitude with position Lat: "
-					+ String.valueOf(m_dLat)
-					+ " Long: " + String.valueOf(m_dLong));
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    	boolean bLogLoc 		= prefs.getBoolean("log_location", false);
+	    	
+	    	if (bLogLoc)
+	    	{
+				Logger.i(TAG, " Service Updating Latitude with position Lat: "
+						+ String.valueOf(m_dLat)
+						+ " Long: " + String.valueOf(m_dLong));
+	    	}
+	    	else
+	    	{
+	    		Logger.i(TAG, " Service Updating Latitude");
+	    	}
 			JsonFactory jsonFactory = new JacksonFactory();
 			HttpTransport transport = new NetHttpTransport();
 			
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 			CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
 			AccessTokenResponse accessTokenResponse = credentialStore.read();
 			
