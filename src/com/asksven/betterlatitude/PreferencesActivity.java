@@ -16,6 +16,8 @@
 
 package com.asksven.betterlatitude;
 
+import com.asksven.betterlatitude.utils.Configuration;
+
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
@@ -42,5 +44,15 @@ public class PreferencesActivity extends PreferenceActivity
 	{
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
+		
+		// disable all LocationListener prefs in free version
+		if (!Configuration.isFullVersion(this))
+		{
+			findPreference("update_interval").setEnabled(false);
+			findPreference("update_accuracy").setEnabled(false);
+			findPreference("map_loc_provider").setEnabled(false);
+			findPreference("map_update_interval").setEnabled(false);
+			findPreference("map_update_accuracy").setEnabled(false);
+		}
 	}
 }
