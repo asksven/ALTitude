@@ -103,7 +103,7 @@ public class MainActivity extends Activity
 	public void onCreate(Bundle savedInstanceState)
 	{
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.about);
+		setContentView(R.layout.main);
 		
 		// detect free/full version and enable/disable ads
 		if (!Configuration.isFullVersion(this))
@@ -263,11 +263,6 @@ public class MainActivity extends Activity
 	        case MENU_ITEM_BROWSER: // browse maps.google.com
 	        	Intent intentBrowser = new Intent(this, BrowserActivity.class);
 	            this.startActivity(intentBrowser);
-	        	break;	
-
-	        case MENU_ITEM_ABOUT: // About  
-	        	Intent intentAbout = new Intent(this, AboutActivity.class);
-	            this.startActivity(intentAbout);
 	        	break;	
 
 	        case MENU_ITEM_LOGON:  
