@@ -33,6 +33,8 @@ import android.widget.RelativeLayout;
 
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
+import com.google.ads.AdRequest;
+import com.google.ads.AdView;
 import com.google.android.maps.Overlay;
 import com.google.android.maps.OverlayItem;
 import com.google.android.maps.GeoPoint;
@@ -73,6 +75,13 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 			setContentView(R.layout.map_release);
 		}
 		
+		// detect free/full version and enable/disable ads
+		if (!Configuration.isFullVersion(this))
+		{
+			AdView adView = (AdView)this.findViewById(R.id.adView);
+		    adView.loadAd(new AdRequest());
+		}
+				
 		// create a map view
 		RelativeLayout linearLayout = (RelativeLayout) findViewById(R.id.mainlayout);
 		m_mapView = (MapView) findViewById(R.id.mapview);

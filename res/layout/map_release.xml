@@ -19,7 +19,7 @@
                    android:layout_alignParentBottom="true"
                    ads:adUnitId="a14e836ef862284"
                    ads:adSize="BANNER"
-                   ads:loadAdOnCreate="true"
+                   ads:loadAdOnCreate="false"
                    android:layout_height="wrap_content"
                    android:gravity="bottom"/>
 
