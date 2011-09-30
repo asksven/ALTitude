@@ -18,6 +18,7 @@ package com.asksven.betterlatitude;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 
 import android.app.Activity;
@@ -46,6 +47,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.asksven.android.common.privateapiproxies.StatElement;
 import com.asksven.android.common.utils.DataStorage;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
@@ -63,9 +65,13 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
 import com.google.ads.*;
 
 public class MainActivity extends Activity
-//implements LocationListener
+
 {
-//	private AdView adView;
+	/**
+	 * Store the status after first logon to avoid calling the API every time the Activity is opene
+	 */
+	private boolean m_bLoggedOn = false;
+	
 	/**
 	 * The logging TAG
 	 */
@@ -104,7 +110,21 @@ public class MainActivity extends Activity
 	{
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
-		
+	
+		try
+		{
+			// recover any saved state
+			if ( (savedInstanceState != null) && (!savedInstanceState.isEmpty()))
+			{
+				m_bLoggedOn 	= (Boolean) savedInstanceState.getSerializable("logged_on");
+			}
+		}
+		catch (Exception e)
+		{
+			m_bLoggedOn	= false;
+			Log.e(TAG, "Exception: " + e.getMessage());
+		}
+
 		// detect free/full version and enable/disable ads
 		if (!Configuration.isFullVersion(this))
 		{
@@ -141,12 +161,19 @@ public class MainActivity extends Activity
         {
         	Log.e(TAG, "An error occured retrieveing the version info: " + e.getMessage());
         }
-        		
-		
-//		// Performs an authorized API call.
-//		new OauthLogin().execute("");
+  	}
 
-	}
+    /**
+     * Save state, the application is going to get moved out of memory
+     * @see http://stackoverflow.com/questions/151777/how-do-i-save-an-android-applications-state
+     */
+	@Override
+	public void onSaveInstanceState(Bundle savedInstanceState)
+    {
+    	super.onSaveInstanceState(savedInstanceState);
+        
+    	savedInstanceState.putSerializable("logged_on", m_bLoggedOn); 
+    }
 
 	/* Request updates at startup */
 	@Override
@@ -155,7 +182,10 @@ public class MainActivity extends Activity
 		super.onResume();
 
 		// Performs an authorized API call.
-		new OauthLogin().execute("");
+		if (!m_bLoggedOn)
+		{
+			new OauthLogin().execute("");
+		}
     	
 		startService();
 		
@@ -187,26 +217,6 @@ public class MainActivity extends Activity
 //		Logger.i(TAG, "Activity paused, removing location listener");
 	}
 	
-	@Override
-	public void onDestroy()
-	{
-//	    adView.destroy();
-	    super.onDestroy();
-	}
-
-//	@Override
-//	public void onLocationChanged(Location location)
-//	{
-//		Logger.i(TAG, "onLocationChanged called");
-//		m_dLat = location.getLatitude();
-//		m_dLong = location.getLongitude();
-//	}
-//
-//	@Override
-//	public void onStatusChanged(String provider, int status, Bundle extras)
-//	{
-//	}
-
 
 	/** 
      * Add menu items
@@ -341,6 +351,7 @@ public class MainActivity extends Activity
 		    
 			LatitudeCurrentlocationResourceJson currentLocation = 
 				latitude.currentLocation.get().execute();
+			m_bLoggedOn = true;
 		}
 		catch (IOException ex)
 		{
@@ -368,7 +379,6 @@ public class MainActivity extends Activity
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
 			startService( i );
 			Log.i(getClass().getSimpleName(), "startService()");
-//			m_bIsStarted = true;
 		}
 	}
 	
