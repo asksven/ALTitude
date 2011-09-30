@@ -106,26 +106,14 @@ public class MainActivity extends Activity
 		setContentView(R.layout.about);
 		
 		// detect free/full version and enable/disable ads
-		if (Configuration.isFullVersion(this))
+		if (!Configuration.isFullVersion(this))
 		{
-			
+			AdView adView = (AdView)this.findViewById(R.id.adView);
+		    adView.loadAd(new AdRequest());
 		}
-		else
-		{
-			
-		}
-		 // Create the adView
-//	    adView = new AdView(this, AdSize.BANNER, "a14e836ef862284");
-
-	    // Lookup your LinearLayout assuming it’s been given
-	    // the attribute android:id="@+id/mainLayout"
-//	    LinearLayout layout = (LinearLayout)findViewById(R.id.mainLayout);
-
-	    // Add the adView to it
-//	    layout.addView(adView);
+		
 
 	    // Initiate a generic request to load it with an ad
-//	    adView.loadAd(new AdRequest());
         // retrieve the version name and display it
 		
 		
@@ -133,6 +121,20 @@ public class MainActivity extends Activity
         {
         	PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
         	TextView versionTextView = (TextView) findViewById(R.id.textViewVersion);
+        	TextView nameTextView = (TextView) findViewById(R.id.textViewName);
+        	TextView hintTextView = (TextView) findViewById(R.id.textViewHint);
+        	
+        	if (Configuration.isFullVersion(this))
+    		{
+        		nameTextView.setText("ALTitude full");
+        		hintTextView.setText("");
+    		}
+        	else
+        	{
+        		nameTextView.setText("ALTitude free");
+        		hintTextView.setText("Add-free full version available");
+        	}
+        	
         	versionTextView.setText(pinfo.versionName);
         }
         catch (Exception e)
