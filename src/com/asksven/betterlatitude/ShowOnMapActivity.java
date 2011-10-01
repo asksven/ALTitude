@@ -19,18 +19,17 @@ package com.asksven.betterlatitude;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.content.pm.PackageManager.NameNotFoundException;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.os.Bundle;
-import android.os.Message;
 import android.preference.PreferenceManager;
-import android.view.Window;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.RelativeLayout;
-
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.ads.AdRequest;
@@ -56,7 +55,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 	private MapView m_mapView;
 	private LocationManager m_locationManager;
 	private PositionOverlay m_friendsOverlay;
-
+	private boolean m_bShowSatLayer = false;
 	/**
 	 * The logging TAG
 	 */
@@ -74,6 +73,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		{
 			setContentView(R.layout.map_release);
 		}
+		
 		
 		// detect free/full version and enable/disable ads
 		if (!Configuration.isFullVersion(this))
@@ -170,7 +170,41 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		return false;
 	}
 
+	/** 
+     * Add menu items
+     * 
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
+    public boolean onCreateOptionsMenu(Menu menu)
+    {  
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mapmenu, menu);
+        return true;
+    }  
+    
+    /** 
+     * Define menu action
+     * 
+     * @see android.app.Activity#onOptionsItemSelected(android.view.MenuItem)
+     */
+    public boolean onOptionsItemSelected(MenuItem item)
+    {  
+        switch (item.getItemId())
+        {  
+	        case R.id.toggle_sat: 
+	        	m_bShowSatLayer = !m_bShowSatLayer;
+	        	this.showSatellite(m_bShowSatLayer);
+	        	break;	
 
+        }  
+        return false;  
+    }    
+
+	private void showSatellite(boolean bShow)
+	{
+		m_mapView.setSatellite(bShow);
+		m_mapView.invalidate();
+	}
 
 	@Override
 	public void onLocationChanged(Location location)
@@ -195,6 +229,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 
 		OverlayItem overlayitem = new OverlayItem(point, "Me", "here");
 		
+		m_friendsOverlay.clear();
 		m_friendsOverlay.addOverlay(overlayitem);
 		m_mapView.invalidate();
 	}
