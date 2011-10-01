@@ -67,5 +67,10 @@ public class PositionOverlay extends ItemizedOverlay<OverlayItem>
 		mapOverlays.add(overlay);
 	    this.populate();
 	}
+	
+	public void clear()
+	{
+		mapOverlays.clear();
+	}
 
 }
