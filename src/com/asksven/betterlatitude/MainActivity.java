@@ -184,28 +184,10 @@ public class MainActivity extends Activity
 		// Performs an authorized API call.
 		if (!m_bLoggedOn)
 		{
-			new OauthLogin().execute("");
+//			new OauthLogin().execute("");
 		}
     	
 		startService();
-		
-		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	String strInterval = prefs.getString("update_interval", "15");
-    	String strAccuracy = prefs.getString("update_accuracy", "2000");
-    	    	
-		int iInterval = 15 * 60 * 1000;
-		int iAccuracy = 2000;
-		try
-    	{
-			iInterval = Integer.valueOf(strInterval);
-			iAccuracy = Integer.valueOf(strAccuracy);
-    	}
-    	catch (Exception e)
-    	{
-    		Logger.e(TAG, "Error reading prefernces, using defaults");
-    	}
-
-//		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
 	}
 
 	/* Remove the locationlistener updates when Activity is paused */
@@ -369,11 +351,7 @@ public class MainActivity extends Activity
      */
 	private void startService()
 	{
-		if( isMyServiceRunning() )
-		{
-			Toast.makeText(this, "Service already started", Toast.LENGTH_SHORT).show();
-		}
-		else
+		if( !isMyServiceRunning() )
 		{
 			Intent i = new Intent();
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
