@@ -1,102 +1,64 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical"
-    android:layout_width="fill_parent"
-    android:layout_height="fill_parent"
-    >
-                <LinearLayout
-                	android:id="@+id/tableRow1"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content">
-
-	        		<Button android:id="@+id/btn_launch_oauth"
-			            android:layout_width="fill_parent"
-			            android:layout_height="wrap_content"
-			            android:layout_weight="2"
-			            android:text="Auth"/>
-
-				    <Button android:id="@+id/btn_clear_credentials"
-				            android:layout_width="fill_parent"
-				            android:layout_height="wrap_content"
-				            android:layout_weight="1"
-				            android:text="Clear"/>	 		        			
-                </LinearLayout>
-                <LinearLayout
-                	android:id="@+id/tableRow1"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content">
-
-		            <TextView android:id="@+id/label"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Latitude"
-		                android:layout_weight="2"
-					    android:typeface="normal"/>  
-
-		            <TextView android:id="@+id/latitude_loc"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Latitude val"
-		                android:layout_weight="1"
-					    android:typeface="normal"/>  
-				</LinearLayout>
-				<LinearLayout
-                	android:id="@+id/tableRow1"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content">
-		
-		            <TextView android:id="@+id/label"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Cell"
-		                android:layout_weight="2"
-					    android:typeface="normal"/>
-		
-		            <TextView android:id="@+id/cell_loc"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Cell val"
-		                android:layout_weight="1"
-					    android:typeface="normal"/>
-				</LinearLayout>
-				<LinearLayout
-                	android:id="@+id/tableRow1"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content">
-
-		            <TextView android:id="@+id/label"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Status"
-		                android:layout_weight="2"
-					    android:typeface="normal"/>  
-
-		            <TextView android:id="@+id/response_code"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Latitude val"
-		                android:layout_weight="1"
-					    android:typeface="normal"/>  
-
-				</LinearLayout>
-				<LinearLayout
-                	android:id="@+id/tableRow1"
-                	android:layout_width="fill_parent"
-                	android:layout_height="wrap_content">
-		
-		            <TextView android:id="@+id/label"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Service"
-		                android:layout_weight="2"
-					    android:typeface="normal"/>
-		
-		            <TextView android:id="@+id/service_status"
-		                android:layout_width="fill_parent"
-		                android:layout_height="wrap_content"
-		                android:text="Service val"
-		                android:layout_weight="1"
-					    android:typeface="normal"/>
-			</LinearLayout> 
-
+	xmlns:ads="http://schemas.android.com/apk/lib/com.google.ads"
+    android:layout_height="fill_parent" android:layout_width="match_parent" android:orientation="vertical">
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textViewName" 
+    	android:textAppearance="?android:attr/textAppearanceLarge" 
+    	android:text="@string/app_name"
+    	android:layout_gravity="center"/>
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textViewHint" 
+    	android:textAppearance="?android:attr/textAppearanceSmall" 
+    	android:text="Hint goes here"
+    	android:layout_gravity="center"/>
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textViewVersion" 
+    	android:textAppearance="?android:attr/textAppearanceSmall" 
+    	android:text="V0.1.0.0"
+    	android:layout_gravity="center"/>
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textView1" 
+    	android:textAppearance="?android:attr/textAppearanceMedium" 
+    	android:text="By asksven"
+    	android:layout_gravity="center"/>
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textView1" 
+    	android:textAppearance="?android:attr/textAppearanceSmall" 
+    	android:text="Contact: https://github.com/asksven"
+    	android:layout_gravity="center"/>
+    <TextView 
+    	android:layout_width="wrap_content" 
+    	android:layout_height="wrap_content" 
+    	android:id="@+id/textView1" 
+    	android:textAppearance="?android:attr/textAppearanceSmall" 
+    	android:text="or @asksven on twitter"
+    	android:layout_gravity="center"/>
+    <ImageView 
+    	android:layout_width="wrap_content"
+    	android:layout_height="wrap_content"
+    	android:id="@+id/imageView1"
+    	android:src="@drawable/icon"
+    	android:layout_gravity="center" android:layout_marginTop="20dip"/>
+    <LinearLayout android:layout_height="fill_parent" android:layout_width="match_parent">		
+	<com.google.ads.AdView android:id="@+id/adView"
+                   android:layout_width="wrap_content"
+                   android:layout_gravity="bottom|center_horizontal"
+                   android:layout_alignParentBottom="true"
+                   ads:adUnitId="a14e836ef862284"
+                   ads:adSize="BANNER"
+                   ads:loadAdOnCreate="false"
+                   android:layout_height="wrap_content"
+                   android:gravity="bottom"/>		
+    </LinearLayout>			
 </LinearLayout>

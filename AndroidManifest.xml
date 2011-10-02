@@ -1,12 +1,24 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="1" android:versionName="0.4.0.0"
+<manifest android:versionCode="2" android:versionName="0.5.0.0"
     package="com.asksven.betterlatitude" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="7"/>
+    
+    <!-- read/write latitude -->
     <uses-permission android:name="android.permission.INTERNET"/>
+    
+    <!-- admob -->
+  	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+    
+    <!--  receive location updates -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    
     <!--  required for writing dump files -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
+	
+	<!--  start service on boot -->
+	<uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
+	
     <application android:icon="@drawable/icon" android:label="@string/app_name">
         <activity android:label="@string/app_name" android:name=".MainActivity">
             <intent-filter>
@@ -26,10 +38,12 @@
         <activity android:name=".ShowOnMapActivity"/>
         <activity android:name=".BrowserActivity"/>
         <activity android:name=".AboutActivity"/>
-        
+        <activity android:name="com.google.ads.AdActivity"
+              android:configChanges="keyboard|keyboardHidden|orientation"/>
+              
         <service android:name=".LocationService"/>
         
-        <receiver android:name=".broadcast.BroadcastHandler">
+        <receiver android:name=".BroadcastHandler">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>
