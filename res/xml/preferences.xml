@@ -58,7 +58,7 @@
             android:key="map_loc_provider"
             android:title="Map location provider"
             android:summary="Location provider used on map"
-            android:defaultValue="0" 
+            android:defaultValue="1" 
             android:entries="@array/mapLocProviderLabels"
             android:entryValues="@array/mapLocProviderValues"
         />

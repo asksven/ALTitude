@@ -104,12 +104,12 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 		
 		// retrieve prefs for creating the LocationManager
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	String strLocProvider 		= prefs.getString("map_loc_provider", "0");
+    	String strLocProvider 		= prefs.getString("map_loc_provider", "1");
     	String strMapUpdateInterval = prefs.getString("map_update_interval", "0");
     	String strMapUpdateAccuracy = prefs.getString("map_map_update_accuracy", "0");
     	
     	
-    	int iLocProvider 		= 0;
+    	int iLocProvider 		= 1;
     	int iMapUpdateInterval 	= 0;
     	int iMapUpdateAccuracy 	= 0;
     	try
@@ -126,7 +126,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	// whatever Prefs say, the free version does not give any choice
     	if (!Configuration.isFullVersion(this))
 		{
-    		iLocProvider 		= 0;
+    		iLocProvider 		= 1;
         	iMapUpdateInterval 	= 0;
         	iMapUpdateAccuracy 	= 0;
         	
