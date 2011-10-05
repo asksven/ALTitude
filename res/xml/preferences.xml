@@ -6,7 +6,7 @@
 		android:summary="Start service on boot"
 		android:title="Start Service on Boot" 
 		android:defaultValue="false"
-    android:enabled="false"/>
+    android:enabled="true"/>
     
     <CheckBoxPreference 
 		android:key="notify_status"
