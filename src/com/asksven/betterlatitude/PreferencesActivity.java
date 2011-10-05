@@ -48,6 +48,7 @@ public class PreferencesActivity extends PreferenceActivity
 		// disable all LocationListener prefs in free version
 		if (!Configuration.isFullVersion(this))
 		{
+			findPreference("start_on_boot").setEnabled(false);
 			findPreference("update_interval").setEnabled(false);
 			findPreference("update_accuracy").setEnabled(false);
 			findPreference("map_loc_provider").setEnabled(false);
