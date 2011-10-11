@@ -32,16 +32,17 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int adView=0x7f080005;
+        public static final int adView=0x7f080006;
         public static final int imageView1=0x7f080004;
-        public static final int mainlayout=0x7f080006;
-        public static final int mapview=0x7f080007;
+        public static final int mainlayout=0x7f080007;
+        public static final int mapview=0x7f080008;
         public static final int textView1=0x7f080003;
         public static final int textViewHint=0x7f080001;
         public static final int textViewName=0x7f080000;
+        public static final int textViewStatus=0x7f080005;
         public static final int textViewVersion=0x7f080002;
-        public static final int toggle_sat=0x7f080009;
-        public static final int webview=0x7f080008;
+        public static final int toggle_sat=0x7f08000a;
+        public static final int webview=0x7f080009;
     }
     public static final class layout {
         public static final int main=0x7f030000;
