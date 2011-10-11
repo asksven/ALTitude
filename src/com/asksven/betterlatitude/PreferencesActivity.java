@@ -50,10 +50,15 @@ public class PreferencesActivity extends PreferenceActivity
 		{
 			findPreference("start_on_boot").setEnabled(false);
 			findPreference("update_interval").setEnabled(false);
+			findPreference("update_interval").setSummary("Latitude update interval: 15 minutes");
 			findPreference("update_accuracy").setEnabled(false);
+			findPreference("update_accuracy").setSummary("Latitude update accuracy: 2 Km");
 			findPreference("map_loc_provider").setEnabled(false);
 			findPreference("map_update_interval").setEnabled(false);
+			findPreference("map_update_interval").setSummary("Map update interval: 15 minutes");
 			findPreference("map_update_accuracy").setEnabled(false);
+			findPreference("map_update_accuracy").setSummary("Map update accuracy: 2 Km");
+			
 		}
 	}
 }
