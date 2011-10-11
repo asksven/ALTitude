@@ -60,6 +60,9 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
  */
 public class LocationService extends Service implements LocationListener, OnSharedPreferenceChangeListener
 {
+	/** singleton */
+	private static LocationService m_instance = null;
+	
 	private NotificationManager mNM;
 	
 	public static String SERVICE_NAME = "com.asksven.betterlatitude.LocationService";
@@ -68,6 +71,14 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private LocationManager m_LocationManager;
 
 	private static final String TAG = "LocationService";
+	
+	/** constants for the connection status */
+	public static final String STATUS_LOGGED_IN = "Logged in";
+	public static final String STATUS_NOT_LOGGED_IN = "Not logged in";
+	public static final String BROADCAST_STATUS_CHANGED = "Connection stats changed";
+	
+	/** the connection status */
+	private String m_strStatus = STATUS_NOT_LOGGED_IN;
 	
 	private boolean m_bRegistered = false;
 
@@ -90,6 +101,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     @Override
     public void onCreate()
     {
+    	m_instance = this;
     	Log.i(getClass().getSimpleName(), "onCreate called");
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -252,6 +264,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		try
 		{
+			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    	boolean bLogLoc 		= prefs.getBoolean("log_location", false);
 	    	
@@ -276,6 +289,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			{
 				notifyError("Access to latitude was not granted. Please log on");
 				bRet = false;
+				setStatus(STATUS_NOT_LOGGED_IN);
 				return bRet;				
 			}
 			
@@ -291,13 +305,17 @@ public class LocationService extends Service implements LocationListener, OnShar
 		    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
 		    currentLocation.set("latitude", m_dLat);
 		    currentLocation.set("longitude", m_dLong);
+		    setStatus(STATUS_LOGGED_IN);
 			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
 		}
 		catch (IOException ex)
 		{
 			bRet = false;
 			Logger.i(TAG, "An error occured in setLocationApiCall() '" +  ex.getMessage() + "'");
-			
+			if (ex.getMessage().equals("401 Unauthorized"))
+			{
+				setStatus(STATUS_NOT_LOGGED_IN);
+			}
 			notifyError("Updating Latitude failed with error '" + ex.getMessage() + "'");
 //			Logger.i(TAG, ex.getStackTrace());
 			
@@ -341,5 +359,29 @@ public class LocationService extends Service implements LocationListener, OnShar
     	mNM.notify(R.string.app_name, notification);
 	}
 	
+
+	/** 
+	 * Broadcasts the connection status change
+	 * @param strStatus the broadcasted message
+	 */
+	public void setStatus(String strStatus)
+	{
+		m_strStatus = strStatus;
+		sendBroadcast(new Intent(BROADCAST_STATUS_CHANGED));
+	}
+	
+	/**
+	 * Returns the status of the Latitude connection
+	 * @return the status of the latitude connection
+	 */
+	public String getStatus()
+	{
+		return m_strStatus;
+	}
+	
+	public static LocationService getInstance()
+	{
+		return m_instance;
+	}
 }
 

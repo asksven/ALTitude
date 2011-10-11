@@ -25,8 +25,10 @@ import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.location.Criteria;
@@ -97,14 +99,9 @@ public class MainActivity extends Activity
 	private double m_dLat = -1;
 	private double m_dLong = -1;
 	
-//	boolean m_bIsStarted;
-	/** 
-	 * The location provider delivers the loc info
-	 */
-//	private LocationManager m_LocationManager;
-//	String m_strLocProvider;
+	/** The event receiver for updated from the service */
+	private ConnectionUpdateReceiver m_connectionUpdateReceiver;
 
-	
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -161,6 +158,9 @@ public class MainActivity extends Activity
         {
         	Log.e(TAG, "An error occured retrieveing the version info: " + e.getMessage());
         }
+        
+        // Set the connection state
+        
   	}
 
     /**
@@ -188,15 +188,27 @@ public class MainActivity extends Activity
 		}
     	
 		startService();
+		
+		// set up the listener for connection status changes 
+		if (m_connectionUpdateReceiver == null)
+		{
+			m_connectionUpdateReceiver = new ConnectionUpdateReceiver();
+		}
+		IntentFilter intentFilter = new IntentFilter(LocationService.BROADCAST_STATUS_CHANGED);
+		registerReceiver(m_connectionUpdateReceiver, intentFilter);
 	}
 
-	/* Remove the locationlistener updates when Activity is paused */
+	/* Remove the event listener updates when Activity is paused */
 	@Override
 	protected void onPause()
 	{
 		super.onPause();
-//		m_LocationManager.removeUpdates(this);
-//		Logger.i(TAG, "Activity paused, removing location listener");
+		
+		// unregister event listener
+		if (m_connectionUpdateReceiver != null)
+		{
+			unregisterReceiver(m_connectionUpdateReceiver);
+		}
 	}
 	
 
@@ -207,8 +219,6 @@ public class MainActivity extends Activity
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-//    	menu.add(0, MENU_ITEM_UPDATE_LATITUDE, 0, "Update Latitude");
-//    	menu.add(0, MENU_ITEM_GET_LOC, 0, "Refresh");
     	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
     	menu.add(0, MENU_ITEM_MAP, 0, "Show on Map");
     	menu.add(0, MENU_ITEM_LOGON, 0, "Log on");
@@ -228,22 +238,6 @@ public class MainActivity extends Activity
     {  
         switch (item.getItemId())
         {  
-	        case MENU_ITEM_UPDATE_LATITUDE: // update location  
-	        	new OauthLogin().execute("");
-	        	//setLocationApiCall(); //performApiCall();
-	        	break;	
-	        case MENU_ITEM_GET_LOC: // retrieve location from Latitude  
-	        	getLocationApiCall();
-//	        	getCellLocation();
-//	        	if (isMyServiceRunning())
-//	        	{
-//	        		textViewServiceStatus.setText("Started");
-//	        	}
-//	        	else
-//	        	{
-//	        		textViewServiceStatus.setText("Stopped");
-//	        	}
-	        	break;	
 	        case MENU_ITEM_PREFS: // prefs  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
 	            this.startActivity(intentPrefs);
@@ -331,8 +325,7 @@ public class MainActivity extends Activity
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    
-			LatitudeCurrentlocationResourceJson currentLocation = 
-				latitude.currentLocation.get().execute();
+			latitude.currentLocation.get().execute();
 			m_bLoggedOn = true;
 		}
 		catch (IOException ex)
@@ -408,18 +401,24 @@ public class MainActivity extends Activity
 	    }
 	}
 
-//	/**
-//	 * Do nothing, those methods must be here because of the implemented interface
-//	 */
-//	@Override
-//	public void onProviderEnabled(String provider)
-//	{
-//	}
-//
-//	@Override
-//	public void onProviderDisabled(String provider)
-//	{
-//	}	
-
-
+	private class ConnectionUpdateReceiver extends BroadcastReceiver
+	{
+	    @Override
+	    public void onReceive(Context context, Intent intent)
+	    {
+	        if (intent.getAction().equals(LocationService.BROADCAST_STATUS_CHANGED))
+	        {
+	        	TextView statusTextView = (TextView) findViewById(R.id.textViewStatus);
+	        	LocationService myService = LocationService.getInstance();
+	        	if (myService != null)
+	        	{
+	        		statusTextView.setText(myService.getStatus());
+	        	}
+	        	else
+	        	{
+	        		statusTextView.setText(LocationService.STATUS_NOT_LOGGED_IN);
+	        	}
+	        }
+	    }
+	}
 }
