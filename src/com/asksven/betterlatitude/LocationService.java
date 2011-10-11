@@ -73,6 +73,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private static final String TAG = "LocationService";
 	
 	/** constants for the connection status */
+	public static final String STATUS_UPDATE_PENDING = "Update pending";
 	public static final String STATUS_LOGGED_IN = "Logged in";
 	public static final String STATUS_NOT_LOGGED_IN = "Not logged in";
 	public static final String BROADCAST_STATUS_CHANGED = "Connection stats changed";
@@ -114,6 +115,8 @@ public class LocationService extends Service implements LocationListener, OnShar
     	PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
 
+    	// set status
+    	setStatus(STATUS_UPDATE_PENDING);
    }
 
     private void registerLocationListener()

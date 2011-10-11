@@ -160,6 +160,16 @@ public class MainActivity extends Activity
         }
         
         // Set the connection state
+    	TextView statusTextView = (TextView) findViewById(R.id.textViewStatus);
+    	LocationService myService = LocationService.getInstance();
+    	if (myService != null)
+    	{
+    		statusTextView.setText(myService.getStatus());
+    	}
+    	else
+    	{
+    		statusTextView.setText(LocationService.STATUS_NOT_LOGGED_IN);
+    	}
         
   	}
 
