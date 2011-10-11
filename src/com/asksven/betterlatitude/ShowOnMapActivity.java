@@ -21,6 +21,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
+import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -29,6 +30,7 @@ import android.preference.PreferenceManager;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.OrientationEventListener;
 import android.widget.RelativeLayout;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
@@ -56,6 +58,19 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 	private LocationManager m_locationManager;
 	private PositionOverlay m_friendsOverlay;
 	private boolean m_bShowSatLayer = false;
+	
+    private OrientationEventListener m_orientationListener =
+    		new OrientationEventListener(
+    				this, SensorManager.SENSOR_DELAY_NORMAL)
+    		{
+
+				@Override
+				public void onOrientationChanged(int arg0)
+				{
+				   // Refresh the map
+					m_mapView.invalidate();
+				 }
+			};
 	/**
 	 * The logging TAG
 	 */
