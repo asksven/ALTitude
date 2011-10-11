@@ -22,6 +22,8 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.drawable.Drawable;
 import android.hardware.SensorManager;
+import android.location.Address;
+import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
@@ -32,6 +34,8 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.OrientationEventListener;
 import android.widget.RelativeLayout;
+
+import com.asksven.android.common.location.GeoUtils;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.ads.AdRequest;
@@ -59,18 +63,7 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
 	private PositionOverlay m_friendsOverlay;
 	private boolean m_bShowSatLayer = false;
 	
-    private OrientationEventListener m_orientationListener =
-    		new OrientationEventListener(
-    				this, SensorManager.SENSOR_DELAY_NORMAL)
-    		{
-
-				@Override
-				public void onOrientationChanged(int arg0)
-				{
-				   // Refresh the map
-					m_mapView.invalidate();
-				 }
-			};
+    private OrientationEventListener m_orientationListener = null;
 	/**
 	 * The logging TAG
 	 */
@@ -166,6 +159,20 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	Logger.i(TAG, "LocationMAnager was set: type=" + iLocProvider
     			+ " interval=" + iMapUpdateInterval
     			+ " accuracy=" + iMapUpdateAccuracy);
+    	
+    	m_orientationListener = 
+    			new OrientationEventListener(
+    					this, SensorManager.SENSOR_DELAY_NORMAL)
+				{
+
+					@Override
+					public void onOrientationChanged(int arg0)
+					{
+					   // Refresh the map
+						m_mapView.invalidate();
+					 }
+				};
+
 	}
 	
 	/* Remove the locationlistener updates when Activity is paused */
@@ -242,8 +249,8 @@ public class ShowOnMapActivity extends MapActivity implements LocationListener
     	}
 		
 
-		OverlayItem overlayitem = new OverlayItem(point, "Me", "here");
-		
+		OverlayItem overlayitem = new OverlayItem(point, "Me", GeoUtils.getNearestCity(this, location));
+
 		m_friendsOverlay.clear();
 		m_friendsOverlay.addOverlay(overlayitem);
 		m_mapView.invalidate();
