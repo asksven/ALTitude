@@ -33,6 +33,7 @@ import android.preference.PreferenceManager;
  */
 public class BroadcastHandler extends BroadcastReceiver
 {	
+	private static final String TAG = "BroadcastHandler";
 	
 	/* (non-Javadoc)
 	 * @see android.content.BroadcastReceiver#onReceive(android.content.Context, android.content.Intent)
@@ -44,16 +45,27 @@ public class BroadcastHandler extends BroadcastReceiver
  
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
 		{
-			Logger.i(getClass().getSimpleName(), "Received Broadcast ACTION_BOOT_COMPLETED");
+			Logger.i(TAG, "Received Broadcast ACTION_BOOT_COMPLETED");
 			
 			// retrieve default selections for spinners
 			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
-			boolean bAutostart = sharedPrefs.getBoolean("autostart", false);
+			boolean bAutostart = sharedPrefs.getBoolean("start_on_boot", false);
 			
 			if (bAutostart)
 			{
-				Logger.i(getClass().getSimpleName(), "Autostart is set so run, starting service");
+				Logger.i(TAG, "Autostart is set to run, starting service");
 				context.startService(new Intent(context, LocationService.class));
+//				Intent i = new Intent();
+//				i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
+//				context.startService( i );
+			}
+			else
+			{
+				if (bAutostart)
+				{
+					Logger.i(TAG, "Autostart is not set to run");
+				}
+
 			}
 		}
 	}
