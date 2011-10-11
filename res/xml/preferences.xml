@@ -14,70 +14,74 @@
 		android:title="Show notification" 
 		android:defaultValue="false"
     	android:enabled="true"/>    
-        
-    <ListPreference 
-            android:key="update_interval"
-            android:title="Interval"
-            android:summary="How often will the service update Latitude"
-            android:defaultValue="15" 
-            android:entries="@array/intervalLabels"
-            android:entryValues="@array/intervalValues"
-        />
-    <ListPreference 
-            android:key="update_accuracy"
-            android:title="Accuracy"
-            android:summary="With what precision will the service update Latitude"
-            android:defaultValue="2000" 
-            android:entries="@array/accuracyLabels"
-            android:entryValues="@array/accuracyValues"
-        />
-        
-    <CheckBoxPreference 
-		android:key="own_logfile"
-		android:summary="Write additional logfile to /"
-		android:title="Own logfile" 
-		android:defaultValue="false"
-    	android:enabled="true"
-    />
-    <CheckBoxPreference 
-		android:key="log_location"
-		android:summary="Caution: privacy"
-		android:title="Log location history" 
-		android:defaultValue="false"
-    	android:enabled="true"
-    />
-    <CheckBoxPreference 
-		android:key="center_map"
-		android:summary="Center map on current position"
-		android:title="Center map" 
-		android:defaultValue="false"
-    	android:enabled="true"
-    />    
+	<PreferenceCategory android:title="Service Settings">        
+	    <ListPreference 
+	            android:key="update_interval"
+	            android:title="Interval"
+	            android:summary="How often will the service update Latitude"
+	            android:defaultValue="15" 
+	            android:entries="@array/intervalLabels"
+	            android:entryValues="@array/intervalValues"
+	        />
+	    <ListPreference 
+	            android:key="update_accuracy"
+	            android:title="Accuracy"
+	            android:summary="With what precision will the service update Latitude"
+	            android:defaultValue="2000" 
+	            android:entries="@array/accuracyLabels"
+	            android:entryValues="@array/accuracyValues"
+	        />
+	</PreferenceCategory>        
+    <PreferenceCategory android:title="Logging">
 
-    <ListPreference 
-            android:key="map_loc_provider"
-            android:title="Map location provider"
-            android:summary="Location provider used on map"
-            android:defaultValue="1" 
-            android:entries="@array/mapLocProviderLabels"
-            android:entryValues="@array/mapLocProviderValues"
-        />
-
-    <ListPreference 
-            android:key="map_update_interval"
-            android:title="Interval"
-            android:summary="How often will the service update Latitude"
-            android:defaultValue="15" 
-            android:entries="@array/mapLocProviderIntervalLabels"
-            android:entryValues="@array/mapLocProviderIntervalValues"
-        />
-    <ListPreference 
-            android:key="map_update_accuracy"
-            android:title="Accuracy"
-            android:summary="With what precision will the service update Latitude"
-            android:defaultValue="2000" 
-            android:entries="@array/mapLocProviderAccuracyLabels"
-            android:entryValues="@array/mapLocProviderAccuracyValues"
-        />
-        
+	    <CheckBoxPreference 
+			android:key="log_location"
+			android:summary="Caution: privacy"
+			android:title="Log location history" 
+			android:defaultValue="false"
+	    	android:enabled="true"
+	    />
+	    <CheckBoxPreference 
+			android:key="own_logfile"
+			android:summary="Write additional logfile to /"
+			android:title="Own logfile" 
+			android:defaultValue="false"
+	    	android:enabled="true"
+	    />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="Map Settings">
+	    <CheckBoxPreference 
+			android:key="center_map"
+			android:summary="Center map on current position"
+			android:title="Center map" 
+			android:defaultValue="false"
+	    	android:enabled="true"
+	    />    
+	
+	    <ListPreference 
+	            android:key="map_loc_provider"
+	            android:title="Map location provider"
+	            android:summary="Location provider used on map"
+	            android:defaultValue="1" 
+	            android:entries="@array/mapLocProviderLabels"
+	            android:entryValues="@array/mapLocProviderValues"
+	        />
+	
+	    <ListPreference 
+	            android:key="map_update_interval"
+	            android:title="Interval"
+	            android:summary="How often will the service update Latitude"
+	            android:defaultValue="15" 
+	            android:entries="@array/mapLocProviderIntervalLabels"
+	            android:entryValues="@array/mapLocProviderIntervalValues"
+	        />
+	    <ListPreference 
+	            android:key="map_update_accuracy"
+	            android:title="Accuracy"
+	            android:summary="With what precision will the service update Latitude"
+	            android:defaultValue="2000" 
+	            android:entries="@array/mapLocProviderAccuracyLabels"
+	            android:entryValues="@array/mapLocProviderAccuracyValues"
+	        />
+	</PreferenceCategory>        
 </PreferenceScreen>
