@@ -7,13 +7,22 @@
 		android:title="Start Service on Boot" 
 		android:defaultValue="false"
     android:enabled="true"/>
-    
-    <CheckBoxPreference 
-		android:key="notify_status"
-		android:summary="Show notification icon with status"
-		android:title="Show notification" 
-		android:defaultValue="false"
-    	android:enabled="true"/>    
+
+	<PreferenceCategory android:title="Notification">
+	    <CheckBoxPreference 
+			android:key="notify_status"
+			android:summary="Show notification icon with status"
+			android:title="Show notification" 
+			android:defaultValue="false"
+	    	android:enabled="true"/>
+	    <CheckBoxPreference 
+			android:key="notify_geodata"
+			android:summary="Notify nearest geodata"
+			android:title="Show geodata in notification" 
+			android:defaultValue="false"
+			android:dependency="notify_status"
+	    	android:enabled="true"/>
+	</PreferenceCategory>        
 	<PreferenceCategory android:title="Service Settings">        
 	    <ListPreference 
 	            android:key="update_interval"
