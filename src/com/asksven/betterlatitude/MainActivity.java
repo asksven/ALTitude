@@ -16,6 +16,7 @@
 package com.asksven.betterlatitude;
 
 import java.io.IOException;
+import java.net.URI;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -35,12 +36,14 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.test.PerformanceTestCase;
 import android.util.Log;
 import android.view.Menu;
+import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -78,26 +81,11 @@ public class MainActivity extends Activity
 	 * The logging TAG
 	 */
 	private static final String TAG = "MainActivity";
-
-	/**
-	 * Constants for menu items
-	 */
-	private final int MENU_ITEM_UPDATE_LATITUDE = 0;
-	private final int MENU_ITEM_GET_LOC = 1;
-	private final int MENU_ITEM_PREFS = 2;
-	private final int MENU_ITEM_MAP = 3;
-	private final int MENU_ITEM_ABOUT = 4;
-	private final int MENU_ITEM_BROWSER = 5;
-	private final int MENU_ITEM_LOGON = 6;
-	private final int MENU_ITEM_LOGOFF = 7;
 	
 	/**
 	 * a progess dialog to be used for long running tasks
 	 */
 	ProgressDialog m_progressDialog;
-	
-	private double m_dLat = -1;
-	private double m_dLong = -1;
 	
 	/** The event receiver for updated from the service */
 	private ConnectionUpdateReceiver m_connectionUpdateReceiver;
@@ -229,14 +217,9 @@ public class MainActivity extends Activity
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-    	menu.add(0, MENU_ITEM_PREFS, 0, "Preferences");
-    	menu.add(0, MENU_ITEM_MAP, 0, "Show on Map");
-    	menu.add(0, MENU_ITEM_LOGON, 0, "Log on");
-    	menu.add(0, MENU_ITEM_LOGOFF, 0, "Log off");
-//    	menu.add(0, MENU_ITEM_BROWSER, 0, "Browser");
-//    	menu.add(0, MENU_ITEM_ABOUT, 0, "About");
-    	
-    	return true;
+    	MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainmenu, menu);
+        return true;
     }
     
     /** 
@@ -248,27 +231,27 @@ public class MainActivity extends Activity
     {  
         switch (item.getItemId())
         {  
-	        case MENU_ITEM_PREFS: // prefs  
+	        case R.id.preferences:  
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
 	            this.startActivity(intentPrefs);
 	        	break;	
-	        case MENU_ITEM_MAP: // map  
+	        case R.id.show_map:  
 	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
 	            this.startActivity(intentMap);
 	        	break;	
-	        case MENU_ITEM_BROWSER: // browse maps.google.com
-	        	Intent intentBrowser = new Intent(this, BrowserActivity.class);
-	            this.startActivity(intentBrowser);
-	        	break;	
-
-	        case MENU_ITEM_LOGON:  
+	        case R.id.log_on:  
 	        	logOn();
 	        	break;	
-
-	        case MENU_ITEM_LOGOFF: 
+	        case R.id.log_off: 
 	        	logOff();
 	        	break;	
-
+	        case R.id.call_latitude:
+	        	Uri myUri = Uri.parse("latitude://latitude/friends/location/");
+		        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, myUri);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+		        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
+		        startActivity(intent);
+		        break;
         }
         
         return true;
