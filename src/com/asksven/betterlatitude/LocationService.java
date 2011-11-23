@@ -37,10 +37,12 @@ import android.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
+import com.asksven.android.common.location.GeoUtils;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
+import com.google.android.maps.OverlayItem;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.http.HttpTransport;
@@ -83,8 +85,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	
 	private boolean m_bRegistered = false;
 
-	private double m_dLat = -1;
-	private double m_dLong = -1;
+	private Location m_location = null;
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -102,11 +103,11 @@ public class LocationService extends Service implements LocationListener, OnShar
     @Override
     public void onCreate()
     {
+    	super.onCreate();
     	m_instance = this;
     	Log.i(getClass().getSimpleName(), "onCreate called");
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
-        notifyStatus("Service started");
         
         // register the location listener
         this.registerLocationListener();
@@ -118,7 +119,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	// set status
     	setStatus(STATUS_UPDATE_PENDING);
    }
-
+    
     private void registerLocationListener()
     {
     	if (m_bRegistered)
@@ -232,8 +233,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void onLocationChanged(Location location)
 	{
     	Logger.i(TAG, "onLocationChanged called");
-		m_dLat = location.getLatitude();
-		m_dLong = location.getLongitude();
+		m_location = location;
+
 		if (setLocationApiCall())
 		{	
 			notifyStatus("Location updated");
@@ -274,8 +275,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    	if (bLogLoc)
 	    	{
 				Logger.i(TAG, " Service Updating Latitude with position Lat: "
-						+ String.valueOf(m_dLat)
-						+ " Long: " + String.valueOf(m_dLong));
+						+ String.valueOf(m_location.getLatitude())
+						+ " Long: " + String.valueOf(m_location.getLongitude()));
 	    	}
 	    	else
 	    	{
@@ -306,8 +307,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
-		    currentLocation.set("latitude", m_dLat);
-		    currentLocation.set("longitude", m_dLong);
+		    currentLocation.set("latitude", m_location.getLatitude());
+		    currentLocation.set("longitude", m_location.getLongitude());
 		    setStatus(STATUS_LOGGED_IN);
 			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
 		}
@@ -333,10 +334,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 	void notifyStatus(String strStatus)
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	boolean bNotify = prefs.getBoolean("notify_status", true);
-    	
+    	boolean bNotify 	= prefs.getBoolean("notify_status", true);
+    	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);
     	if (bNotify)
     	{
+			if (bNotifyGeo)
+			{
+				strStatus = strStatus + ": " + GeoUtils.getNearestCity(this, m_location);
+			}
+
 	    	Notification notification = new Notification(
 	    			R.drawable.icon, strStatus, System.currentTimeMillis());
 	    	PendingIntent contentIntent = PendingIntent.getActivity(
