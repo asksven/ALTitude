@@ -17,6 +17,7 @@
 package com.asksven.betterlatitude;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -30,6 +31,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -85,7 +87,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	
 	private boolean m_bRegistered = false;
 
-	private Location m_location = null;
+	private ArrayList<Location> m_locationStack = null;
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -105,6 +107,10 @@ public class LocationService extends Service implements LocationListener, OnShar
     {
     	super.onCreate();
     	m_instance = this;
+    	if (m_locationStack == null)
+    	{
+    		m_locationStack = new ArrayList<Location>();
+    	}
     	Log.i(getClass().getSimpleName(), "onCreate called");
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
@@ -233,7 +239,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void onLocationChanged(Location location)
 	{
     	Logger.i(TAG, "onLocationChanged called");
-		m_location = location;
+		m_locationStack.add(location);
 
 		if (setLocationApiCall())
 		{	
@@ -268,20 +274,19 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		try
 		{
+			ConnectivityManager myConnectivity = 
+					(ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
+			
+			// if no network connection is available buffer the update
+			if (!myConnectivity.getActiveNetworkInfo().isConnectedOrConnecting())
+			{
+				
+				return false;
+			}
 			
 			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
 	    	boolean bLogLoc 		= prefs.getBoolean("log_location", false);
 	    	
-	    	if (bLogLoc)
-	    	{
-				Logger.i(TAG, " Service Updating Latitude with position Lat: "
-						+ String.valueOf(m_location.getLatitude())
-						+ " Long: " + String.valueOf(m_location.getLongitude()));
-	    	}
-	    	else
-	    	{
-	    		Logger.i(TAG, " Service Updating Latitude");
-	    	}
 			JsonFactory jsonFactory = new JacksonFactory();
 			HttpTransport transport = new NetHttpTransport();
 			
@@ -306,11 +311,37 @@ public class LocationService extends Service implements LocationListener, OnShar
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
-		    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
-		    currentLocation.set("latitude", m_location.getLatitude());
-		    currentLocation.set("longitude", m_location.getLongitude());
-		    setStatus(STATUS_LOGGED_IN);
-			LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
+		    
+		    // empty the stack and update all locations with the right timestamp
+		    if (m_locationStack != null)
+		    {
+		    	for (int i=0; i < m_locationStack.size(); i++)
+		    	{
+		    		Location location = m_locationStack.get(i);
+		    		
+			    	if (bLogLoc)
+			    	{
+						Logger.i(TAG, " Service Updating Latitude with position Lat: "
+								+ String.valueOf(location.getLatitude())
+								+ " Long: " + String.valueOf(location.getLongitude()));
+			    	}
+			    	else
+			    	{
+			    		Logger.i(TAG, " Service Updating Latitude");
+			    	}
+
+		    		
+				    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
+				    currentLocation.set("latitude", location.getLatitude());
+				    currentLocation.set("longitude", location.getLongitude());
+				    currentLocation.set("timespampMs", location.getTime());
+				    setStatus(STATUS_LOGGED_IN);
+					LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
+		    	}
+		    	
+		    	// if we got here all updates were OK, delete the stack
+		    	m_locationStack.clear();
+		    }
 		}
 		catch (IOException ex)
 		{
@@ -338,9 +369,11 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);
     	if (bNotify)
     	{
-			if (bNotifyGeo)
-			{
-				strStatus = strStatus + ": " + GeoUtils.getNearestCity(this, m_location);
+			if ( (bNotifyGeo) && (m_locationStack != null) && (!m_locationStack.isEmpty()) )
+ 			{
+				strStatus = strStatus
+						+ ": "
+						+ GeoUtils.getNearestCity(this, m_locationStack.get(m_locationStack.size()-1));
 			}
 
 	    	Notification notification = new Notification(
