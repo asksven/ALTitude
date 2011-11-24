@@ -39,12 +39,11 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.asksven.android.common.location.GeoUtils;
-import com.asksven.android.networkutils.DataNetwork;
+import com.asksven.android.common.networkutils.DataNetwork;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
-import com.google.android.maps.OverlayItem;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.http.HttpTransport;
