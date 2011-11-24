@@ -31,7 +31,6 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
-import android.net.ConnectivityManager;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -40,6 +39,7 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.asksven.android.common.location.GeoUtils;
+import com.asksven.android.networkutils.DataNetwork;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
@@ -241,9 +241,9 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Logger.i(TAG, "onLocationChanged called");
 		m_locationStack.add(location);
 
-		if (setLocationApiCall())
+		if (!setLocationApiCall())
 		{	
-			notifyStatus("Location updated");
+			notifyStatus(m_locationStack + " Location(s) buffered");
 		}
 		
 	}
@@ -274,11 +274,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		try
 		{
-			ConnectivityManager myConnectivity = 
-					(ConnectivityManager) this.getSystemService(Context.CONNECTIVITY_SERVICE);
-			
-			// if no network connection is available buffer the update
-			if (!myConnectivity.getActiveNetworkInfo().isConnectedOrConnecting())
+			if (!DataNetwork.hasDataConnection(this))
 			{
 				
 				return false;
@@ -340,6 +336,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		    	}
 		    	
 		    	// if we got here all updates were OK, delete the stack
+		    	notifyCurrentLocation();
 		    	m_locationStack.clear();
 		    }
 		}
@@ -366,16 +363,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	boolean bNotify 	= prefs.getBoolean("notify_status", true);
-    	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);
     	if (bNotify)
     	{
-			if ( (bNotifyGeo) && (m_locationStack != null) && (!m_locationStack.isEmpty()) )
- 			{
-				strStatus = strStatus
-						+ ": "
-						+ GeoUtils.getNearestCity(this, m_locationStack.get(m_locationStack.size()-1));
-			}
-
 	    	Notification notification = new Notification(
 	    			R.drawable.icon, strStatus, System.currentTimeMillis());
 	    	PendingIntent contentIntent = PendingIntent.getActivity(
@@ -386,7 +375,30 @@ public class LocationService extends Service implements LocationListener, OnShar
     	}
 
 	}
+	/**
+	 * Notify location change in notification bar (if enabled)
+	 */
+	void notifyCurrentLocation()
+	{
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	String strStatus = "Location updated";
+    	
+    	boolean bNotify 	= prefs.getBoolean("notify_status", true);
+    	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);
+    	if (bNotify && bNotifyGeo)
+    	{
+			if ( (bNotifyGeo) && (m_locationStack != null) && (!m_locationStack.isEmpty()) )
+ 			{
+				strStatus = strStatus
+						+ ": "
+						+ GeoUtils.getNearestAddress(this, m_locationStack.get(m_locationStack.size()-1));
+			}
 
+	    	notifyStatus(strStatus);
+	    }
+	}
+
+	
 	/**
 	 * Notify status change in notification bar (if enabled)
 	 */
