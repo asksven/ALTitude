@@ -1,4 +1,5 @@
 /*
+
  * Copyright (C) 2011 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,32 +14,35 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package com.asksven.betterlatitude;
 
-import android.app.Activity;
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
-import android.view.Window;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
+import android.util.Log;
 
-public class BrowserActivity extends Activity
-{
-	/**
-	 * @see android.app.Activity#onCreate(Bundle)
-	 */
+/**
+ * Handles alarms set for quick changes by the service
+ * @author sven
+ *
+ */
+public class AlarmReceiver extends BroadcastReceiver
+{		 
+	private static String TAG = "AlarmReceiver";
+	
 	@Override
-	protected void onCreate(Bundle savedInstanceState)
+	public void onReceive(Context context, Intent intent)
 	{
-		super.onCreate(savedInstanceState);
-		
-		this.requestWindowFeature(Window.FEATURE_NO_TITLE);
-		setContentView(R.layout.webview);
-		
-		WebView browser = (WebView)findViewById(R.id.webview);
-
-	    WebSettings settings = browser.getSettings();
-	    settings.setJavaScriptEnabled(true);
-	    
-    	browser.loadUrl("http://maps.google.com/maps/m#ac=f,l");
+		try
+		{
+			// reset the quick action
+			LocationService.getInstance().resetQuickChange();
+		}
+		catch (Exception e)
+		{
+			Log.e(TAG, "An error occured receiving the alarm");
+		}
 	}
 }

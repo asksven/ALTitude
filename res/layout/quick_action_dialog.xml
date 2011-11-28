@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:padding="10dip">
+    
+   	<Spinner android:id="@+id/spinnerInterval"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+	
+	<Spinner android:id="@+id/spinnerAccuracy"
+	    android:layout_below="@id/spinnerInterval"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+	
+	<Spinner android:id="@+id/spinnerDuration"
+	    android:layout_below="@id/spinnerAccuracy"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"/>
+	
+	<Button android:id="@+id/ButtonOk"
+	    android:layout_below="@id/spinnerDuration"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:layout_alignParentLeft="true"
+ 		android:text="OK" />
+		
+	<Button android:id="@+id/ButtonCancel"
+	    android:layout_below="@id/spinnerDuration"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:layout_toRightOf="@id/ButtonOk"
+        android:layout_alignTop="@id/ButtonOk"
+ 		android:text="Cancel" />
+	<Button android:id="@+id/ButtonReset"
+	    android:layout_below="@id/spinnerDuration"
+ 		android:layout_width="wrap_content"
+ 		android:layout_height="wrap_content"
+ 		android:layout_toRightOf="@id/ButtonCancel"
+        android:layout_alignTop="@id/ButtonOk"
+ 		android:text="Reset" />
+	
+</RelativeLayout>

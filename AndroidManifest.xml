@@ -6,7 +6,7 @@
     <!-- read/write latitude -->
     <uses-permission android:name="android.permission.INTERNET"/>
     
-    <!-- admob -->
+    <!-- admob and ConnectivityManager-->
   	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
     
     <!--  receive location updates -->
@@ -48,6 +48,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>    
         </receiver>
+        <receiver  android:process=":remote" android:name="AlarmReceiver"/>
         
         <uses-library android:name="com.google.android.maps"/>
     </application>

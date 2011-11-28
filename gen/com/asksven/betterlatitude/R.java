@@ -11,20 +11,28 @@ public final class R {
     public static final class array {
         /**  Values for the update precision. 
          */
-        public static final int accuracyLabels=0x7f060002;
-        public static final int accuracyValues=0x7f060003;
-        /**  Values for the update interval. 
-         */
-        public static final int intervalLabels=0x7f060000;
-        public static final int intervalValues=0x7f060001;
+        public static final int accuracyLabels=0x7f06000a;
+        public static final int accuracyValues=0x7f06000b;
+        public static final int intervalLabels=0x7f060008;
+        public static final int intervalValues=0x7f060009;
+        public static final int locProviderLabels=0x7f060006;
+        public static final int locProviderValues=0x7f060007;
         /**  Values for the update precision. 
          */
-        public static final int mapLocProviderAccuracyLabels=0x7f060008;
-        public static final int mapLocProviderAccuracyValues=0x7f060009;
-        public static final int mapLocProviderIntervalLabels=0x7f060006;
-        public static final int mapLocProviderIntervalValues=0x7f060007;
-        public static final int mapLocProviderLabels=0x7f060004;
-        public static final int mapLocProviderValues=0x7f060005;
+        public static final int mapLocProviderAccuracyLabels=0x7f060010;
+        public static final int mapLocProviderAccuracyValues=0x7f060011;
+        public static final int mapLocProviderIntervalLabels=0x7f06000e;
+        public static final int mapLocProviderIntervalValues=0x7f06000f;
+        public static final int mapLocProviderLabels=0x7f06000c;
+        public static final int mapLocProviderValues=0x7f06000d;
+        public static final int quickAccuracyLabels=0x7f060002;
+        public static final int quickAccuracyValues=0x7f060003;
+        public static final int quickDurationLabels=0x7f060004;
+        public static final int quickDurationValues=0x7f060005;
+        /**  Values for the update interval. 
+         */
+        public static final int quickIntervalLabels=0x7f060000;
+        public static final int quickIntervalValues=0x7f060001;
     }
     public static final class attr {
     }
@@ -32,27 +40,47 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int adView=0x7f080006;
-        public static final int imageView1=0x7f080004;
-        public static final int mainlayout=0x7f080007;
-        public static final int mapview=0x7f080008;
-        public static final int textView1=0x7f080003;
-        public static final int textViewHint=0x7f080001;
-        public static final int textViewName=0x7f080000;
-        public static final int textViewStatus=0x7f080005;
-        public static final int textViewVersion=0x7f080002;
-        public static final int toggle_sat=0x7f08000a;
-        public static final int webview=0x7f080009;
+        public static final int ButtonCancel=0x7f080011;
+        public static final int ButtonOk=0x7f080010;
+        public static final int ButtonReset=0x7f080012;
+        public static final int adView=0x7f08000a;
+        public static final int call_latitude=0x7f080016;
+        public static final int image=0x7f080001;
+        public static final int imageView1=0x7f080008;
+        public static final int layout_root=0x7f080000;
+        public static final int location_Status=0x7f080018;
+        public static final int log_off=0x7f08001a;
+        public static final int log_on=0x7f080019;
+        public static final int mainlayout=0x7f08000b;
+        public static final int mapview=0x7f08000c;
+        public static final int preferences=0x7f080014;
+        public static final int quick_dialog=0x7f080017;
+        public static final int show_map=0x7f080015;
+        public static final int spinnerAccuracy=0x7f08000e;
+        public static final int spinnerDuration=0x7f08000f;
+        public static final int spinnerInterval=0x7f08000d;
+        public static final int text=0x7f080003;
+        public static final int textView1=0x7f080007;
+        public static final int textViewHint=0x7f080005;
+        public static final int textViewName=0x7f080004;
+        public static final int textViewStatus=0x7f080009;
+        public static final int textViewVersion=0x7f080006;
+        public static final int title=0x7f080002;
+        public static final int toggle_sat=0x7f08001b;
+        public static final int webview=0x7f080013;
     }
     public static final class layout {
-        public static final int main=0x7f030000;
-        public static final int main_old=0x7f030001;
-        public static final int map_debug=0x7f030002;
-        public static final int map_release=0x7f030003;
-        public static final int webview=0x7f030004;
+        public static final int information_dialog=0x7f030000;
+        public static final int main=0x7f030001;
+        public static final int main_old=0x7f030002;
+        public static final int map_debug=0x7f030003;
+        public static final int map_release=0x7f030004;
+        public static final int quick_action_dialog=0x7f030005;
+        public static final int webview=0x7f030006;
     }
     public static final class menu {
-        public static final int mapmenu=0x7f070000;
+        public static final int mainmenu=0x7f070000;
+        public static final int mapmenu=0x7f070001;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
