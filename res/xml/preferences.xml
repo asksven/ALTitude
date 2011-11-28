@@ -24,6 +24,7 @@
 	    	android:enabled="true"/>
 	</PreferenceCategory>        
 	<PreferenceCategory android:title="Service Settings">        
+
 	    <ListPreference 
 	            android:key="update_interval"
 	            android:title="Interval"
@@ -41,7 +42,36 @@
 	            android:entryValues="@array/accuracyValues"
 	        />
 	</PreferenceCategory>        
-    <PreferenceCategory android:title="Logging">
+	<PreferenceCategory android:title="Quick Action Settings">        
+
+	    <ListPreference 
+	            android:key="quick_update_interval"
+	            android:title="Interval"
+	            android:summary="How often will Latitude be updated"
+	            android:defaultValue="0" 
+	            android:entries="@array/quickIntervalLabels"
+	            android:entryValues="@array/quickIntervalValues"
+	        />
+	    <ListPreference 
+	            android:key="quick_update_accuracy"
+	            android:title="Accuracy"
+	            android:summary="With what precision will Latitude be updated"
+	            android:defaultValue="0" 
+	            android:entries="@array/quickAccuracyLabels"
+	            android:entryValues="@array/quickAccuracyValues"
+	        />
+	    <ListPreference 
+	            android:key="quick_update_duration"
+	            android:title="Duration"
+	            android:summary="How long will Latitude be updated"
+	            android:defaultValue="0" 
+	            android:entries="@array/quickDurationLabels"
+	            android:entryValues="@array/quickDurationValues"
+	        />
+	    
+	</PreferenceCategory>        
+	    
+	<PreferenceCategory android:title="Logging">
 
 	    <CheckBoxPreference 
 			android:key="log_location"

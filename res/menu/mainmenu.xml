@@ -6,6 +6,11 @@
           android:title="Show on Map" />
     <item android:id="@+id/call_latitude"
           android:title="Show friends" />
+    <item android:id="@+id/quick_dialog"
+          android:title="Change precision" />
+    <item android:id="@+id/location_Status"
+          android:title="Status" />
+    
     <item android:id="@+id/log_on"
           android:title="Log on" />
     <item android:id="@+id/log_off"

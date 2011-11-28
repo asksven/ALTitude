@@ -1,6 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <!-- Values for the update interval. -->
+    <string-array name="quickIntervalLabels" translatable="false">
+        <item>Interval 5 s</item>
+        <item>Interval 10 s</item>
+        <item>Interval 30 s</item>
+        <item>Interval 1 Min.</item>
+        <item>Interval 5 Min.</item>
+        <item>Interval 15 Min.</item>
+    </string-array>
+
+    <string-array name="quickIntervalValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+        <item name="6">5</item>
+    </string-array>
+        
+    <string-array name="quickAccuracyLabels" translatable="false">
+        <item>Accuracy 10 m</item>
+        <item>Accuracy 50 m</item>
+        <item>Accuracy 100 m</item>
+        <item>Accuracy 500 m</item>
+        <item>Accuracy 1 Km</item>
+    </string-array>
+
+    <string-array name="quickAccuracyValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+        <item name="5">4</item>
+    </string-array>
+        
+    <string-array name="quickDurationLabels" translatable="false">
+        <item>For 15 Min.</item>
+        <item>For 30 Min.</item>
+        <item>For 60 Min.</item>
+        <item>For 2 Hrs.</item>
+    </string-array>
+
+    <string-array name="quickDurationValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+        <item name="4">3</item>
+    </string-array>
+        
+    <string-array name="locProviderLabels" translatable="false">
+        <item>Passive</item>
+        <item>* Cell based</item>
+        <item>GPS based</item>
+    </string-array>
+ 
+     <string-array name="locProviderValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
+        
     <string-array name="intervalLabels" translatable="false">
         <item>5 Min.</item>
         <item>*15 Min.</item>

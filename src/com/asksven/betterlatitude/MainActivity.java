@@ -16,14 +16,9 @@
 package com.asksven.betterlatitude;
 
 import java.io.IOException;
-import java.net.URI;
-import java.text.DateFormat;
-import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Date;
-
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
@@ -32,28 +27,22 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
-import android.location.Criteria;
-import android.location.Location;
-import android.location.LocationListener;
-import android.location.LocationManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
-import android.test.PerformanceTestCase;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.LinearLayout;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.asksven.android.common.privateapiproxies.StatElement;
-import com.asksven.android.common.utils.DataStorage;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
@@ -66,7 +55,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
-import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
 import com.google.ads.*;
 
 public class MainActivity extends Activity
@@ -222,6 +210,23 @@ public class MainActivity extends Activity
         return true;
     }
     
+    @Override
+	public boolean onPrepareOptionsMenu(Menu menu)
+    {
+    	MenuItem quickAction = menu.findItem(R.id.quick_dialog);
+    	
+    	if (!Configuration.isFullVersion(this))
+    	{
+    		quickAction.setEnabled(false);
+    	}
+    	else
+    	{
+    		quickAction.setEnabled(true);
+    	}
+    	
+    	return true;
+    }
+    
     /** 
      * Define menu action
      * 
@@ -252,6 +257,13 @@ public class MainActivity extends Activity
 		        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
 		        startActivity(intent);
 		        break;
+	        case R.id.quick_dialog:
+	        	showQuickDialog(this);
+	        	break;
+	        case R.id.location_Status:
+	        	showLocationStatus(this);
+	        	break;
+
         }
         
         return true;
@@ -413,5 +425,176 @@ public class MainActivity extends Activity
 	        	}
 	        }
 	    }
+	}
+	
+	/**
+	 * Shows a dialog to capture the quick action parameters
+	 * @param context
+	 */
+	private void showQuickDialog(Context context)
+	{
+    	final Dialog dialog = new Dialog(context);
+
+    	dialog.setContentView(R.layout.quick_action_dialog);
+    	dialog.setTitle("Location Quick Settings");
+
+    	// configure first spinner
+		final Spinner spinnerInterval = (Spinner) dialog.findViewById(R.id.spinnerInterval);
+		
+		ArrayAdapter spinnerIntervalAdapter = ArrayAdapter.createFromResource(
+	            this, R.array.quickIntervalLabels, android.R.layout.simple_spinner_item);
+		spinnerIntervalAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    
+		spinnerInterval.setAdapter(spinnerIntervalAdapter);
+
+		// configure second spinner
+		final Spinner spinnerAccuracy = (Spinner) dialog.findViewById(R.id.spinnerAccuracy);
+		
+		ArrayAdapter spinnerAccuracyAdapter = ArrayAdapter.createFromResource(
+	            this, R.array.quickAccuracyLabels, android.R.layout.simple_spinner_item);
+		spinnerAccuracyAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    
+		spinnerAccuracy.setAdapter(spinnerAccuracyAdapter);
+
+		// configure third spinner
+		final Spinner spinnerDuration = (Spinner) dialog.findViewById(R.id.spinnerDuration);
+		
+		ArrayAdapter spinnerDurationAdapter = ArrayAdapter.createFromResource(
+	            this, R.array.quickDurationLabels, android.R.layout.simple_spinner_item);
+		spinnerDurationAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+	    
+		spinnerDuration.setAdapter(spinnerDurationAdapter);
+		
+		Button buttonOk 	= (Button) dialog.findViewById(R.id.ButtonOk);
+		Button buttonCancel = (Button) dialog.findViewById(R.id.ButtonCancel);
+		Button buttonReset 	= (Button) dialog.findViewById(R.id.ButtonReset);
+		
+		// Check if we already have a qhick change running
+		LocationService myService = LocationService.getInstance();
+    	if (myService != null)
+    	{
+    		if (myService.isQuickChangeRunning())
+    		{
+    			// disable all except reset
+    			spinnerAccuracy.setEnabled(false);
+    			spinnerInterval.setEnabled(false);
+    			spinnerDuration.setEnabled(false);
+    			
+    			buttonOk.setEnabled(false);
+    			buttonCancel.setEnabled(true);
+    			buttonReset.setEnabled(true);
+    			buttonReset.setOnClickListener( new Button.OnClickListener()
+    			 {
+    			     @Override
+    			     public void onClick(View v)
+    			     {
+    			    	 LocationService.getInstance().resetQuickChange();
+    			         dialog.dismiss();
+    			     }
+    			 });
+    			
+    			// set selections
+    			spinnerAccuracy.setSelection(myService.getAccuracy());
+    			spinnerInterval.setSelection(myService.getInterval());
+    			spinnerDuration.setSelection(myService.getQuickDuration());
+
+    			
+    		}
+    		else
+    		{
+    			// disable reset
+    			spinnerAccuracy.setEnabled(true);
+    			spinnerInterval.setEnabled(true);
+    			spinnerDuration.setEnabled(true);
+
+    			buttonOk.setEnabled(true);
+    			buttonCancel.setEnabled(true);
+    			buttonReset.setEnabled(false);
+
+    			// set selection from prefs
+    	    	
+    	    	int iAccuracy = 0;
+    	    	int iInterval = 0;
+    	    	int iDuration = 0;
+    	    	try
+    	    	{
+    	    		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	        	
+    	    		iAccuracy = Integer.valueOf(sharedPrefs.getString("quick_update_accuracy", "0"));
+    	    		iInterval = Integer.valueOf(sharedPrefs.getString("quick_update_interval", "0"));
+    	    		iDuration = Integer.valueOf(sharedPrefs.getString("quick_update_duration", "0"));
+    	    	}
+    	    	catch (Exception e)
+    	    	{
+    	    		Log.e(TAG, "An error occured while reading quick action preferences");
+    	    	}
+
+    			spinnerAccuracy.setSelection(iAccuracy);
+    			spinnerInterval.setSelection(iInterval);
+    			spinnerDuration.setSelection(iDuration);
+
+    			buttonOk.setOnClickListener( new Button.OnClickListener()
+    			{
+    				
+					@Override
+					public void onClick(View v)
+					{
+						LocationService.getInstance()
+							.setQuickChange(
+									spinnerInterval.getSelectedItemPosition(),
+									spinnerAccuracy.getSelectedItemPosition(),
+									spinnerDuration.getSelectedItemPosition());
+						dialog.dismiss();
+					}
+				});
+				buttonCancel.setOnClickListener(new Button.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						// do nothing
+						dialog.dismiss();
+					}
+				});
+
+    		}
+
+    		dialog.show();
+    	}
+    	else
+    	{
+    		Toast.makeText(this, "Service is not started yet.", Toast.LENGTH_SHORT).show();
+    	}
+	}
+	
+	/**
+	 * Shows a dialog with the current location info
+	 * @param context
+	 */
+	private void showLocationStatus(Context context)
+	{
+    	Dialog dialog = new Dialog(context);
+
+    	dialog.setContentView(R.layout.information_dialog);
+    	dialog.setTitle("Details");
+
+    	TextView title = (TextView) dialog.findViewById(R.id.title);
+    	TextView text = (TextView) dialog.findViewById(R.id.text);
+    	title.setText("Location status");
+    	
+    	
+    	LocationService myService = LocationService.getInstance();
+    	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
+    	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
+    	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
+    	
+    	if (!myService.getCurrentLocation().equals(""))
+    	{
+    		strText = strText + "\n" + "Current Location: " +  myService.getCurrentLocation();
+    	}
+    	
+    	text.setText(strText);
+    	dialog.show();
+
 	}
 }

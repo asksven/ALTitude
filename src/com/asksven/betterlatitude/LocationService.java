@@ -18,7 +18,9 @@ package com.asksven.betterlatitude;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Calendar;
 
+import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
@@ -61,6 +63,10 @@ import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJso
  * @author sven
  *
  */
+/**
+ * @author sven
+ *
+ */
 public class LocationService extends Service implements LocationListener, OnSharedPreferenceChangeListener
 {
 	/** singleton */
@@ -69,9 +75,9 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private NotificationManager mNM;
 	
 	public static String SERVICE_NAME = "com.asksven.betterlatitude.LocationService";
+	private static int QUICK_ACTION = 1234567;
 
-	String m_strLocProvider;
-	private LocationManager m_LocationManager;
+	private LocationManager m_locationManager;
 
 	private static final String TAG = "LocationService";
 	
@@ -87,6 +93,19 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private boolean m_bRegistered = false;
 
 	private ArrayList<Location> m_locationStack = null;
+	
+	private boolean bQuickChangeRunning = false;
+
+	/** the location provider in use */
+	String m_strLocProvider;
+	
+	/** the current location (is geo is on) */
+	String m_strCurrentLocation;
+	
+	/** values for current quick action */
+	private int m_iIterval = 0;
+	private int m_iAccuracy = 0;
+	private int m_iduration = 0;
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -130,12 +149,13 @@ public class LocationService extends Service implements LocationListener, OnShar
     	if (m_bRegistered)
     	{
         	// unregister the receiver
-    		m_LocationManager.removeUpdates(this);    		
+    		m_locationManager.removeUpdates(this);    		
     	}
 
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	String strInterval = prefs.getString("update_interval", "15");
     	String strAccuracy = prefs.getString("update_accuracy", "2000");
+
     	    	
 		int iInterval = 15 * 60 * 1000;
 		int iAccuracy = 2000;
@@ -149,26 +169,55 @@ public class LocationService extends Service implements LocationListener, OnShar
     		Logger.e(TAG, "Error reading prefernces, using defaults");
     	}
     	
+		registerLocationListener(iInterval, iAccuracy);
+
+            
+    }
+    
+    private void registerLocationListener(int intervalMs, int accuracyM)
+    {
+    	if (m_bRegistered)
+    	{
+        	// unregister the receiver
+    		m_locationManager.removeUpdates(this);    		
+    	}
+
+    	
 		// whatever Prefs say, the free version does not give any choice
     	if (!Configuration.isFullVersion(this))
 		{
-    		iInterval = 15 * 60 * 1000;
-    		iAccuracy = 2000;
+    		intervalMs = 15 * 60 * 1000;
+    		accuracyM = 2000;
     		
         	
 		}
     	Criteria criteria = new Criteria();
+    	criteria.setSpeedRequired(false);
+    	criteria.setAltitudeRequired(false);
+    	criteria.setCostAllowed(true);
+    	if (accuracyM < 100)
+    	{
+    		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    	}
+    	else
+    	{
+    		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+    	}
+    	
 
 		// Get the location manager
-		m_LocationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
+		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        m_strLocProvider = m_LocationManager.getBestProvider(criteria, false);
-		m_LocationManager.requestLocationUpdates(m_strLocProvider, iInterval, iAccuracy, this);
-		Logger.i(TAG, "Changed location settings to interval, accuracy = (" + iInterval + ", " + iAccuracy + ")");
-        m_bRegistered = true;
+        m_strLocProvider = m_locationManager.getBestProvider(criteria, true);
+        
+        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
+        m_iAccuracy = accuracyM;
+        m_iIterval = intervalMs;
+		
+		m_bRegistered = true;
             
     }
-    
+
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
     {
     	if (key.equals("update_interval") || key.equals("update_accuracy"))
@@ -196,17 +245,17 @@ public class LocationService extends Service implements LocationListener, OnShar
     		}
     	}
     }
-//    /** 
-//     * Called when service is started
-//     */
-//    public int onStartCommand(Intent intent, int flags, int startId)
-//    {
-//        Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
-//        // We want this service to continue running until it is explicitly
-//        // stopped, so return sticky.
-//        notifyStatus("Service started");
-//        return Service.START_STICKY;
-//    }
+
+    /** 
+     * Called when service is started
+     */
+    public int onStartCommand(Intent intent, int flags, int startId)
+    {
+        Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
+        // We want this service to continue running until it is explicitly
+        // stopped, so return sticky.
+        return Service.START_STICKY;
+    }
     
     @Override
     /**
@@ -217,7 +266,7 @@ public class LocationService extends Service implements LocationListener, OnShar
         // Cancel the persistent notification.
         mNM.cancel(R.string.app_name);
     	// unregister the receiver
-		m_LocationManager.removeUpdates(this);
+		m_locationManager.removeUpdates(this);
         // Unregister the listener whenever a key changes
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
@@ -252,19 +301,47 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
 	}
 
+	/* 
+	 * Called when a new location provider was enabled
+	 * (non-Javadoc)
+	 * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
+	 */
 	@Override
 	public void onProviderEnabled(String provider)
 	{
-		Toast.makeText(this, "Enabled new provider " + provider,
-				Toast.LENGTH_SHORT).show();
-
+		// we may have a better provider now, redefine
+		Log.e(TAG, "Provider " + provider + " was enabled. Maybe we want to use it");
+		if (bQuickChangeRunning)
+		{
+			registerLocationListener(m_iIterval, m_iAccuracy);
+		}
+		else
+		{
+			registerLocationListener();
+		}
 	}
 
+	/* 
+	 * Called when a location provider was disabled
+	 * (non-Javadoc)
+	 * @see android.location.LocationListener#onProviderEnabled(java.lang.String)
+	 */
 	@Override
 	public void onProviderDisabled(String provider)
 	{
-		Toast.makeText(this, "Disenabled provider " + provider,
-				Toast.LENGTH_SHORT).show();
+		// we may have to change providers if we use it right now
+		if (provider.equals(m_strLocProvider))
+		{
+			Log.e(TAG, "Provider " + provider + " was in use. Getting a new one");
+			if (bQuickChangeRunning)
+			{
+				registerLocationListener(m_iIterval, m_iAccuracy);
+			}
+			else
+			{
+				registerLocationListener();
+			}		
+		}
 	}	
 
 	private boolean setLocationApiCall()
@@ -388,12 +465,15 @@ public class LocationService extends Service implements LocationListener, OnShar
     	{
 			if ( (bNotifyGeo) && (m_locationStack != null) && (!m_locationStack.isEmpty()) )
  			{
+				m_strCurrentLocation = GeoUtils.getNearestAddress(this, m_locationStack.get(m_locationStack.size()-1));
 				strStatus = strStatus
 						+ ": "
-						+ GeoUtils.getNearestAddress(this, m_locationStack.get(m_locationStack.size()-1));
+						+ m_strCurrentLocation;
 			}
-
-	    	notifyStatus(strStatus);
+			else
+			{
+				m_strCurrentLocation = "";
+			}
 	    }
 	}
 
@@ -432,9 +512,187 @@ public class LocationService extends Service implements LocationListener, OnShar
 		return m_strStatus;
 	}
 	
+	/**
+	 * Returns the sigleton instance of the service
+	 * @return
+	 */
 	public static LocationService getInstance()
 	{
 		return m_instance;
+	}
+	
+	/**
+	 * Returns true if a quick action is running
+	 * @return 
+	 */
+	public boolean isQuickChangeRunning()
+	{
+		return bQuickChangeRunning;
+	}
+	
+	/**
+	 * Run a quick action for the given parameters
+	 * @param interval as index (@see array.xml)
+	 * @param accuracy as index (@see array.xml)
+	 * @param duration as index (@see array.xml)
+	 * @return true if set successfully
+	 */
+	public boolean setQuickChange(int interval, int accuracy, int duration)
+	{
+		// @see arrays.xml
+		// get a Calendar object with current time
+		m_iIterval = interval;
+		m_iAccuracy = accuracy;
+		m_iduration = duration;
+		
+		Calendar cal = Calendar.getInstance();
+		int minutes = 0;
+		int intervalMs = 0;
+		int accuracyM = 0;
+
+		switch (interval)
+		{
+		case 0:
+			intervalMs = 5 * 1000;
+			break;
+		case 1:
+			intervalMs = 10 * 1000;
+			break;
+		case 2:
+			intervalMs = 30 * 1000;
+			break;
+		case 3:
+			intervalMs = 60 * 1000;
+			break;
+		case 4:
+			intervalMs = 5 * 60 * 1000;
+			break;
+		case 5:
+			intervalMs = 15 * 60 * 1000;
+			break;
+		}
+
+		switch (accuracy)
+		{
+		case 0:
+			accuracyM = 10;
+			break;
+		case 1:
+			accuracyM = 50;
+			break;
+		case 2:
+			accuracyM = 100;
+			break;
+		case 3:
+			accuracyM = 500;
+			break;
+		case 5:
+			accuracyM = 1000;
+			break;
+		}
+
+		switch (duration)
+		{
+		case 0:
+			minutes = 15;
+			break;
+		case 1:
+			minutes = 30;
+			break;
+		case 2:
+			minutes = 60;
+			break;
+		case 3:
+			minutes = 120;
+			break;
+		}
+
+		cal.add(Calendar.MINUTE, minutes);
+
+		Intent intent = new Intent(this, AlarmReceiver.class);
+
+		PendingIntent sender = PendingIntent.getBroadcast(this, QUICK_ACTION,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		// Get the AlarmManager service
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+
+		// change
+		registerLocationListener(intervalMs, accuracyM);
+		bQuickChangeRunning = true;
+		return true;
+	}
+	
+	/**
+	 * Reset (void) any running quick action
+	 */
+	public void resetQuickChange()
+	{
+		m_iIterval = 0;
+		m_iAccuracy = 0;
+		m_iduration = 0;
+
+		// check if there is an intent pending
+		Intent intent = new Intent(this, AlarmReceiver.class);
+
+		PendingIntent sender = PendingIntent.getBroadcast(this, QUICK_ACTION,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		if (sender != null)
+		{
+			// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.cancel(sender);
+		}
+		// reset to pref values
+		registerLocationListener();
+		bQuickChangeRunning = false;
+	}
+
+	/**
+	 * Returns the update interval requested from the LocationProvider
+	 * @return the interval in ms
+	 */
+	public int getInterval()
+	{
+		return m_iIterval;
+	}
+	
+	/**
+	 * Returns the accuracy requested from the LocationProvider
+	 * @return the accuracy in m
+	 */
+	public int getAccuracy()
+	{
+		return m_iAccuracy;
+	}
+		
+	/**
+	 * Returns the duration a quick action will last
+	 * @return the duration
+	 */
+	public int getQuickDuration()
+	{
+		return m_iduration; 
+	}
+	
+	/**
+	 * Return the current address (if geo is on)
+	 * @return the current location as a string
+	 */
+	public String getLocationProvider()
+	{
+		return m_strLocProvider;
+	}
+	
+	
+	/**
+	 * @return
+	 */
+	public String getCurrentLocation()
+	{
+		return m_strCurrentLocation;
 	}
 }
 
