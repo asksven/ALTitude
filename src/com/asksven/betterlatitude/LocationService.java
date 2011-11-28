@@ -97,10 +97,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private boolean bQuickChangeRunning = false;
 
 	/** the location provider in use */
-	String m_strLocProvider;
+	String m_strLocProvider = "";
 	
 	/** the current location (is geo is on) */
-	String m_strCurrentLocation;
+	String m_strCurrentLocation  = "";
 	
 	/** values for current quick action */
 	private int m_iIterval = 0;
