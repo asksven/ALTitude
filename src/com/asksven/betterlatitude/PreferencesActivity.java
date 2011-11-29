@@ -21,6 +21,7 @@ import com.asksven.betterlatitude.utils.Configuration;
 import android.app.Activity;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.util.Log;
 
 /**
  * Activity for managing preferences using Android's preferences framework
@@ -36,6 +37,7 @@ import android.preference.PreferenceActivity;
  */
 public class PreferencesActivity extends PreferenceActivity
 {
+	private static String TAG = "PreferencesActivity";
 	/**
 	 * @see android.app.Activity#onCreate(Bundle)
 	 */
@@ -48,20 +50,27 @@ public class PreferencesActivity extends PreferenceActivity
 		// disable all LocationListener prefs in free version
 		if (!Configuration.isFullVersion(this))
 		{
-			findPreference("start_on_boot").setEnabled(false);
-			findPreference("loc_provider").setEnabled(false);
-			findPreference("loc_provider").setSummary("Latitude location provider: cell network");
-			findPreference("update_interval").setEnabled(false);
-			findPreference("update_interval").setSummary("Latitude update interval: 15 minutes");
-			findPreference("update_accuracy").setEnabled(false);
-			findPreference("update_accuracy").setSummary("Latitude update accuracy: 2 Km");
-			findPreference("map_loc_provider").setEnabled(false);
-			findPreference("map_locProvider").setSummary("Map location provider: cell network");
-			findPreference("map_update_interval").setEnabled(false);
-			findPreference("map_update_interval").setSummary("Map update interval: 15 minutes");
-			findPreference("map_update_accuracy").setEnabled(false);
-			findPreference("map_update_accuracy").setSummary("Map update accuracy: 2 Km");
-			
+			try
+			{
+				findPreference("start_on_boot").setEnabled(false);
+				findPreference("update_interval").setEnabled(false);
+				findPreference("update_interval").setSummary("Latitude update interval: 15 minutes");
+				findPreference("update_accuracy").setEnabled(false);
+				findPreference("update_accuracy").setSummary("Latitude update accuracy: 2 Km");
+				findPreference("map_loc_provider").setEnabled(false);
+				findPreference("map_loc_provider").setSummary("Map location provider: cell network");
+				findPreference("map_update_interval").setEnabled(false);
+				findPreference("map_update_interval").setSummary("Map update interval: 15 minutes");
+				findPreference("map_update_accuracy").setEnabled(false);
+				findPreference("map_update_accuracy").setSummary("Map update accuracy: 2 Km");
+				findPreference("quick_update_interval").setEnabled(false);
+				findPreference("quick_update_accuracy").setEnabled(false);
+				findPreference("quick_update_duration").setEnabled(false);
+			}
+			catch (Exception e)
+			{
+				Log.e(TAG, "An error occured while loading the preferences.");
+			}
 		}
 	}
 }
