@@ -78,6 +78,11 @@ public class MainActivity extends Activity
 	/** The event receiver for updated from the service */
 	private ConnectionUpdateReceiver m_connectionUpdateReceiver;
 
+	/** spinner indexes for quick actions */
+	int m_iIntervalIndex = 0;
+	int m_iAccuracyIndex = 0;
+	int m_iDurationIndex = 0;
+
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -494,10 +499,9 @@ public class MainActivity extends Activity
     			 });
     			
     			// set selections
-    			spinnerAccuracy.setSelection(myService.getAccuracy());
-    			spinnerInterval.setSelection(myService.getInterval());
-    			spinnerDuration.setSelection(myService.getQuickDuration());
-
+    			spinnerAccuracy.setSelection(m_iAccuracyIndex);
+    			spinnerInterval.setSelection(m_iIntervalIndex);
+    			spinnerDuration.setSelection(m_iDurationIndex);
     			
     		}
     		else
@@ -544,6 +548,12 @@ public class MainActivity extends Activity
 									spinnerInterval.getSelectedItemPosition(),
 									spinnerAccuracy.getSelectedItemPosition(),
 									spinnerDuration.getSelectedItemPosition());
+						
+						// save selection
+						m_iIntervalIndex = spinnerInterval.getSelectedItemPosition();
+						m_iAccuracyIndex = spinnerAccuracy.getSelectedItemPosition();
+						m_iDurationIndex = spinnerDuration.getSelectedItemPosition();
+						
 						dialog.dismiss();
 					}
 				});
@@ -585,14 +595,15 @@ public class MainActivity extends Activity
     	
     	LocationService myService = LocationService.getInstance();
     	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
+    	strText = strText + "Buffered locations: " + myService.getBufferSize() / 1000 + "\n";
     	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
     	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
-    	
+    	    	
     	if (!myService.getCurrentLocation().equals(""))
     	{
     		strText = strText + "\n" + "Current Location: " +  myService.getCurrentLocation();
     	}
-    	
+
     	text.setText(strText);
     	dialog.show();
 

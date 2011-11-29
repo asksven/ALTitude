@@ -102,10 +102,9 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/** the current location (is geo is on) */
 	String m_strCurrentLocation  = "";
 	
-	/** values for current quick action */
+	/** precision for current location manager */
 	private int m_iIterval = 0;
 	private int m_iAccuracy = 0;
-	private int m_iduration = 0;
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -469,11 +468,13 @@ public class LocationService extends Service implements LocationListener, OnShar
 				strStatus = strStatus
 						+ ": "
 						+ m_strCurrentLocation;
+				notifyStatus(strStatus);
 			}
 			else
 			{
 				m_strCurrentLocation = "";
 			}
+			
 	    }
 	}
 
@@ -541,10 +542,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
 		// @see arrays.xml
 		// get a Calendar object with current time
-		m_iIterval = interval;
-		m_iAccuracy = accuracy;
-		m_iduration = duration;
-		
 		Calendar cal = Calendar.getInstance();
 		int minutes = 0;
 		int intervalMs = 0;
@@ -607,6 +604,9 @@ public class LocationService extends Service implements LocationListener, OnShar
 			break;
 		}
 
+		m_iIterval = intervalMs;
+		m_iAccuracy = accuracyM;		
+
 		cal.add(Calendar.MINUTE, minutes);
 
 		Intent intent = new Intent(this, AlarmReceiver.class);
@@ -629,9 +629,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 	 */
 	public void resetQuickChange()
 	{
-		m_iIterval = 0;
-		m_iAccuracy = 0;
-		m_iduration = 0;
 
 		// check if there is an intent pending
 		Intent intent = new Intent(this, AlarmReceiver.class);
@@ -667,16 +664,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
 		return m_iAccuracy;
 	}
-		
-	/**
-	 * Returns the duration a quick action will last
-	 * @return the duration
-	 */
-	public int getQuickDuration()
-	{
-		return m_iduration; 
-	}
-	
+			
 	/**
 	 * Return the current address (if geo is on)
 	 * @return the current location as a string
@@ -686,13 +674,28 @@ public class LocationService extends Service implements LocationListener, OnShar
 		return m_strLocProvider;
 	}
 	
-	
 	/**
-	 * @return
+	 * Returns the current location (address) as a string
+	 * @return the current address
 	 */
 	public String getCurrentLocation()
 	{
 		return m_strCurrentLocation;
 	}
+
+	/**
+	 * Returns the number of buffered locations
+	 * @return the number 
+	 */
+	public int getBufferSize()
+	{
+		int iRet = 0; 
+		if ( (m_locationStack != null) && (m_locationStack.size() > 0) )
+		{
+			iRet = m_locationStack.size();
+		}
+		return iRet;
+	}
+
 }
 
