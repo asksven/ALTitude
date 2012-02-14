@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011 asksven
+ * Copyright (C) 2011-12 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -69,6 +69,9 @@ public class MainActivity extends Activity
 	 * The logging TAG
 	 */
 	private static final String TAG = "MainActivity";
+    public static final String MARKET_LINK ="market://details?id=com.asksven.commandcenter";
+    public static final String TWITTER_LINK ="https://twitter.com/#!/asksven";
+
 	
 	/**
 	 * a progess dialog to be used for long running tasks
@@ -151,6 +154,42 @@ public class MainActivity extends Activity
     	{
     		statusTextView.setText(LocationService.STATUS_NOT_LOGGED_IN);
     	}
+    	
+    	final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	
+    	// show Rate button if it wasn't clicked yet
+    	if (prefs.getInt("show_rate", 0) == 0)
+    	{
+	        final Button buttonRate = (Button) findViewById(R.id.buttonRate);
+	        buttonRate.setOnClickListener(new View.OnClickListener()
+	        {
+	            public void onClick(View v)
+	            {
+	            	SharedPreferences.Editor editor = prefs.edit();
+	    	        editor.putInt("show_rate", 1);
+	    	        editor.commit();
+
+	    	        openURL(MARKET_LINK);
+	            }
+	        });
+    	}
+    	
+        // show Follow button if it wasn't clicked yet
+        if (prefs.getInt("show_follow", 0) == 0)
+        {
+	        final Button buttonFollow = (Button) findViewById(R.id.buttonTwitter);
+	        buttonFollow.setOnClickListener(new View.OnClickListener()
+	        {
+	            public void onClick(View v)
+	            {
+	            	SharedPreferences.Editor editor = prefs.edit();
+	    	        editor.putInt("show_follow", 1);
+	    	        editor.commit();
+
+	                openURL(TWITTER_LINK);
+	            }
+	        });
+        }
         
   	}
 
@@ -615,4 +654,12 @@ public class MainActivity extends Activity
     	}
     	dialog.show();
 	}
+	
+    public void openURL( String inURL )
+    {
+        Intent browse = new Intent( Intent.ACTION_VIEW , Uri.parse( inURL ) );
+
+        startActivity( browse );
+    }
+
 }

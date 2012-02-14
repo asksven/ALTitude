@@ -30,20 +30,6 @@
     	android:textAppearance="?android:attr/textAppearanceMedium" 
     	android:text="By asksven"
     	android:layout_gravity="center"/>
-    <TextView 
-    	android:layout_width="wrap_content" 
-    	android:layout_height="wrap_content" 
-    	android:id="@+id/textView1" 
-    	android:textAppearance="?android:attr/textAppearanceSmall" 
-    	android:text="Contact: https://github.com/asksven"
-    	android:layout_gravity="center"/>
-    <TextView 
-    	android:layout_width="wrap_content" 
-    	android:layout_height="wrap_content" 
-    	android:id="@+id/textView1" 
-    	android:textAppearance="?android:attr/textAppearanceSmall" 
-    	android:text="or @asksven on twitter"
-    	android:layout_gravity="center"/>
     <ImageView 
     	android:layout_width="wrap_content"
     	android:layout_height="wrap_content"
@@ -57,6 +43,28 @@
     	android:textAppearance="?android:attr/textAppearanceLarge" 
     	android:text="Not connected"
     	android:layout_gravity="center"/>
+    <Button
+        android:id="@+id/buttonTwitter"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"
+        android:text="Follow me on Twitter" />
+
+    <Button
+        android:id="@+id/buttonRate"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginBottom="3dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="10dp"        
+        android:text="Rate / Review on Android Market" />
+    
     <LinearLayout android:layout_height="fill_parent" android:layout_width="match_parent">		
 	<com.google.ads.AdView android:id="@+id/adView"
                    android:layout_width="wrap_content"
