@@ -53,6 +53,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
+import com.google.api.services.latitude.Latitude.CurrentLocation;
+import com.google.api.services.latitude.Latitude.CurrentLocation.Insert;
 import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
 
 
@@ -207,14 +209,19 @@ public class LocationService extends Service implements LocationListener, OnShar
 		// Get the location manager
 		m_locationManager = (LocationManager) getSystemService(Context.LOCATION_SERVICE);
 
-        m_strLocProvider = m_locationManager.getBestProvider(criteria, true);
-        
-        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
-        m_iAccuracy = accuracyM;
-        m_iIterval = intervalMs;
-		
-		m_bRegistered = true;
-            
+		if (m_locationManager != null)
+		{
+	        m_strLocProvider = m_locationManager.getBestProvider(criteria, true);
+	        
+	        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
+	        m_iAccuracy = accuracyM;
+	        m_iIterval = intervalMs;
+	        m_bRegistered = true;
+		}
+		else
+		{
+			m_bRegistered = false;
+		}
     }
 
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key)
@@ -401,13 +408,22 @@ public class LocationService extends Service implements LocationListener, OnShar
 			    		Logger.i(TAG, " Service Updating Latitude");
 			    	}
 
-		    		
 				    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
 				    currentLocation.set("latitude", location.getLatitude());
 				    currentLocation.set("longitude", location.getLongitude());
 				    currentLocation.set("timespampMs", location.getTime());
 				    setStatus(STATUS_LOGGED_IN);
-					LatitudeCurrentlocationResourceJson insertedLocation = latitude.currentLocation.insert(currentLocation).execute();
+				    
+				    Insert myInsert = latitude.currentLocation.insert(currentLocation);
+				    
+				    if (myInsert != null)
+				    {
+				    	myInsert.execute();
+				    }
+				    else
+				    {
+				    	throw new IOException("CurrentLocation.Insert failed");
+				    }
 		    	}
 		    	
 		    	// if we got here all updates were OK, delete the stack
