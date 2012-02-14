@@ -66,6 +66,9 @@
         <item>*15 Min.</item>
         <item>30 Min.</item>
         <item>60 Min.</item>
+        <item>2 Hrs.</item>
+        <item>4 Hrs.</item>
+        <item>6 Hrs.</item>
     </string-array>
  
      <string-array name="intervalValues">
@@ -73,6 +76,9 @@
         <item name="2">15</item>
         <item name="3">30</item>
         <item name="4">60</item>
+        <item name="4">120</item>
+        <item name="4">240</item>
+        <item name="4">360</item>
     </string-array>
 
     <!-- Values for the update precision. -->
