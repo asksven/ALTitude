@@ -594,18 +594,25 @@ public class MainActivity extends Activity
     	
     	
     	LocationService myService = LocationService.getInstance();
-    	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
-    	strText = strText + "Buffered locations: " + myService.getBufferSize() / 1000 + "\n";
-    	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
-    	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
-    	    	
-    	if (!myService.getCurrentLocation().equals(""))
+    	if (myService != null)
     	{
-    		strText = strText + "\n" + "Current Location: " +  myService.getCurrentLocation();
+	    	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
+	    	strText = strText + "Buffered locations: " + myService.getBufferSize() / 1000 + "\n";
+	    	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
+	    	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
+	    	    	
+	    	if (!myService.getCurrentLocation().equals(""))
+	    	{
+	    		strText = strText + "\n" + "Current Location: " +  myService.getCurrentLocation();
+	    	}
+	
+	    	text.setText(strText);
+    	
     	}
-
-    	text.setText(strText);
+    	else
+    	{
+    		text.setText("The location service is currently unavailable");
+    	}
     	dialog.show();
-
 	}
 }
