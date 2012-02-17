@@ -10,9 +10,11 @@
           android:title="Change precision" />
     <item android:id="@+id/location_Status"
           android:title="Status" />
+    <item android:id="@+id/release_notes"
+          android:title="Release Notes" />
     
-    <item android:id="@+id/log_on"
-          android:title="Log on" />
+<!--     <item android:id="@+id/log_on" -->
+<!--           android:title="Log on" /> -->
     <item android:id="@+id/log_off"
           android:title="Log off" />
 </menu>
