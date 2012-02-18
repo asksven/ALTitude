@@ -40,34 +40,38 @@ public final class R {
         public static final int icon=0x7f020000;
     }
     public static final class id {
-        public static final int ButtonCancel=0x7f080011;
-        public static final int ButtonOk=0x7f080010;
-        public static final int ButtonReset=0x7f080012;
-        public static final int adView=0x7f08000a;
-        public static final int call_latitude=0x7f080016;
-        public static final int image=0x7f080001;
-        public static final int imageView1=0x7f080008;
-        public static final int layout_root=0x7f080000;
-        public static final int location_Status=0x7f080018;
-        public static final int log_off=0x7f08001a;
-        public static final int log_on=0x7f080019;
-        public static final int mainlayout=0x7f08000b;
-        public static final int mapview=0x7f08000c;
-        public static final int preferences=0x7f080014;
-        public static final int quick_dialog=0x7f080017;
-        public static final int show_map=0x7f080015;
-        public static final int spinnerAccuracy=0x7f08000e;
-        public static final int spinnerDuration=0x7f08000f;
-        public static final int spinnerInterval=0x7f08000d;
-        public static final int text=0x7f080003;
-        public static final int textView1=0x7f080007;
-        public static final int textViewHint=0x7f080005;
-        public static final int textViewName=0x7f080004;
-        public static final int textViewStatus=0x7f080009;
-        public static final int textViewVersion=0x7f080006;
-        public static final int title=0x7f080002;
-        public static final int toggle_sat=0x7f08001b;
-        public static final int webview=0x7f080013;
+        public static final int ButtonCancel=0x7f090012;
+        public static final int ButtonOk=0x7f090011;
+        public static final int ButtonReset=0x7f090013;
+        public static final int adView=0x7f09000b;
+        public static final int buttonClose=0x7f090015;
+        public static final int buttonLogon=0x7f09000a;
+        public static final int buttonMarket=0x7f090017;
+        public static final int buttonTwitter=0x7f090016;
+        public static final int call_latitude=0x7f09001a;
+        public static final int image=0x7f090001;
+        public static final int imageView1=0x7f090008;
+        public static final int layout_root=0x7f090000;
+        public static final int location_Status=0x7f09001c;
+        public static final int log_off=0x7f09001e;
+        public static final int mainlayout=0x7f09000c;
+        public static final int mapview=0x7f09000d;
+        public static final int preferences=0x7f090018;
+        public static final int quick_dialog=0x7f09001b;
+        public static final int release_notes=0x7f09001d;
+        public static final int show_map=0x7f090019;
+        public static final int spinnerAccuracy=0x7f09000f;
+        public static final int spinnerDuration=0x7f090010;
+        public static final int spinnerInterval=0x7f09000e;
+        public static final int text=0x7f090003;
+        public static final int textView1=0x7f090007;
+        public static final int textViewHint=0x7f090005;
+        public static final int textViewName=0x7f090004;
+        public static final int textViewStatus=0x7f090009;
+        public static final int textViewVersion=0x7f090006;
+        public static final int title=0x7f090002;
+        public static final int toggle_sat=0x7f09001f;
+        public static final int webview=0x7f090014;
     }
     public static final class layout {
         public static final int information_dialog=0x7f030000;
@@ -76,15 +80,21 @@ public final class R {
         public static final int map_debug=0x7f030003;
         public static final int map_release=0x7f030004;
         public static final int quick_action_dialog=0x7f030005;
-        public static final int webview=0x7f030006;
+        public static final int readmewebview=0x7f030006;
+        public static final int webview=0x7f030007;
     }
     public static final class menu {
-        public static final int mainmenu=0x7f070000;
-        public static final int mapmenu=0x7f070001;
+        public static final int mainmenu=0x7f080000;
+        public static final int mapmenu=0x7f080001;
     }
     public static final class string {
         public static final int app_name=0x7f050001;
         public static final int hello=0x7f050000;
+    }
+    public static final class style {
+        public static final int Theme_asksven=0x7f070000;
+        public static final int Theme_asksven_Fullscreen=0x7f070002;
+        public static final int Theme_asksven_NoTitleBar=0x7f070001;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;

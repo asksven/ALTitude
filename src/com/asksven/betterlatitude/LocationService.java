@@ -33,6 +33,7 @@ import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
 import android.os.IBinder;
@@ -42,12 +43,14 @@ import android.widget.Toast;
 
 import com.asksven.android.common.location.GeoUtils;
 import com.asksven.android.common.networkutils.DataNetwork;
+import com.asksven.android.common.utils.DateUtils;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessTokenRequest.GoogleAuthorizationCodeGrant;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -85,8 +88,11 @@ public class LocationService extends Service implements LocationListener, OnShar
 	
 	/** constants for the connection status */
 	public static final String STATUS_UPDATE_PENDING = "Update pending";
-	public static final String STATUS_LOGGED_IN = "Logged in";
-	public static final String STATUS_NOT_LOGGED_IN = "Not logged in";
+	public static final String STATUS_UPDATE_BUFFERED = "Update buffered";
+//	public static final String STATUS_LOGGED_IN = "Logged in";
+	public static final String STATUS_NOT_LOGGED_IN = "Please log on to Latitude";
+	public static final String STATUS_SERVICE_NOT_STARTED = "Service not started yet";
+	public static final String STATUS_LOCATION_UPDATED = "Location was updated";
 	public static final String BROADCAST_STATUS_CHANGED = "Connection stats changed";
 	
 	/** the connection status */
@@ -295,11 +301,17 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Logger.i(TAG, "onLocationChanged called");
 		m_locationStack.add(location);
 
-		if (!setLocationApiCall())
-		{	
+		try
+		{
+			if (!setLocationApiCall())
+			{	
+				notifyStatus(m_locationStack + " Location(s) buffered");
+			}
+		}
+		catch (Exception e)
+		{
 			notifyStatus(m_locationStack + " Location(s) buffered");
 		}
-		
 	}
 
 	@Override
@@ -412,17 +424,22 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    currentLocation.set("latitude", location.getLatitude());
 				    currentLocation.set("longitude", location.getLongitude());
 				    currentLocation.set("timespampMs", location.getTime());
-				    setStatus(STATUS_LOGGED_IN);
 				    
 				    Insert myInsert = latitude.currentLocation.insert(currentLocation);
-				    
+
+				    String now = DateUtils.now("HH:mm:ss");
+				    setStatus(STATUS_LOCATION_UPDATED + ": " + now);
+
 				    if (myInsert != null)
 				    {
-				    	myInsert.execute();
+				    	//myInsert.execute();
+				    	new UpdateLatitudeTask().execute(myInsert);
 				    }
 				    else
 				    {
+				    	setStatus(STATUS_UPDATE_BUFFERED + "(" + m_locationStack.size() + ")");
 				    	throw new IOException("CurrentLocation.Insert failed");
+				    	
 				    }
 		    	}
 		    	
@@ -712,6 +729,32 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 		return iRet;
 	}
+	
+	class UpdateLatitudeTask extends AsyncTask<Insert, Void, Void>
+	{
+
+	    private Exception exception;
+
+	    protected Void doInBackground(Insert... inserts)
+	    {
+	    	try
+	        {
+	    		inserts[0].execute();
+	        	return null;
+	        }
+	        catch (Exception e)
+	        {
+	            this.exception = e;
+	            return null;
+	        }
+	    }
+
+	    protected void onPostExecute()
+	    {
+
+	    }
+	 }
+
 
 }
 

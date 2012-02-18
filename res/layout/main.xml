@@ -43,27 +43,17 @@
     	android:textAppearance="?android:attr/textAppearanceLarge" 
     	android:text="Not connected"
     	android:layout_gravity="center"/>
+    
     <Button
-        android:id="@+id/buttonTwitter"
+        android:id="@+id/buttonLogon"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal"
         android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
-        android:layout_marginLeft="10dp"
-        android:layout_marginRight="10dp"
-        android:text="Follow me on Twitter" />
-
-    <Button
-        android:id="@+id/buttonRate"
-        android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center_horizontal"
-        android:layout_marginBottom="3dp"
-        android:layout_marginTop="3dp"
+        android:layout_marginTop="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"        
-        android:text="Rate / Review on Android Market" />
+        android:text="Log on to Latitude" />
     
     <LinearLayout android:layout_height="fill_parent" android:layout_width="match_parent">		
 	<com.google.ads.AdView android:id="@+id/adView"

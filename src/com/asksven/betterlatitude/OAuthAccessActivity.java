@@ -21,6 +21,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Bitmap;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -84,25 +85,18 @@ public class OAuthAccessActivity extends Activity
             	
             	if (url.startsWith(OAuth2ClientConstants.REDIRECT_URI))
             	{
-            		try
-            		{
+//            		try
+//            		{
 						
             			if (url.indexOf("code=")!=-1)
             			{
             			
 	            			String code = extractCodeFromUrl(url);
-							
-				  		      AccessTokenResponse accessTokenResponse = new GoogleAuthorizationCodeGrant(new NetHttpTransport(),
-										      new JacksonFactory(),
-										      OAuth2ClientConstants.CLIENT_ID,
-										      OAuth2ClientConstants.CLIENT_SECRET,
-										      code,
-										      OAuth2ClientConstants.REDIRECT_URI).execute();
-				
-				  		      CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
-				  		      credentialStore.write(accessTokenResponse);
-				  		      view.setVisibility(View.INVISIBLE);
-				  		      startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
+	            			Object[] myArgs = {code, view};
+							new GetCredentialsTask().execute(myArgs);
+
+//							view.setVisibility(View.INVISIBLE);
+//				  		    startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
             			}
             			else if (url.indexOf("error=")!=-1)
             			{
@@ -111,11 +105,11 @@ public class OAuthAccessActivity extends Activity
             				startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
             			}
             			
-					}
-            		catch (IOException e)
-            		{
-						e.printStackTrace();
-					}
+//					}
+//            		catch (IOException e)
+//            		{
+//						e.printStackTrace();
+//					}
 
             	}
                 System.out.println("onPageFinished : " + url);
@@ -130,5 +124,45 @@ public class OAuthAccessActivity extends Activity
         
         webview.loadUrl(authorizationUrl);		
 	}
+	
+	class GetCredentialsTask extends AsyncTask<Object, Void, View>
+	{
+
+	    private Exception exception;
+
+	    protected View doInBackground(Object... args)
+	    {
+	        try
+	        {
+	        	// args is [String, View]
+	  		    AccessTokenResponse accessTokenResponse = new GoogleAuthorizationCodeGrant(new NetHttpTransport(),
+				new JacksonFactory(),
+				OAuth2ClientConstants.CLIENT_ID,
+				OAuth2ClientConstants.CLIENT_SECRET,
+				(String) args[0],
+				OAuth2ClientConstants.REDIRECT_URI).execute();
+
+				CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
+				credentialStore.write(accessTokenResponse);
+				return (View) args[1];
+	        }
+	        catch (Exception e)
+	        {
+	            this.exception = e;
+	            return null;
+	        }
+	    }
+
+	    protected void onPostExecute(View view)
+	    {
+	    	if (view != null)
+	    	{
+	    		view.setVisibility(View.INVISIBLE);
+	    	}
+  		    startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
+
+	    }
+	 }
+
 
 }

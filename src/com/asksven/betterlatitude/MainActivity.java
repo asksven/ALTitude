@@ -18,11 +18,13 @@ package com.asksven.betterlatitude;
 import java.io.IOException;
 import android.app.Activity;
 import android.app.ActivityManager;
+import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
 import android.content.BroadcastReceiver;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -36,6 +38,7 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -43,6 +46,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.asksven.betterlatitude.ReadmeActivity;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
@@ -69,7 +73,7 @@ public class MainActivity extends Activity
 	 * The logging TAG
 	 */
 	private static final String TAG = "MainActivity";
-    public static final String MARKET_LINK ="market://details?id=com.asksven.commandcenter";
+    public static final String MARKET_LINK ="market://details?id=com.asksven.betterlatitude";
     public static final String TWITTER_LINK ="https://twitter.com/#!/asksven";
 
 	
@@ -143,53 +147,37 @@ public class MainActivity extends Activity
         	Log.e(TAG, "An error occured retrieveing the version info: " + e.getMessage());
         }
         
-        // Set the connection state
-    	TextView statusTextView = (TextView) findViewById(R.id.textViewStatus);
-    	LocationService myService = LocationService.getInstance();
-    	if (myService != null)
-    	{
-    		statusTextView.setText(myService.getStatus());
-    	}
-    	else
-    	{
-    		statusTextView.setText(LocationService.STATUS_NOT_LOGGED_IN);
-    	}
-    	
-    	final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	
-    	// show Rate button if it wasn't clicked yet
-    	if (prefs.getInt("show_rate", 0) == 0)
-    	{
-	        final Button buttonRate = (Button) findViewById(R.id.buttonRate);
-	        buttonRate.setOnClickListener(new View.OnClickListener()
-	        {
-	            public void onClick(View v)
-	            {
-	            	SharedPreferences.Editor editor = prefs.edit();
-	    	        editor.putInt("show_rate", 1);
-	    	        editor.commit();
+        	
 
-	    	        openURL(MARKET_LINK);
-	            }
-	        });
-    	}
-    	
-        // show Follow button if it wasn't clicked yet
-        if (prefs.getInt("show_follow", 0) == 0)
-        {
-	        final Button buttonFollow = (Button) findViewById(R.id.buttonTwitter);
-	        buttonFollow.setOnClickListener(new View.OnClickListener()
-	        {
-	            public void onClick(View v)
-	            {
-	            	SharedPreferences.Editor editor = prefs.edit();
-	    	        editor.putInt("show_follow", 1);
-	    	        editor.commit();
+        // Show release notes when first starting a new version
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String strLastRelease	= sharedPrefs.getString("last_release", "0");
+		String strCurrentRelease = "";
 
-	                openURL(TWITTER_LINK);
-	            }
-	        });
-        }
+		try
+		{
+			PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
+			
+	    	strCurrentRelease = Integer.toString(pinfo.versionCode);
+		}
+		catch (Exception e)
+		{
+			// nop strCurrentRelease is set to ""
+		}
+
+		if (!strLastRelease.equals(strCurrentRelease))
+    	{
+    		// show the readme
+	    	Intent intentReleaseNotes = new Intent(this, ReadmeActivity.class);
+	    	intentReleaseNotes.putExtra("filename", "readme.html");
+	        this.startActivity(intentReleaseNotes);
+	        
+	        // save the current release to properties so that the dialog won't be shown till next version
+	        SharedPreferences.Editor editor = sharedPrefs.edit();
+	        editor.putString("last_release", strCurrentRelease);
+	        editor.commit();
+    	}
+
         
   	}
 
@@ -210,12 +198,6 @@ public class MainActivity extends Activity
 	protected void onResume()
 	{
 		super.onResume();
-
-		// Performs an authorized API call.
-		if (!m_bLoggedOn)
-		{
-//			new OauthLogin().execute("");
-		}
     	
 		startService();
 		
@@ -226,6 +208,9 @@ public class MainActivity extends Activity
 		}
 		IntentFilter intentFilter = new IntentFilter(LocationService.BROADCAST_STATUS_CHANGED);
 		registerReceiver(m_connectionUpdateReceiver, intentFilter);
+		
+		// update the status
+		this.updateStatus();
 	}
 
 	/* Remove the event listener updates when Activity is paused */
@@ -288,9 +273,9 @@ public class MainActivity extends Activity
 	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
 	            this.startActivity(intentMap);
 	        	break;	
-	        case R.id.log_on:  
-	        	logOn();
-	        	break;	
+//	        case R.id.log_on:  
+//	        	logOn();
+//	        	break;	
 	        case R.id.log_off: 
 	        	logOff();
 	        	break;	
@@ -306,13 +291,63 @@ public class MainActivity extends Activity
 	        	break;
 	        case R.id.location_Status:
 	        	showLocationStatus(this);
-	        	break;
-
+	        case R.id.release_notes:
+            	// Release notes
+            	Intent intentReleaseNotes = new Intent(this, ReadmeActivity.class);
+            	intentReleaseNotes.putExtra("filename", "readme.html");
+                this.startActivity(intentReleaseNotes);
+            	break;	
         }
         
         return true;
     }
-    
+
+    private void updateStatus()
+    {
+	    // Set the connection state
+		TextView statusTextView = (TextView) findViewById(R.id.textViewStatus);
+		LocationService myService = LocationService.getInstance();
+		if (myService != null)
+		{
+			statusTextView.setText(myService.getStatus());
+		}
+		else
+		{
+			statusTextView.setText(LocationService.STATUS_SERVICE_NOT_STARTED);
+		}
+		
+		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		
+		
+	    // Show or hide log on button depending on the existence of the credentials
+	    final Button buttonLogon = (Button) findViewById(R.id.buttonLogon);
+	    if (!hasCredentials())
+	    {
+	    	buttonLogon.setVisibility(Button.VISIBLE);
+	    	if (myService != null)
+	    	{
+	    		myService.setStatus(LocationService.STATUS_NOT_LOGGED_IN);
+	    	}
+	    	
+	        buttonLogon.setOnClickListener(new View.OnClickListener()
+	        {
+	            public void onClick(View v)
+	            {
+		        	logOn();
+	            }
+	        });
+	
+	    }
+	    else
+	    {
+	    	buttonLogon.setVisibility(Button.INVISIBLE);
+	    	if (myService != null)
+	    	{
+	    		myService.setStatus(myService.getStatus());
+	    	}
+	    }
+    }
+
 	// Launch the OAuth flow to get an access token required to do authorized API calls.
 	// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
 	public void logOn()
@@ -327,7 +362,9 @@ public class MainActivity extends Activity
 	void logOff()
 	{
 		clearCredentials();
+		
 		getLocationApiCall();
+		updateStatus();
 	}
 
     /**
@@ -340,7 +377,31 @@ public class MainActivity extends Activity
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	new SharedPreferencesCredentialStore(prefs).clearCredentials();
     }
-	
+
+    /**
+     * Check if credentials exist
+     * @return true is credentials were stored
+     */
+    private boolean hasCredentials()
+    {
+    	boolean bRet = false;
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
+		AccessTokenResponse accessTokenResponse = credentialStore.read();
+
+		// check if token is valid (exists)
+		if (accessTokenResponse.accessToken.equals(""))
+		{
+			bRet = false;
+		}
+		else
+		{
+			bRet = true;
+		}
+		
+		return bRet;
+
+    }
     /**
      * Performs an authorized API call to retrieve the current location.
      */
@@ -421,34 +482,34 @@ public class MainActivity extends Activity
 	 * @see http://code.google.com/p/makemachine/source/browse/trunk/android/examples/async_task/src/makemachine/android/examples/async/AsyncTaskExample.java
 	 * for more details
 	 */
-	private class OauthLogin extends AsyncTask
-	{
-		@Override
-	    protected Object doInBackground(Object... params)
-	    {
-			MainActivity.this.getLocationApiCall();
-			
-	        return true;
-	    }
-		
-		@Override
-		protected void onPostExecute(Object o)
-	    {
-			super.onPostExecute(o);
-	        // update hourglass
-    		m_progressDialog.hide();
-	    }
-	    @Override
-	    protected void onPreExecute()
-	    {
-	        // update hourglass
-	    	m_progressDialog = new ProgressDialog(MainActivity.this);
-	    	m_progressDialog.setMessage("Retrieving current location...");
-	    	m_progressDialog.setIndeterminate(true);
-	    	m_progressDialog.setCancelable(false);
-	    	m_progressDialog.show();
-	    }
-	}
+//	private class OauthLogin extends AsyncTask
+//	{
+//		@Override
+//	    protected Object doInBackground(Object... params)
+//	    {
+//			MainActivity.this.getLocationApiCall();
+//			
+//	        return true;
+//	    }
+//		
+//		@Override
+//		protected void onPostExecute(Object o)
+//	    {
+//			super.onPostExecute(o);
+//	        // update hourglass
+//    		m_progressDialog.hide();
+//	    }
+//	    @Override
+//	    protected void onPreExecute()
+//	    {
+//	        // update hourglass
+//	    	m_progressDialog = new ProgressDialog(MainActivity.this);
+//	    	m_progressDialog.setMessage("Retrieving current location...");
+//	    	m_progressDialog.setIndeterminate(true);
+//	    	m_progressDialog.setCancelable(false);
+//	    	m_progressDialog.show();
+//	    }
+//	}
 
 	private class ConnectionUpdateReceiver extends BroadcastReceiver
 	{
@@ -465,7 +526,7 @@ public class MainActivity extends Activity
 	        	}
 	        	else
 	        	{
-	        		statusTextView.setText(LocationService.STATUS_NOT_LOGGED_IN);
+	        		statusTextView.setText(LocationService.STATUS_SERVICE_NOT_STARTED);
 	        	}
 	        }
 	    }
