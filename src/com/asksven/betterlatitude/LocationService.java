@@ -20,6 +20,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
@@ -45,12 +47,15 @@ import com.asksven.android.common.location.GeoUtils;
 import com.asksven.android.common.networkutils.DataNetwork;
 import com.asksven.android.common.utils.DateUtils;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
+import com.asksven.betterlatitude.credentialstore.LatitudeApi;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessTokenRequest.GoogleAuthorizationCodeGrant;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -58,6 +63,8 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
 import com.google.api.services.latitude.Latitude.CurrentLocation;
 import com.google.api.services.latitude.Latitude.CurrentLocation.Insert;
+//import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
+//import com.google.api.services.latitude.model.Location;
 import com.google.api.services.latitude.model.LatitudeCurrentlocationResourceJson;
 
 
@@ -181,6 +188,17 @@ public class LocationService extends Service implements LocationListener, OnShar
             
     }
     
+    public ArrayList<Location> getLocationStack()
+    {
+    	return m_locationStack;
+    	
+    }
+    
+    public void clearLocationStack()
+    {
+    	m_locationStack.clear();
+    	
+    }
     private void registerLocationListener(int intervalMs, int accuracyM)
     {
     	if (m_bRegistered)
@@ -303,10 +321,18 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		try
 		{
-			if (!setLocationApiCall())
-			{	
-				notifyStatus(m_locationStack + " Location(s) buffered");
-			}
+//			if (!LatitudeApi.useAccountManager(this))
+//			{
+				if (!setLocationApiCall())
+				{	
+					notifyStatus(m_locationStack + " Location(s) buffered");
+				}
+//			}
+//			else
+//			{
+//				// headless call
+//				LatitudeApi.getInstance(this).useAccount(null, false);
+//			}
 		}
 		catch (Exception e)
 		{
@@ -400,6 +426,11 @@ public class LocationService extends Service implements LocationListener, OnShar
 			        accessTokenResponse.refreshToken);
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
+		    
+//		    final Latitude.Builder builder = Latitude.builder(transport, jsonFactory);
+//		    builder.setHttpRequestInitializer(accessProtectedResource);
+//		    builder.setApplicationName("ALTitude");
+//			final Latitude latitude = builder.build();
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    
 		    // empty the stack and update all locations with the right timestamp
@@ -421,6 +452,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			    	}
 
 				    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
+//			    	com.google.api.services.latitude.model.Location currentLocation = new com.google.api.services.latitude.model.Location();
 				    currentLocation.set("latitude", location.getLatitude());
 				    currentLocation.set("longitude", location.getLongitude());
 				    currentLocation.set("timespampMs", location.getTime());
@@ -464,6 +496,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 		return bRet;
 	}
 
+
+
 	/**
 	 * Notify status change in notification bar (if enabled)
 	 */
@@ -486,7 +520,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/**
 	 * Notify location change in notification bar (if enabled)
 	 */
-	void notifyCurrentLocation()
+	public void notifyCurrentLocation()
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	String strStatus = "Location updated";
@@ -515,7 +549,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/**
 	 * Notify status change in notification bar (if enabled)
 	 */
-	void notifyError(String strStatus)
+	public void notifyError(String strStatus)
 	{
     	Notification notification = new Notification(
     			R.drawable.icon, strStatus, System.currentTimeMillis());
@@ -739,12 +773,16 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    {
 	    	try
 	        {
+	    		Log.d(TAG, "before insert.execute");
 	    		inserts[0].execute();
+	    		Log.d(TAG, "after insert.execute");
 	        	return null;
 	        }
 	        catch (Exception e)
 	        {
+	        	Log.d(TAG, "error in insert.execute");
 	            this.exception = e;
+	            Log.e(TAG, "An error occured in UpdateLatitude.doInBackground(): " + e.getMessage());
 	            return null;
 	        }
 	    }

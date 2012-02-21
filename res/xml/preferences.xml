@@ -120,7 +120,15 @@
 	            android:summary="With what precision will the service update Latitude"
 	            android:defaultValue="2000" 
 	            android:entries="@array/mapLocProviderAccuracyLabels"
-	            android:entryValues="@array/mapLocProviderAccuracyValues"
-	        />
-	</PreferenceCategory>        
+	            android:entryValues="@array/mapLocProviderAccuracyValues"/>
+ 	</PreferenceCategory> 
+<!-- 	<PreferenceCategory android:title="Advanced"> -->
+<!-- 	    <CheckBoxPreference  -->
+<!-- 			android:key="use_account_manager" -->
+<!-- 			android:summary="Use integrated accounts" -->
+<!-- 			android:title="Use AccountManager"  -->
+<!-- 			android:defaultValue="false" -->
+<!-- 	    	android:enabled="true" -->
+<!-- 	    />     -->
+<!--     </PreferenceCategory> -->
 </PreferenceScreen>

@@ -16,6 +16,9 @@
 package com.asksven.betterlatitude;
 
 import java.io.IOException;
+
+import android.accounts.Account;
+import android.accounts.AccountManager;
 import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
@@ -48,12 +51,15 @@ import android.widget.Toast;
 
 import com.asksven.betterlatitude.ReadmeActivity;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
+import com.asksven.betterlatitude.credentialstore.LatitudeApi;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.asksven.betterlatitude.R;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
+import com.google.api.client.http.HttpResponse;
+import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -75,6 +81,13 @@ public class MainActivity extends Activity
 	private static final String TAG = "MainActivity";
     public static final String MARKET_LINK ="market://details?id=com.asksven.betterlatitude";
     public static final String TWITTER_LINK ="https://twitter.com/#!/asksven";
+
+	/** The OAuth2 token */
+	private String m_authToken;
+	
+	
+	/** id for the account dialog */
+	public static final int DIALOG_ACCOUNTS = 0;
 
 	
 	/**
@@ -291,6 +304,7 @@ public class MainActivity extends Activity
 	        	break;
 	        case R.id.location_Status:
 	        	showLocationStatus(this);
+	        	break;
 	        case R.id.release_notes:
             	// Release notes
             	Intent intentReleaseNotes = new Intent(this, ReadmeActivity.class);
@@ -321,7 +335,7 @@ public class MainActivity extends Activity
 		
 	    // Show or hide log on button depending on the existence of the credentials
 	    final Button buttonLogon = (Button) findViewById(R.id.buttonLogon);
-	    if (!hasCredentials())
+	    if (!LatitudeApi.hasCredentials(this))
 	    {
 	    	buttonLogon.setVisibility(Button.VISIBLE);
 	    	if (myService != null)
@@ -349,59 +363,31 @@ public class MainActivity extends Activity
     }
 
 	// Launch the OAuth flow to get an access token required to do authorized API calls.
-	// When the OAuth flow finishes, we redirect to this Activity to perform the API call.
 	public void logOn()
 	{
-		startActivity(new Intent().setClass(
-				this,
-				OAuthAccessActivity.class));
+		if (!LatitudeApi.useAccountManager(this))
+		{
+			startActivity(new Intent().setClass(
+					this,
+					OAuthAccessActivity.class));
+		}
+//		else
+//		{
+//			LatitudeApi.getInstance(this).useAccount(this, true);
+//		}
 	}
 
 
 	// Clearing the credentials and performing an API call to see the unauthorized message.
 	void logOff()
 	{
-		clearCredentials();
+		LatitudeApi.getInstance(this).clearCredentials();
 		
+//		getLocationApiCall(LatitudeApi.getInstance(this).getAuthToken());
 		getLocationApiCall();
 		updateStatus();
 	}
 
-    /**
-	 * Clears our credentials (token and token secret) from the shared preferences.
-	 * We also setup the authorizer (without the token).
-	 * After this, no more authorized API calls will be possible.
-	 */
-    private void clearCredentials()
-    {
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	new SharedPreferencesCredentialStore(prefs).clearCredentials();
-    }
-
-    /**
-     * Check if credentials exist
-     * @return true is credentials were stored
-     */
-    private boolean hasCredentials()
-    {
-    	boolean bRet = false;
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		CredentialStore credentialStore = new SharedPreferencesCredentialStore(prefs);
-		AccessTokenResponse accessTokenResponse = credentialStore.read();
-
-		// check if token is valid (exists)
-		if (accessTokenResponse.accessToken.equals(""))
-		{
-			bRet = false;
-		}
-		else
-		{
-			bRet = true;
-		}
-		
-		return bRet;
-
-    }
     /**
      * Performs an authorized API call to retrieve the current location.
      */
@@ -425,12 +411,14 @@ public class MainActivity extends Activity
 				return bRet;				
 			}
 
-			GoogleAccessProtectedResource accessProtectedResource = new GoogleAccessProtectedResource(accessTokenResponse.accessToken,
+			String responseToken = "";
+			GoogleAccessProtectedResource accessProtectedResource =
+					new GoogleAccessProtectedResource(accessTokenResponse.accessToken,
 			        transport,
 			        jsonFactory,
 			        OAuth2ClientConstants.CLIENT_ID,
 			        OAuth2ClientConstants.CLIENT_SECRET,
-			        accessTokenResponse.refreshToken);
+			        responseToken);
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
@@ -714,6 +702,38 @@ public class MainActivity extends Activity
     		text.setText("The location service is currently unavailable");
     	}
     	dialog.show();
+	}
+	
+	
+	
+	
+	@Override
+	protected Dialog onCreateDialog(int id)
+	{
+		switch (id)
+		{
+		case DIALOG_ACCOUNTS:
+			AlertDialog.Builder builder = new AlertDialog.Builder(this);
+			builder.setTitle("Select a Google account");
+			final AccountManager manager = AccountManager.get(this);
+			
+			final Account[] accounts = manager.getAccountsByType("com.google");
+			final int size = accounts.length;
+			String[] names = new String[size];
+			for (int i = 0; i < size; i++)
+			{
+				names[i] = accounts[i].name;
+			}
+			builder.setItems(names, new DialogInterface.OnClickListener()
+			{
+				public void onClick(DialogInterface dialog, int which)
+				{
+//					LatitudeApi.getInstance(MainActivity.this).useAccount(MainActivity.this, manager, accounts[which]);
+				}
+			});
+			return builder.create();
+		}
+		return null;
 	}
 	
     public void openURL( String inURL )

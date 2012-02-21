@@ -3,6 +3,10 @@
     package="com.asksven.betterlatitude" xmlns:android="http://schemas.android.com/apk/res/android">
     <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
     
+<!--     Access Accounts -->
+<!--     <uses-permission android:name="android.permission.GET_ACCOUNTS"/> -->
+<!-- 	<uses-permission android:name="android.permission.USE_CREDENTIALS"/> -->
+    
     <!-- read/write latitude -->
     <uses-permission android:name="android.permission.INTERNET"/>
     
