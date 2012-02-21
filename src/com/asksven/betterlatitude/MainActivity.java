@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-12 asksven
+ * Copyright (C) 2011-2012 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -33,7 +33,6 @@ import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.pm.PackageInfo;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -41,7 +40,6 @@ import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
@@ -58,8 +56,6 @@ import com.asksven.betterlatitude.utils.Logger;
 import com.asksven.betterlatitude.R;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
 import com.google.api.client.googleapis.auth.oauth2.draft10.GoogleAccessProtectedResource;
-import com.google.api.client.http.HttpResponse;
-import com.google.api.client.http.HttpResponseException;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
@@ -329,10 +325,7 @@ public class MainActivity extends Activity
 		{
 			statusTextView.setText(LocationService.STATUS_SERVICE_NOT_STARTED);
 		}
-		
-		final SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-		
-		
+				
 	    // Show or hide log on button depending on the existence of the credentials
 	    final Button buttonLogon = (Button) findViewById(R.id.buttonLogon);
 	    if (!LatitudeApi.hasCredentials(this))
@@ -464,40 +457,6 @@ public class MainActivity extends Activity
 	    return false;
 	}
 	
-	/**
-	 * Connect to latitude and retrieve location in a thread 
-	 * @author sven
-	 * @see http://code.google.com/p/makemachine/source/browse/trunk/android/examples/async_task/src/makemachine/android/examples/async/AsyncTaskExample.java
-	 * for more details
-	 */
-//	private class OauthLogin extends AsyncTask
-//	{
-//		@Override
-//	    protected Object doInBackground(Object... params)
-//	    {
-//			MainActivity.this.getLocationApiCall();
-//			
-//	        return true;
-//	    }
-//		
-//		@Override
-//		protected void onPostExecute(Object o)
-//	    {
-//			super.onPostExecute(o);
-//	        // update hourglass
-//    		m_progressDialog.hide();
-//	    }
-//	    @Override
-//	    protected void onPreExecute()
-//	    {
-//	        // update hourglass
-//	    	m_progressDialog = new ProgressDialog(MainActivity.this);
-//	    	m_progressDialog.setMessage("Retrieving current location...");
-//	    	m_progressDialog.setIndeterminate(true);
-//	    	m_progressDialog.setCancelable(false);
-//	    	m_progressDialog.show();
-//	    }
-//	}
 
 	private class ConnectionUpdateReceiver extends BroadcastReceiver
 	{
