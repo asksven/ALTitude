@@ -1,20 +1,20 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/preferences"
-          android:title="Preferences" />
+          android:title="@string/menu_preferences"/>
     <item android:id="@+id/show_map"
-          android:title="Show on Map" />
+          android:title="@string/menu_show_on_map" />
     <item android:id="@+id/call_latitude"
-          android:title="Show friends" />
+          android:title="@string/menu_show_friends" />
     <item android:id="@+id/quick_dialog"
-          android:title="Change precision" />
+          android:title="@string/menu_change_precision" />
     <item android:id="@+id/location_Status"
-          android:title="Status" />
+          android:title="@string/menu_status" />
     <item android:id="@+id/release_notes"
-          android:title="Release Notes" />
+          android:title="@string/menu_release_notes" />
     
 <!--     <item android:id="@+id/log_on" -->
 <!--           android:title="Log on" /> -->
     <item android:id="@+id/log_off"
-          android:title="Log off" />
+          android:title="@string/menu_log_off" />
 </menu>

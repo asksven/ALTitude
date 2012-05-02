@@ -1,4 +1,13 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">ALTitude</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_show_on_map">Show on Map</string>
+    <string name="menu_show_friends">Show friends</string>
+    <string name="menu_change_precision">Change precision</string>
+    <string name="menu_status">Status</string>
+    <string name="menu_release_notes">Release Notes</string>
+    <string name="menu_log_off">Log Off</string>
+    <string name="menu_toggle_sat">Toggle Sat Layer</string>
+    
 </resources>
