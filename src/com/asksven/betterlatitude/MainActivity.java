@@ -25,6 +25,7 @@ import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
 import android.app.ActivityManager.RunningServiceInfo;
+import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -293,7 +294,14 @@ public class MainActivity extends Activity
 		        Intent intent = new Intent(android.content.Intent.ACTION_VIEW, myUri);
 		        intent.addFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
 		        intent.addFlags(Intent.FLAG_ACTIVITY_BROUGHT_TO_FRONT);
-		        startActivity(intent);
+		        try
+		        {
+		        	startActivity(intent);
+		        }
+		        catch ( ActivityNotFoundException e)
+		        {
+		    		Toast.makeText(this, "Latitude is not installed.", Toast.LENGTH_SHORT).show();
+		        }
 		        break;
 	        case R.id.quick_dialog:
 	        	showQuickDialog(this);
