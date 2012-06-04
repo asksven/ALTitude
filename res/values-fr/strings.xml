@@ -9,5 +9,10 @@
     <string name="menu_release_notes">Release Notes</string>
     <string name="menu_log_off">Log Off</string>
     <string name="menu_toggle_sat">Toggle Sat Layer</string>
+    <string name="plugin_name">Configuration ALTitude</string>
+    <string name="label_select_action">Action</string>
+    <string name="label_select_interval">Intervalle</string>
+    <string name="label_select_accuracy">Précision</string>
+    <string name="label_select_duration">Durée</string>
     
 </resources>

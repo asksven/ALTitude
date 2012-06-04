@@ -53,7 +53,7 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
             </intent-filter>    
         </receiver>
-        <receiver  android:process=":remote" android:name="AlarmReceiver"/>
+        <receiver  android:process=":remote" android:name=".AlarmReceiver"/>
         
         <uses-library android:name="com.google.android.maps"/>
     </application>
