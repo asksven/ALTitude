@@ -90,6 +90,14 @@ public final class R {
     public static final class string {
         public static final int app_name=0x7f050001;
         public static final int hello=0x7f050000;
+        public static final int menu_change_precision=0x7f050005;
+        public static final int menu_log_off=0x7f050008;
+        public static final int menu_preferences=0x7f050002;
+        public static final int menu_release_notes=0x7f050007;
+        public static final int menu_show_friends=0x7f050004;
+        public static final int menu_show_on_map=0x7f050003;
+        public static final int menu_status=0x7f050006;
+        public static final int menu_toggle_sat=0x7f050009;
     }
     public static final class style {
         public static final int Theme_asksven=0x7f070000;

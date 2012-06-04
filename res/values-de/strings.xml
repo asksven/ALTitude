@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<resources>
+    <string name="app_name">ALTitude</string>
+    <string name="menu_preferences">Preferences</string>
+    <string name="menu_show_on_map">Karte</string>
+    <string name="menu_show_friends">Freunde</string>
+    <string name="menu_change_precision">Genauigkeit ändern</string>
+    <string name="menu_status">Status</string>
+    <string name="menu_release_notes">Release Notes</string>
+    <string name="menu_log_off">Abmelden</string>
+    <string name="menu_toggle_sat">Sat ein/aus</string>
+</resources>
