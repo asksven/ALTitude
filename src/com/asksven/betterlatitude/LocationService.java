@@ -534,6 +534,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 			}
 			
 	    }
+    	else if (bNotify)
+    	{
+    		// simple notification
+			strStatus = strStatus
+					+ " at "
+					+ DateUtils.now();
+			notifyStatus(strStatus);
+    	}
+    		
 	}
 
 	
