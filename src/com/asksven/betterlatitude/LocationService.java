@@ -506,8 +506,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    			this, getText(R.string.app_name), strStatus, contentIntent);
 	    	mNM.notify(R.string.app_name, notification);
     	}
-
 	}
+	
 	/**
 	 * Notify location change in notification bar (if enabled)
 	 */
@@ -549,15 +549,23 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/**
 	 * Notify status change in notification bar (if enabled)
 	 */
-	public void notifyError(String strStatus)
+	void notifyError(String strStatus)
 	{
-    	Notification notification = new Notification(
-    			R.drawable.icon, strStatus, System.currentTimeMillis());
-    	PendingIntent contentIntent = PendingIntent.getActivity(
-    			this, 0, new Intent(this, MainActivity.class), 0);
-    	notification.setLatestEventInfo(
-    			this, getText(R.string.app_name), strStatus, contentIntent);
-    	mNM.notify(R.string.app_name, notification);
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+		boolean bNotify 	= prefs.getBoolean("notify_error", true);
+    	if (bNotify)
+    	{
+
+	    	Notification notification = new Notification(
+	    			R.drawable.icon, strStatus, System.currentTimeMillis());
+	    	PendingIntent contentIntent = PendingIntent.getActivity(
+	    			this, 0, new Intent(this, MainActivity.class), 0);
+	    	notification.setLatestEventInfo(
+	    			this, getText(R.string.app_name), strStatus, contentIntent);
+	    	mNM.notify(R.string.app_name, notification);
+    	}
+    	// Log the error
+    	Logger.e(TAG, "An error occured: " + strStatus);
 	}
 	
 

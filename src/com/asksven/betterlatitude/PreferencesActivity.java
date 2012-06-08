@@ -52,6 +52,7 @@ public class PreferencesActivity extends PreferenceActivity
 		{
 			try
 			{
+				findPreference("notify_errors").setEnabled(false);
 				findPreference("start_on_boot").setEnabled(false);
 				findPreference("update_interval").setEnabled(false);
 				findPreference("update_interval").setSummary("Latitude update interval: 15 minutes");

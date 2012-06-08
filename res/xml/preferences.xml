@@ -16,6 +16,13 @@
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    <CheckBoxPreference 
+			android:key="notify_errors"
+			android:summary="Show notification when logon fails"
+			android:title="Show error notifications" 
+			android:defaultValue="true"
+	    	android:enabled="true"/>
+	    
+	    <CheckBoxPreference 
 			android:key="notify_geodata"
 			android:summary="Notify nearest geodata"
 			android:title="Show geodata in notification" 
