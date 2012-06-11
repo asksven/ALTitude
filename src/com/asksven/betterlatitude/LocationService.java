@@ -314,7 +314,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		{
 //			if (!LatitudeApi.useAccountManager(this))
 //			{
-				if (!setLocationApiCall())
+				if (!updateLatitude())
 				{	
 					notifyStatus(m_locationStack + " Location(s) buffered");
 				}
@@ -379,19 +379,29 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 	}	
 
-	private boolean setLocationApiCall()
+	protected boolean updateLatitude()
 	{
 		boolean bRet = true;
 
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean bWifiUpdatesOnly = prefs.getBoolean("update_on_wifi_only", false);
+
 		try
 		{
+			// if no data connection is present no need to try
 			if (!DataNetwork.hasDataConnection(this))
 			{
 				
 				return false;
 			}
-			
-			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
+			// if updates are set to be done on wifi only and wifi is not connected do nothing
+			if ((bWifiUpdatesOnly) && (!DataNetwork.hasWifiConnection(this)))
+			{
+				
+				return false;
+			}
+
 	    	boolean bLogLoc 		= prefs.getBoolean("log_location", false);
 	    	
 			JsonFactory jsonFactory = new JacksonFactory();

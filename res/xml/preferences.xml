@@ -48,6 +48,13 @@
 	            android:entries="@array/accuracyLabels"
 	            android:entryValues="@array/accuracyValues"
 	        />
+	    <CheckBoxPreference 
+			android:key="update_on_wifi_only"
+			android:summary="Update Latitude only when a wifi connection is available (does not affect locations to be collected)"
+			android:title="Update Latitude only when on Wifi" 
+			android:defaultValue="false"
+	    	android:enabled="true"/>
+	    
 	</PreferenceCategory>        
 	<PreferenceCategory android:title="Quick Action Settings">        
 

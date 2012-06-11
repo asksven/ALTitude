@@ -68,6 +68,7 @@ public class PreferencesActivity extends PreferenceActivity
 				findPreference("quick_update_accuracy").setEnabled(false);
 				findPreference("quick_update_duration").setEnabled(false);
 				findPreference("use_account_manager").setEnabled(false);
+				findPreference("update_on_wifi_only").setEnabled(false);
 			}
 			catch (Exception e)
 			{

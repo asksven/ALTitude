@@ -16,6 +16,7 @@
 
 package com.asksven.betterlatitude;
 
+import com.asksven.android.common.networkutils.DataNetwork;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 
@@ -23,6 +24,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.net.ConnectivityManager;
 import android.preference.PreferenceManager;
 
 
@@ -68,5 +70,13 @@ public class BroadcastHandler extends BroadcastReceiver
 
 			}
 		}
+        if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION))
+        {
+        	
+        	if( DataNetwork.hasWifiConnection(context) )
+            {
+                LocationService.getInstance().updateLatitude();
+            }
+        }
 	}
 }

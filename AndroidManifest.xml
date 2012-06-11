@@ -51,6 +51,7 @@
         <receiver android:name=".BroadcastHandler">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED"/>
+                <action android:name="android.net.ConnectivityManager.CONNECTIVITY_ACTION" />
             </intent-filter>    
         </receiver>
         <receiver  android:process=":remote" android:name=".AlarmReceiver"/>
