@@ -2,8 +2,6 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:id="@+id/preferences"
           android:title="@string/menu_preferences"/>
-    <item android:id="@+id/show_map"
-          android:title="@string/menu_show_on_map" />
     <item android:id="@+id/call_latitude"
           android:title="@string/menu_show_friends" />
     <item android:id="@+id/quick_dialog"

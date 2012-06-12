@@ -279,10 +279,6 @@ public class MainActivity extends Activity
 	        	Intent intentPrefs = new Intent(this, PreferencesActivity.class);
 	            this.startActivity(intentPrefs);
 	        	break;	
-	        case R.id.show_map:  
-	        	Intent intentMap = new Intent(this, ShowOnMapActivity.class);
-	            this.startActivity(intentMap);
-	        	break;	
 //	        case R.id.log_on:  
 //	        	logOn();
 //	        	break;	
