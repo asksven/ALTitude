@@ -648,7 +648,7 @@ public class MainActivity extends Activity
     	if (myService != null)
     	{
 	    	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
-	    	strText = strText + "Buffered locations: " + myService.getBufferSize() / 1000 + "\n";
+	    	strText = strText + "Buffered locations: " + myService.getBufferSize() + "\n";
 	    	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
 	    	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
 	    	    	

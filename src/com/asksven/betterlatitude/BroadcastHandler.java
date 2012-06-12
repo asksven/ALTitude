@@ -70,13 +70,5 @@ public class BroadcastHandler extends BroadcastReceiver
 
 			}
 		}
-        if (intent.getAction().equals(ConnectivityManager.CONNECTIVITY_ACTION))
-        {
-        	
-        	if( DataNetwork.hasWifiConnection(context) )
-            {
-                LocationService.getInstance().updateLatitude();
-            }
-        }
 	}
 }

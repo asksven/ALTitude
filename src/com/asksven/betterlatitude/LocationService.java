@@ -27,12 +27,14 @@ import android.app.PendingIntent;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
 import android.os.AsyncTask;
 import android.os.Binder;
 import android.os.Bundle;
@@ -81,6 +83,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private static int QUICK_ACTION = 1234567;
 
 	private LocationManager m_locationManager;
+	
+	private WifiStateHandler m_wifiHandler = new WifiStateHandler();
 
 	private static final String TAG = "LocationService";
 	
@@ -140,6 +144,9 @@ public class LocationService extends Service implements LocationListener, OnShar
         
         // register the location listener
         this.registerLocationListener();
+        
+        // register the Wifi state receiver
+        this.registerReceiver(m_wifiHandler, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
 
         // Set up a listener whenever a key changes
     	PreferenceManager.getDefaultSharedPreferences(this)
@@ -286,8 +293,10 @@ public class LocationService extends Service implements LocationListener, OnShar
     {        
         // Cancel the persistent notification.
         mNM.cancel(R.string.app_name);
-    	// unregister the receiver
+    	// unregister the receivers
 		m_locationManager.removeUpdates(this);
+		unregisterReceiver(m_wifiHandler);
+		
         // Unregister the listener whenever a key changes
         PreferenceManager.getDefaultSharedPreferences(this)
                 .unregisterOnSharedPreferenceChangeListener(this);
@@ -316,7 +325,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 //			{
 				if (!updateLatitude())
 				{	
-					notifyStatus(m_locationStack + " Location(s) buffered");
+					notifyStatus(m_locationStack.size() + " Location(s) buffered");
 				}
 //			}
 //			else

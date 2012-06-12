@@ -12,6 +12,9 @@
     
     <!-- admob and ConnectivityManager-->
   	<uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
+  	
+  	<!-- detect wifi state changes in case of buffering till wifi connected -->
+  	<uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     
     <!--  receive location updates -->
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
