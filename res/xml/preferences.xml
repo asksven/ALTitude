@@ -102,40 +102,6 @@
 	    	android:enabled="true"
 	    />
     </PreferenceCategory>
-    <PreferenceCategory android:title="Map Settings">
-	    <CheckBoxPreference 
-			android:key="center_map"
-			android:summary="Center map on current position"
-			android:title="Center map" 
-			android:defaultValue="false"
-	    	android:enabled="true"
-	    />    
-	
-	    <ListPreference 
-	            android:key="map_loc_provider"
-	            android:title="Map location provider"
-	            android:summary="Location provider used on map"
-	            android:defaultValue="1" 
-	            android:entries="@array/mapLocProviderLabels"
-	            android:entryValues="@array/mapLocProviderValues"
-	        />
-	
-	    <ListPreference 
-	            android:key="map_update_interval"
-	            android:title="Interval"
-	            android:summary="How often will the service update Latitude"
-	            android:defaultValue="15" 
-	            android:entries="@array/mapLocProviderIntervalLabels"
-	            android:entryValues="@array/mapLocProviderIntervalValues"
-	        />
-	    <ListPreference 
-	            android:key="map_update_accuracy"
-	            android:title="Accuracy"
-	            android:summary="With what precision will the service update Latitude"
-	            android:defaultValue="2000" 
-	            android:entries="@array/mapLocProviderAccuracyLabels"
-	            android:entryValues="@array/mapLocProviderAccuracyValues"/>
- 	</PreferenceCategory> 
 <!-- 	<PreferenceCategory android:title="Advanced"> -->
 <!-- 	    <CheckBoxPreference  -->
 <!-- 			android:key="use_account_manager" -->
