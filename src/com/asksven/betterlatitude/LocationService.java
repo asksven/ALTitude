@@ -465,7 +465,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 //			    	com.google.api.services.latitude.model.Location currentLocation = new com.google.api.services.latitude.model.Location();
 				    currentLocation.set("latitude", location.getLatitude());
 				    currentLocation.set("longitude", location.getLongitude());
-				    currentLocation.set("timespampMs", location.getTime());
+				    currentLocation.set("timestampMs", location.getTime());
 				    
 				    Insert myInsert = latitude.currentLocation.insert(currentLocation);
 
