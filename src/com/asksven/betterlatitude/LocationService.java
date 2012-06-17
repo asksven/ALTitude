@@ -116,6 +116,12 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/** precision for current location manager */
 	private int m_iIterval = 0;
 	private int m_iAccuracy = 0;
+	
+	/** spinner indexes for quick actions */
+	int m_iIntervalIndex = 0;
+	int m_iAccuracyIndex = 0;
+	int m_iDurationIndex = 0;
+
 
     /**
      * Class for clients to access.  Because we know this service always
@@ -640,6 +646,33 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 	
 	/**
+	 * 
+	 * @return the accuracy spinner index
+	 */
+	public int getAccuracyIndex()
+	{
+		return m_iAccuracyIndex;
+	}
+
+	/**
+	 * 
+	 * @return the duration spinner index
+	 */
+	public int getDurationIndex()
+	{
+		return m_iDurationIndex;
+	}
+
+	/**
+	 * 
+	 * @return the interval spinner index
+	 */
+	public int getIntervalIndex()
+	{
+		return m_iIntervalIndex;
+	}
+
+	/**
 	 * Run a quick action for the given parameters
 	 * @param interval as index (@see array.xml)
 	 * @param accuracy as index (@see array.xml)
@@ -655,6 +688,11 @@ public class LocationService extends Service implements LocationListener, OnShar
 		int minutes = 0;
 		int intervalMs = 0;
 		int accuracyM = 0;
+		
+		m_iIntervalIndex = interval;
+		m_iAccuracyIndex = accuracy;
+		m_iDurationIndex = duration;
+
 
 		switch (interval)
 		{
@@ -754,6 +792,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 		// reset to pref values
 		registerLocationListener();
 		bQuickChangeRunning = false;
+		m_iIntervalIndex = 0;
+		m_iAccuracyIndex = 0;
+		m_iDurationIndex = 0;
+
 	}
 
 	/**

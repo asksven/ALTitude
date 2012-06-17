@@ -95,11 +95,6 @@ public class MainActivity extends Activity
 	/** The event receiver for updated from the service */
 	private ConnectionUpdateReceiver m_connectionUpdateReceiver;
 
-	/** spinner indexes for quick actions */
-	int m_iIntervalIndex = 0;
-	int m_iAccuracyIndex = 0;
-	int m_iDurationIndex = 0;
-
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
@@ -550,9 +545,9 @@ public class MainActivity extends Activity
     			 });
     			
     			// set selections
-    			spinnerAccuracy.setSelection(m_iAccuracyIndex);
-    			spinnerInterval.setSelection(m_iIntervalIndex);
-    			spinnerDuration.setSelection(m_iDurationIndex);
+    			spinnerAccuracy.setSelection(myService.getAccuracyIndex());
+    			spinnerInterval.setSelection(myService.getIntervalIndex());
+    			spinnerDuration.setSelection(myService.getDurationIndex());
     			
     		}
     		else
@@ -599,11 +594,6 @@ public class MainActivity extends Activity
 									spinnerInterval.getSelectedItemPosition(),
 									spinnerAccuracy.getSelectedItemPosition(),
 									spinnerDuration.getSelectedItemPosition());
-						
-						// save selection
-						m_iIntervalIndex = spinnerInterval.getSelectedItemPosition();
-						m_iAccuracyIndex = spinnerAccuracy.getSelectedItemPosition();
-						m_iDurationIndex = spinnerDuration.getSelectedItemPosition();
 						
 						dialog.dismiss();
 					}

@@ -16,11 +16,10 @@
 package com.asksven.betterlatitude.localeplugin.receiver;
 
 /**
+ * This service handles the requests coming from the locale plugin
+ * The service is started from FireReceiver as a broadcast handler can not bind to a service
  * @author sven
  *
- */
-/**
- * 
  */
 
 import com.asksven.betterlatitude.LocationService;
@@ -133,33 +132,6 @@ public class UpdaterService extends Service
         {
         	Log.i(TAG, "Interval was 0, no action");
         }
-//        // Asynchronously send broadcast
-//        Runnable r = new Runnable()
-//        {
-//            public void run()
-//            {
-//                if (!TextUtils.isEmpty(message))
-//                {
-//                    Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
-//                    Log.d(TAG, "Toast: \"" + message + "\"");
-//                }
-//
-//                // And this is the reason of the plug-in existence:
-//                Intent notificationIntent = new Intent(Constants.ACTION_AUDIO_VOLUME_UPDATE);
-//                notificationIntent.putExtra(Constants.EXTRA_STREAM_TYPE,
-//                        Constants.EXTRA_VALUE_UNKNOWN);
-//                notificationIntent.putExtra(Constants.EXTRA_VOLUME_INDEX,
-//                        Constants.EXTRA_VALUE_UNKNOWN);
-//                notificationIntent.putExtra(Constants.EXTRA_RINGER_MODE,
-//                        Constants.EXTRA_VALUE_UNKNOWN);
-//
-//                Log.d(TAG, "On send Broadcast");
-//                getApplicationContext().sendBroadcast(notificationIntent, null);
-//                // finally stop the service
-//                TheService.this.stopSelf();
-//            }
-//        };
-
     }
 
 }
