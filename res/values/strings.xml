@@ -9,7 +9,6 @@
     <string name="menu_release_notes">Release Notes</string>
     <string name="menu_log_off">Log Off</string>
     <string name="menu_toggle_sat">Toggle Sat Layer</string>
-    
     <string name="plugin_name">ALTitude settings</string>
     <string name="label_select_action">Action</string>
 </resources>

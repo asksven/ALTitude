@@ -20,9 +20,12 @@
 package com.asksven.betterlatitude.localeplugin.receiver;
 
 import android.content.BroadcastReceiver;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +40,7 @@ import com.asksven.betterlatitude.localeplugin.ui.EditActivity;
  */
 public final class FireReceiver extends BroadcastReceiver
 {
+
 
     /**
      * @param context {@inheritDoc}.
@@ -74,21 +78,23 @@ public final class FireReceiver extends BroadcastReceiver
         final Bundle bundle = intent.getBundleExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE);
 
         // TODO add processing code here
-        Log.i(Constants.LOG_TAG, "Preparing to call ALTitude with action: " + bundle.getString(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION));
+        Log.i(Constants.LOG_TAG, "Preparing to call ALTitude with action: " 
+        		+ bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION)
+        		+ bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_INTERVAL)
+        		+ bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACCURACY)
+        		+ bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_DURATION));
         
         int iAction = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION);
         int iInterval = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_INTERVAL);
         int iAccuracy = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACCURACY);
         int iDuration = bundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_DURATION);
         
-        if (iAction == 0)
-        {
-			LocationService.getInstance().setQuickChange(iInterval, iAccuracy, iDuration);
-        }
-        else
-        {
-        	LocationService.getInstance().resetQuickChange();
-        }
-        
+        Intent serviceIntent = new Intent(UpdaterService.class.getName());
+        serviceIntent.putExtra(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION, iAction);
+        serviceIntent.putExtra(PluginBundleManager.BUNDLE_EXTRA_INT_INTERVAL, iInterval);
+        serviceIntent.putExtra(PluginBundleManager.BUNDLE_EXTRA_INT_ACCURACY, iAccuracy);
+        serviceIntent.putExtra(PluginBundleManager.BUNDLE_EXTRA_INT_DURATION, iDuration);
+        Log.i(Constants.LOG_TAG, "Starting UpdaterService");
+        context.startService(serviceIntent);
     }
 }

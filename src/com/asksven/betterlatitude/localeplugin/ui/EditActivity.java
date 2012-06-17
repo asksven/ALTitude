@@ -168,7 +168,7 @@ public final class EditActivity extends Activity implements AdapterView.OnItemSe
                 spinnerAccuracy.setSelection(forwardedBundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACCURACY));
                 spinnerDuration.setSelection(forwardedBundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_DURATION));
 
-                Log.i(TAG, "Retrieved from Bundle: " + forwardedBundle.getString(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION));
+                Log.i(TAG, "Retrieved from Bundle: " + forwardedBundle.getInt(PluginBundleManager.BUNDLE_EXTRA_INT_ACTION));
             }
         }        
 
@@ -219,7 +219,14 @@ public final class EditActivity extends Activity implements AdapterView.OnItemSe
             resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_BUNDLE, resultBundle);
             
             // add text for display in tasker
-            resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, "");
+            if (positionAction == 0)
+            {
+            	resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, "Set ALTitude");
+            }
+            else
+            {
+            	resultIntent.putExtra(com.twofortyfouram.locale.Intent.EXTRA_STRING_BLURB, "reset ALTitude");
+            }
 
             setResult(RESULT_OK, resultIntent);
         }

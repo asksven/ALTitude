@@ -14,5 +14,4 @@
     <string name="label_select_interval">Intervall</string>
     <string name="label_select_accuracy">Präzision</string>
     <string name="label_select_duration">Dauer</string>
-    
 </resources>

@@ -46,6 +46,7 @@ import com.asksven.android.common.networkutils.DataNetwork;
 import com.asksven.android.common.utils.DateUtils;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
+import com.asksven.betterlatitude.localeplugin.Constants;
 import com.asksven.betterlatitude.utils.Configuration;
 import com.asksven.betterlatitude.utils.Logger;
 import com.google.api.client.auth.oauth2.draft10.AccessTokenResponse;
@@ -123,8 +124,9 @@ public class LocationService extends Service implements LocationListener, OnShar
      */
     public class LocalBinder extends Binder
     {
-        LocationService getService()
+        public LocationService getService()
         {
+        	Log.i(TAG, "getService called");
             return LocationService.this;
         }
     }
@@ -646,6 +648,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	 */
 	public boolean setQuickChange(int interval, int accuracy, int duration)
 	{
+		Logger.i(TAG, "setQuickChange called with " + interval + accuracy + duration);
 		// @see arrays.xml
 		// get a Calendar object with current time
 		Calendar cal = Calendar.getInstance();
@@ -735,7 +738,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	 */
 	public void resetQuickChange()
 	{
-
+		Logger.i(TAG, "resetQuickChange called");
 		// check if there is an intent pending
 		Intent intent = new Intent(this, AlarmReceiver.class);
 

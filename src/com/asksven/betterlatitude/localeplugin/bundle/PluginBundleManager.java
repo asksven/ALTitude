@@ -45,7 +45,6 @@ public final class PluginBundleManager
      * <p>
      * String message to display in a Toast message.
      */
-    public static final String BUNDLE_EXTRA_STRING_COMMAND 	= "com.asksven.betterlatitude.localeplugin.extra.STRING_COMMAND"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_ACTION 		= "com.asksven.betterlatitude.localeplugin.extra.INT_ACTION"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_INTERVAL 		= "com.asksven.betterlatitude.localeplugin.extra.INT_INTERVAL"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_ACCURACY 		= "com.asksven.betterlatitude.localeplugin.extra.INT_ACCURACY"; //$NON-NLS-1$
@@ -83,15 +82,6 @@ public final class PluginBundleManager
          * Make sure the expected extras exist
          */
 
-        if (!bundle.containsKey(BUNDLE_EXTRA_STRING_COMMAND))
-        {
-            if (Constants.IS_LOGGABLE)
-            {
-                Log.e(Constants.LOG_TAG, String.format("bundle must contain extra %s", BUNDLE_EXTRA_STRING_COMMAND)); //$NON-NLS-1$
-            }
-            return false;
-        }
-
         if (!bundle.containsKey(BUNDLE_EXTRA_INT_VERSION_CODE))
         {
             if (Constants.IS_LOGGABLE)
@@ -106,24 +96,12 @@ public final class PluginBundleManager
          * error message is more useful. (E.g. the caller will see what extras are missing, rather than just a message that there
          * is the wrong number).
          */
-        if (2 != bundle.keySet().size())
+        if (5 != bundle.keySet().size())
         {
             if (Constants.IS_LOGGABLE)
             {
                 Log.e(Constants.LOG_TAG, String.format("bundle must contain 2 keys, but currently contains %d keys: %s", Integer.valueOf(bundle.keySet().size()), bundle.keySet() //$NON-NLS-1$
                                                                                                                                                                        .toString()));
-            }
-            return false;
-        }
-
-        /*
-         * Make sure the extra isn't null or empty
-         */
-        if (TextUtils.isEmpty(bundle.getString(BUNDLE_EXTRA_STRING_COMMAND)))
-        {
-            if (Constants.IS_LOGGABLE)
-            {
-                Log.e(Constants.LOG_TAG, String.format("bundle extra %s appears to be null or empty.  It must be a non-empty string", BUNDLE_EXTRA_STRING_COMMAND)); //$NON-NLS-1$
             }
             return false;
         }
