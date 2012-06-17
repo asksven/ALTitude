@@ -32,6 +32,13 @@
 	</PreferenceCategory>        
 	<PreferenceCategory android:title="Service Settings">        
 
+	    <CheckBoxPreference 
+			android:key="passive_provider"
+			android:summary="Passive location"
+			android:title="Use location provided by another app (disclaimer: behavior depends on other apps)" 
+			android:defaultValue="false"
+	    	android:enabled="true"/>
+	    
 	    <ListPreference 
 	            android:key="update_interval"
 	            android:title="Interval"
