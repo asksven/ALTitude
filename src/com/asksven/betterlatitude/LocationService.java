@@ -121,6 +121,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 	int m_iIntervalIndex = 0;
 	int m_iAccuracyIndex = 0;
 	int m_iDurationIndex = 0;
+	
+	Notification m_stickyNotification = null;
 
 
     /**
@@ -300,8 +302,29 @@ public class LocationService extends Service implements LocationListener, OnShar
     public int onStartCommand(Intent intent, int flags, int startId)
     {
         Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
+
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean bForegroundService = prefs.getBoolean("foreground_service", true);
+    	if (bForegroundService)
+    	{
+	    	m_stickyNotification = new Notification(
+	    			R.drawable.icon, "Service Running", System.currentTimeMillis());
+			Intent i=new Intent(this, MainActivity.class);
+			
+			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+			Intent.FLAG_ACTIVITY_SINGLE_TOP);
+			
+			PendingIntent pi=PendingIntent.getActivity(this, 0, i, 0);
+
+			m_stickyNotification.setLatestEventInfo(this, "ALTitude", "", pi);
+			m_stickyNotification.flags|=Notification.FLAG_NO_CLEAR;
+			
+			
+			startForeground(12245, m_stickyNotification);
+    	}
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
+        
         return Service.START_STICKY;
     }
     
@@ -537,13 +560,27 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bNotify 	= prefs.getBoolean("notify_status", true);
     	if (bNotify)
     	{
-	    	Notification notification = new Notification(
-	    			R.drawable.icon, strStatus, System.currentTimeMillis());
-	    	PendingIntent contentIntent = PendingIntent.getActivity(
-	    			this, 0, new Intent(this, MainActivity.class), 0);
-	    	notification.setLatestEventInfo(
-	    			this, getText(R.string.app_name), strStatus, contentIntent);
-	    	mNM.notify(R.string.app_name, notification);
+    		if (false) //m_stickyNotification != null)
+    		{
+				Intent i=new Intent(this, MainActivity.class);
+				
+				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+				Intent.FLAG_ACTIVITY_SINGLE_TOP);
+				
+				PendingIntent pi=PendingIntent.getActivity(this, 0, i, 0);
+
+				m_stickyNotification.setLatestEventInfo(this, getText(R.string.app_name), strStatus, pi);
+    		}
+    		else
+    		{
+		    	Notification notification = new Notification(
+		    			R.drawable.icon, strStatus, System.currentTimeMillis());
+		    	PendingIntent contentIntent = PendingIntent.getActivity(
+		    			this, 0, new Intent(this, MainActivity.class), 0);
+		    	notification.setLatestEventInfo(
+		    			this, getText(R.string.app_name), strStatus, contentIntent);
+		    	mNM.notify(R.string.app_name, notification);
+    		}
     	}
 	}
 	
