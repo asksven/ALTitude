@@ -11,27 +11,34 @@
 	<PreferenceCategory android:title="Notification">
 	    <CheckBoxPreference 
 			android:key="notify_status"
-			android:summary="Show notification icon with status"
-			android:title="Show notification" 
+			android:summary="Show status in notification"
+			android:title="Notify status" 
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    <CheckBoxPreference 
 			android:key="notify_errors"
 			android:summary="Show notification when logon fails"
-			android:title="Show error notifications" 
+			android:title="Show errors" 
 			android:defaultValue="true"
 	    	android:enabled="true"/>
 	    
 	    <CheckBoxPreference 
 			android:key="notify_geodata"
 			android:summary="Notify nearest geodata"
-			android:title="Show geodata in notification" 
+			android:title="Show geodata" 
 			android:defaultValue="false"
 			android:dependency="notify_status"
 	    	android:enabled="true"/>
 	</PreferenceCategory>        
 	<PreferenceCategory android:title="Service Settings">        
 
+	    <CheckBoxPreference 
+			android:key="foreground_service"
+			android:summary="Run as foreground service"
+			android:title="Avoid the service to be killed by Android" 
+			android:defaultValue="true"
+	    	android:enabled="true"/>
+	    	    
 	    <CheckBoxPreference 
 			android:key="passive_provider"
 			android:summary="Passive location"
