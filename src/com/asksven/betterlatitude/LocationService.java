@@ -307,27 +307,32 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bForegroundService = prefs.getBoolean("foreground_service", true);
     	if (bForegroundService)
     	{
-	    	m_stickyNotification = new Notification(
-	    			R.drawable.icon, "Service Running", System.currentTimeMillis());
-			Intent i=new Intent(this, MainActivity.class);
-			
-			i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
-			Intent.FLAG_ACTIVITY_SINGLE_TOP);
-			
-			PendingIntent pi=PendingIntent.getActivity(this, 0, i, 0);
-
-			m_stickyNotification.setLatestEventInfo(this, "ALTitude", "", pi);
-			m_stickyNotification.flags|=Notification.FLAG_NO_CLEAR;
-			
-			
-			startForeground(12245, m_stickyNotification);
+    		setupAsForeground("Foreground Service Started");
     	}
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
         
         return Service.START_STICKY;
     }
-    
+
+    void setupAsForeground(String strNotification)
+    {
+    	m_stickyNotification = new Notification(
+    			R.drawable.icon, "Service Running", System.currentTimeMillis());
+		Intent i=new Intent(this, MainActivity.class);
+		
+		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
+		Intent.FLAG_ACTIVITY_SINGLE_TOP);
+		
+		PendingIntent pi=PendingIntent.getActivity(this, 0, i, 0);
+
+		m_stickyNotification.setLatestEventInfo(this, "ALTitude", strNotification, pi);
+		m_stickyNotification.flags|=Notification.FLAG_NO_CLEAR;
+		
+		
+		startForeground(12245, m_stickyNotification);
+    	
+    }
     @Override
     /**
      * Called when Service is terminated
@@ -560,16 +565,9 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bNotify 	= prefs.getBoolean("notify_status", true);
     	if (bNotify)
     	{
-    		if (false) //m_stickyNotification != null)
+    		if (m_stickyNotification != null)
     		{
-				Intent i=new Intent(this, MainActivity.class);
-				
-				i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|
-				Intent.FLAG_ACTIVITY_SINGLE_TOP);
-				
-				PendingIntent pi=PendingIntent.getActivity(this, 0, i, 0);
-
-				m_stickyNotification.setLatestEventInfo(this, getText(R.string.app_name), strStatus, pi);
+    			setupAsForeground(strStatus);
     		}
     		else
     		{
@@ -623,7 +621,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 	
 	/**
-	 * Notify status change in notification bar (if enabled)
+	 * Notify errors in notification bar (if enabled)
 	 */
 	void notifyError(String strStatus)
 	{
