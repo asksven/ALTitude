@@ -28,7 +28,7 @@
     	android:layout_height="wrap_content" 
     	android:id="@+id/textView1" 
     	android:textAppearance="?android:attr/textAppearanceMedium" 
-    	android:text="By asksven"
+    	android:text="@string/layout_main_author"
     	android:layout_gravity="center"/>
     <ImageView 
     	android:layout_width="wrap_content"
@@ -53,7 +53,7 @@
         android:layout_marginTop="6dp"
         android:layout_marginLeft="10dp"
         android:layout_marginRight="10dp"        
-        android:text="Log on to Latitude" />
+        android:text="@string/layout_main_logon" />
     
     <LinearLayout android:layout_height="fill_parent" android:layout_width="match_parent">		
 	<com.google.ads.AdView android:id="@+id/adView"

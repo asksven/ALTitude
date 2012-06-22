@@ -11,20 +11,28 @@ public final class R {
     public static final class array {
         /**  Values for the update precision. 
          */
-        public static final int accuracyLabels=0x7f09000b;
-        public static final int accuracyValues=0x7f09000c;
-        public static final int intervalLabels=0x7f090009;
-        public static final int intervalValues=0x7f09000a;
-        public static final int locProviderLabels=0x7f090007;
-        public static final int locProviderValues=0x7f090008;
+        public static final int accuracyLabels=0x7f090009;
+        public static final int accuracyValues=0x7f09000a;
+        /**          
+    <string-array name="locProviderLabels">
+        <item>@string/loc_provider_label_passivePassive</item>
+        <item>@string/loc_provider_label_cell* Cell based</item>
+        <item>@string/loc_provider_label_gpsGPS based</item>
+    </string-array>
+ 
+     <string-array name="locProviderValues">
+        <item name="1">0</item>
+        <item name="2">1</item>
+        <item name="3">2</item>
+    </string-array>
+ 
+         */
+        public static final int intervalLabels=0x7f090007;
+        public static final int intervalValues=0x7f090008;
         /**  Values for the update precision. 
          */
-        public static final int mapLocProviderAccuracyLabels=0x7f090011;
-        public static final int mapLocProviderAccuracyValues=0x7f090012;
-        public static final int mapLocProviderIntervalLabels=0x7f09000f;
-        public static final int mapLocProviderIntervalValues=0x7f090010;
-        public static final int mapLocProviderLabels=0x7f09000d;
-        public static final int mapLocProviderValues=0x7f09000e;
+        public static final int mapLocProviderAccuracyLabels=0x7f09000b;
+        public static final int mapLocProviderAccuracyValues=0x7f09000c;
         public static final int quickAccuracyLabels=0x7f090003;
         public static final int quickAccuracyValues=0x7f090004;
         public static final int quickActionLabels=0x7f090000;
@@ -105,20 +113,74 @@ public final class R {
     }
     public static final class string {
         public static final int app_name=0x7f050001;
+        public static final int dialog_cancel=0x7f050030;
+        public static final int dialog_dismiss=0x7f050032;
+        public static final int dialog_follow_me=0x7f050033;
+        public static final int dialog_ok=0x7f05002f;
+        public static final int dialog_quick_settings_title=0x7f050045;
+        public static final int dialog_rate=0x7f050031;
+        public static final int dialog_reset=0x7f05002e;
+        public static final int dialog_status_accuracy=0x7f05004b;
+        public static final int dialog_status_buffered=0x7f050046;
+        public static final int dialog_status_current_location=0x7f05004c;
+        public static final int dialog_status_interval=0x7f050047;
+        public static final int dialog_status_provider=0x7f050049;
+        public static final int dialog_status_text=0x7f05004a;
+        public static final int dialog_status_title=0x7f050048;
+        public static final int error_latitude_not_installed=0x7f050044;
+        public static final int full_version_available=0x7f050043;
         public static final int hello=0x7f050000;
-        public static final int label_select_accuracy=0x7f050016;
-        public static final int label_select_action=0x7f050014;
-        public static final int label_select_duration=0x7f050017;
-        public static final int label_select_interval=0x7f050015;
-        public static final int menu_change_precision=0x7f05000e;
-        public static final int menu_log_off=0x7f050011;
+        public static final int label_select_accuracy=0x7f050034;
+        public static final int label_select_action=0x7f050012;
+        public static final int label_select_duration=0x7f050035;
+        public static final int label_select_interval=0x7f050036;
+        public static final int latitude_error=0x7f050040;
+        public static final int layout_main_author=0x7f05002d;
+        public static final int layout_main_logon=0x7f05002c;
+        public static final int locations_buffered=0x7f050041;
+        public static final int menu_change_precision=0x7f05000d;
+        public static final int menu_log_off=0x7f050010;
         public static final int menu_preferences=0x7f05000b;
-        public static final int menu_release_notes=0x7f050010;
-        public static final int menu_show_friends=0x7f05000d;
-        public static final int menu_show_on_map=0x7f05000c;
-        public static final int menu_status=0x7f05000f;
-        public static final int menu_toggle_sat=0x7f050012;
-        public static final int plugin_name=0x7f050013;
+        public static final int menu_release_notes=0x7f05000f;
+        public static final int menu_show_friends=0x7f05000c;
+        public static final int menu_status=0x7f05000e;
+        public static final int not_logged_on_error=0x7f05003f;
+        public static final int plugin_name=0x7f050011;
+        public static final int pref_foreground_service_summary=0x7f05001b;
+        public static final int pref_foreground_service_title=0x7f05001a;
+        public static final int pref_log_location_summary=0x7f050027;
+        public static final int pref_log_location_title=0x7f050026;
+        public static final int pref_notify_errors_summary=0x7f050017;
+        public static final int pref_notify_errors_title=0x7f050016;
+        public static final int pref_notify_geodata_summary=0x7f050019;
+        public static final int pref_notify_geodata_title=0x7f050018;
+        public static final int pref_notify_status_summary=0x7f050015;
+        public static final int pref_notify_status_title=0x7f050014;
+        public static final int pref_own_logfile_summary=0x7f050029;
+        public static final int pref_own_logfile_title=0x7f050028;
+        public static final int pref_passive_provider_summary=0x7f05001d;
+        public static final int pref_passive_provider_title=0x7f05001c;
+        public static final int pref_start_on_boot_summary=0x7f050013;
+        public static final int pref_start_on_boot_title=0x7f05003d;
+        public static final int pref_update_accuracy_summary=0x7f050021;
+        public static final int pref_update_accuracy_title=0x7f050020;
+        public static final int pref_update_duration_summary=0x7f050025;
+        public static final int pref_update_duration_title=0x7f050024;
+        public static final int pref_update_interval_summary=0x7f05001f;
+        public static final int pref_update_interval_title=0x7f05001e;
+        public static final int pref_update_on_wifi_only_summary=0x7f050023;
+        public static final int pref_update_on_wifi_only_title=0x7f050022;
+        public static final int quick_action_label_reset=0x7f05002b;
+        public static final int quick_action_label_set=0x7f05002a;
+        public static final int status_connection_changed=0x7f050038;
+        public static final int status_fg_service_started=0x7f050042;
+        public static final int status_location_updated=0x7f05003a;
+        public static final int status_not_logged_in=0x7f05003b;
+        public static final int status_notification_on=0x7f05003e;
+        public static final int status_service_not_started=0x7f050039;
+        public static final int status_service_unavailable=0x7f05004d;
+        public static final int status_update_buffered=0x7f050037;
+        public static final int status_update_pending=0x7f05003c;
         /**  A Toast message that appears if an application that is being launched isn't available.  There is no maximum length, although this message will only appear on the screen for about 5 seconds in a Toast message so it should be short enough to be comprehended before it disappears. 
          */
         public static final int twofortyfouram_locale_application_not_available=0x7f050002;

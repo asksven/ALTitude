@@ -23,7 +23,7 @@
  		android:layout_width="wrap_content"
  		android:layout_height="wrap_content"
  		android:layout_alignParentLeft="true"
- 		android:text="OK" />
+ 		android:text="@string/dialog_ok" />
 		
 	<Button android:id="@+id/ButtonCancel"
 	    android:layout_below="@id/spinnerDuration"
@@ -31,13 +31,13 @@
  		android:layout_height="wrap_content"
  		android:layout_toRightOf="@id/ButtonOk"
         android:layout_alignTop="@id/ButtonOk"
- 		android:text="Cancel" />
+ 		android:text="@string/dialog_cancel" />
 	<Button android:id="@+id/ButtonReset"
 	    android:layout_below="@id/spinnerDuration"
  		android:layout_width="wrap_content"
  		android:layout_height="wrap_content"
  		android:layout_toRightOf="@id/ButtonCancel"
         android:layout_alignTop="@id/ButtonOk"
- 		android:text="Reset" />
+ 		android:text="@string/dialog_reset" />
 	
 </RelativeLayout>

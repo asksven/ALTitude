@@ -19,19 +19,19 @@
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="15"
-		    android:text="Dismiss" />
+		    android:text="@string/dialog_dismiss" />
 	    		
 		<Button
 		    android:id="@+id/buttonTwitter"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="15"
-		    android:text="Follow me" />
+		    android:text="@string/dialog_follow_me" />
 		<Button
 		    android:id="@+id/buttonMarket"
 		    android:layout_width="fill_parent"
 		    android:layout_height="wrap_content"
 		    android:layout_weight="15"
-		    android:text="Rate" />
+		    android:text="@string/dialog_rate" />
 	</LinearLayout>	
 </LinearLayout>

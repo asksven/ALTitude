@@ -142,7 +142,7 @@ public class MainActivity extends Activity
         	else
         	{
         		nameTextView.setText("ALTitude free");
-        		hintTextView.setText("Add-free full version available");
+        		hintTextView.setText(getString(R.string.full_version_available));
         	}
         	
         	versionTextView.setText(pinfo.versionName);
@@ -291,7 +291,7 @@ public class MainActivity extends Activity
 		        }
 		        catch ( ActivityNotFoundException e)
 		        {
-		    		Toast.makeText(this, "Latitude is not installed.", Toast.LENGTH_SHORT).show();
+		    		Toast.makeText(this, getString(R.string.error_latitude_not_installed), Toast.LENGTH_SHORT).show();
 		        }
 		        break;
 	        case R.id.quick_dialog:
@@ -487,7 +487,7 @@ public class MainActivity extends Activity
     	final Dialog dialog = new Dialog(context);
 
     	dialog.setContentView(R.layout.quick_action_dialog);
-    	dialog.setTitle("Location Quick Settings");
+    	dialog.setTitle(getString(R.string.dialog_quick_settings_title));
 
     	// configure first spinner
 		final Spinner spinnerInterval = (Spinner) dialog.findViewById(R.id.spinnerInterval);
@@ -614,7 +614,7 @@ public class MainActivity extends Activity
     	}
     	else
     	{
-    		Toast.makeText(this, "Service is not started yet.", Toast.LENGTH_SHORT).show();
+    		Toast.makeText(this, LocationService.STATUS_SERVICE_NOT_STARTED, Toast.LENGTH_SHORT).show();
     	}
 	}
 	
@@ -627,24 +627,24 @@ public class MainActivity extends Activity
     	Dialog dialog = new Dialog(context);
 
     	dialog.setContentView(R.layout.information_dialog);
-    	dialog.setTitle("Details");
+    	dialog.setTitle(getString(R.string.dialog_status_title));
 
     	TextView title = (TextView) dialog.findViewById(R.id.title);
     	TextView text = (TextView) dialog.findViewById(R.id.text);
-    	title.setText("Location status");
+    	title.setText(getString(R.string.dialog_status_text));
     	
     	
     	LocationService myService = LocationService.getInstance();
     	if (myService != null)
     	{
-	    	String strText = "Location Provider: " + myService.getLocationProvider() + "\n";
-	    	strText = strText + "Buffered locations: " + myService.getBufferSize() + "\n";
-	    	strText = strText + "Accuracy [m]: " + myService.getAccuracy() + "\n";
-	    	strText = strText + "Interval [s]: " + myService.getInterval() / 1000;
+	    	String strText = getString(R.string.dialog_status_provider) + ": " + myService.getLocationProvider() + "\n";
+	    	strText = strText + getString(R.string.dialog_status_buffered) + ": " + myService.getBufferSize() + "\n";
+	    	strText = strText + getString(R.string.dialog_status_accuracy) + ": " + myService.getAccuracy() + "\n";
+	    	strText = strText + getString(R.string.dialog_status_interval) + ": " + myService.getInterval() / 1000;
 	    	    	
 	    	if (!myService.getCurrentLocation().equals(""))
 	    	{
-	    		strText = strText + "\n" + "Current Location: " +  myService.getCurrentLocation();
+	    		strText = strText + "\n" + getString(R.string.dialog_status_current_location) + ": " +  myService.getCurrentLocation();
 	    	}
 	
 	    	text.setText(strText);
@@ -652,7 +652,7 @@ public class MainActivity extends Activity
     	}
     	else
     	{
-    		text.setText("The location service is currently unavailable");
+    		text.setText(LocationService.STATUS_SERVICE_UNAVAILABLE);
     	}
     	dialog.show();
 	}

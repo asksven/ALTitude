@@ -30,6 +30,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
+import android.content.res.Resources;
 import android.location.Criteria;
 import android.location.Location;
 import android.location.LocationListener;
@@ -90,13 +91,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private static final String TAG = "LocationService";
 	
 	/** constants for the connection status */
-	public static final String STATUS_UPDATE_PENDING = "Update pending";
-	public static final String STATUS_UPDATE_BUFFERED = "Update buffered";
-//	public static final String STATUS_LOGGED_IN = "Logged in";
-	public static final String STATUS_NOT_LOGGED_IN = "Please log on to Latitude";
-	public static final String STATUS_SERVICE_NOT_STARTED = "Service not started yet";
-	public static final String STATUS_LOCATION_UPDATED = "Location was updated";
-	public static final String BROADCAST_STATUS_CHANGED = "Connection stats changed";
+	public static final String STATUS_UPDATE_PENDING 		= Resources.getSystem().getString(R.string.status_update_pending);
+	public static final String STATUS_UPDATE_BUFFERED 		= Resources.getSystem().getString(R.string.status_update_buffered);
+	public static final String STATUS_NOTIFICATION_ON 		= Resources.getSystem().getString(R.string.status_notification_on);
+	public static final String STATUS_NOT_LOGGED_IN	 		= Resources.getSystem().getString(R.string.status_not_logged_in);
+	public static final String STATUS_SERVICE_NOT_STARTED 	= Resources.getSystem().getString(R.string.status_service_not_started);
+	public static final String STATUS_SERVICE_UNAVAILABLE 	= Resources.getSystem().getString(R.string.status_service_unavailable);
+	public static final String STATUS_FG_SERVICE_STARTED 	= Resources.getSystem().getString(R.string.status_fg_service_started);
+	public static final String STATUS_LOCATION_UPDATED 		= Resources.getSystem().getString(R.string.status_location_updated);
+	public static final String BROADCAST_STATUS_CHANGED 	= Resources.getSystem().getString(R.string.status_connection_changed);
 	
 	/** the connection status */
 	private String m_strStatus = STATUS_NOT_LOGGED_IN;
@@ -285,7 +288,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     		// activate / deactivate the notification
     		if (prefs.getBoolean("notify_status", true))
     		{
-    			notifyStatus("Notification activated");
+    			notifyStatus(STATUS_NOTIFICATION_ON);
     		}
     		else
     		{
@@ -307,7 +310,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bForegroundService = prefs.getBoolean("foreground_service", true);
     	if (bForegroundService)
     	{
-    		setupAsForeground("Foreground Service Started");
+    		setupAsForeground(STATUS_FG_SERVICE_STARTED);
     	}
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -373,7 +376,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 //			{
 				if (!updateLatitude())
 				{	
-					notifyStatus(m_locationStack.size() + " Location(s) buffered");
+					notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
 				}
 //			}
 //			else
@@ -384,7 +387,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 		catch (Exception e)
 		{
-			notifyStatus(m_locationStack + " Location(s) buffered");
+			notifyStatus(m_locationStack + " " + getString(R.string.locations_buffered));
 		}
 	}
 
@@ -470,7 +473,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			// check if token is valid (not empty)
 			if (accessTokenResponse.accessToken.equals(""))
 			{
-				notifyError("Access to latitude was not granted. Please log on");
+				notifyError(getString(R.string.not_logged_on_error));
 				bRet = false;
 				setStatus(STATUS_NOT_LOGGED_IN);
 				return bRet;				
@@ -546,7 +549,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			{
 				setStatus(STATUS_NOT_LOGGED_IN);
 			}
-			notifyError("Updating Latitude failed with error '" + ex.getMessage() + "'");
+			notifyError(getString(R.string.latitude_error) + " '" + ex.getMessage() + "'");
 //			Logger.i(TAG, ex.getStackTrace());
 			
 		}
@@ -588,7 +591,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void notifyCurrentLocation()
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	String strStatus = "Location updated";
+    	String strStatus = STATUS_LOCATION_UPDATED;
     	
     	boolean bNotify 	= prefs.getBoolean("notify_status", true);
     	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);

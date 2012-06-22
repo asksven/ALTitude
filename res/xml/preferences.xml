@@ -3,29 +3,29 @@
   xmlns:android="http://schemas.android.com/apk/res/android">
 	<CheckBoxPreference 
 		android:key="start_on_boot"
-		android:summary="Start service on boot"
-		android:title="Start Service on Boot" 
+		android:summary="@string/pref_start_on_boot_summary"
+		android:title="@string/pref_start_on_boot_title" 
 		android:defaultValue="false"
     android:enabled="true"/>
 
 	<PreferenceCategory android:title="Notification">
 	    <CheckBoxPreference 
 			android:key="notify_status"
-			android:summary="Show status in notification"
-			android:title="Notify status" 
+			android:summary="@string/pref_notify_status_summary"
+			android:title="@string/pref_notify_status_title" 
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    <CheckBoxPreference 
 			android:key="notify_errors"
-			android:summary="Show notification when logon fails"
-			android:title="Show errors" 
+			android:summary="@string/pref_notify_errors_summary"
+			android:title="@string/pref_notify_errors_title" 
 			android:defaultValue="true"
 	    	android:enabled="true"/>
 	    
 	    <CheckBoxPreference 
 			android:key="notify_geodata"
-			android:summary="Notify nearest geodata"
-			android:title="Show geodata" 
+			android:summary="@string/pref_notify_geodata_summary"
+			android:title="@string/pref_notify_geodata_title" 
 			android:defaultValue="false"
 			android:dependency="notify_status"
 	    	android:enabled="true"/>
@@ -34,38 +34,38 @@
 
 	    <CheckBoxPreference 
 			android:key="foreground_service"
-			android:summary="Run as foreground service"
-			android:title="Avoid the service to be killed by Android" 
+			android:summary="@string/pref_foreground_service_summary"
+			android:title="@string/pref_foreground_service_title" 
 			android:defaultValue="true"
 	    	android:enabled="true"/>
 	    	    
 	    <CheckBoxPreference 
 			android:key="passive_provider"
-			android:summary="Passive location"
-			android:title="Use location provided by another app (disclaimer: behavior depends on other apps)" 
+			android:summary="@string/pref_passive_provider_summary"
+			android:title="@string/pref_passive_provider_title" 
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    
 	    <ListPreference 
 	            android:key="update_interval"
-	            android:title="Interval"
-	            android:summary="How often will the service update Latitude"
+	            android:title="@string/pref_update_interval_title"
+	            android:summary="@string/pref_update_interval_summary"
 	            android:defaultValue="15" 
 	            android:entries="@array/intervalLabels"
 	            android:entryValues="@array/intervalValues"
 	        />
 	    <ListPreference 
 	            android:key="update_accuracy"
-	            android:title="Accuracy"
-	            android:summary="With what precision will the service update Latitude"
+	            android:title="@string/pref_update_accuracy_title"
+	            android:summary="@string/pref_update_accuracy_summary"
 	            android:defaultValue="2000" 
 	            android:entries="@array/accuracyLabels"
 	            android:entryValues="@array/accuracyValues"
 	        />
 	    <CheckBoxPreference 
 			android:key="update_on_wifi_only"
-			android:summary="Update Latitude only when a wifi connection is available (does not affect locations to be collected)"
-			android:title="Update Latitude only when on Wifi" 
+			android:summary="@string/pref_update_on_wifi_only_summary"
+			android:title="@string/pref_update_on_wifi_only_title" 
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    
@@ -74,24 +74,24 @@
 
 	    <ListPreference 
 	            android:key="quick_update_interval"
-	            android:title="Interval"
-	            android:summary="How often will Latitude be updated"
+	            android:title="@string/pref_update_interval_title"
+	            android:summary="@string/pref_update_interval_summary"
 	            android:defaultValue="0" 
 	            android:entries="@array/quickIntervalLabels"
 	            android:entryValues="@array/quickIntervalValues"
 	        />
 	    <ListPreference 
 	            android:key="quick_update_accuracy"
-	            android:title="Accuracy"
-	            android:summary="With what precision will Latitude be updated"
+	            android:title="@string/pref_update_accuracy_title"
+	            android:summary="@string/pref_update_accuracy_summary"
 	            android:defaultValue="0" 
 	            android:entries="@array/quickAccuracyLabels"
 	            android:entryValues="@array/quickAccuracyValues"
 	        />
 	    <ListPreference 
 	            android:key="quick_update_duration"
-	            android:title="Duration"
-	            android:summary="How long will Latitude be updated"
+	            android:title="@string/pref_update_duration_title"
+	            android:summary="@string/pref_update_duration_summary"
 	            android:defaultValue="0" 
 	            android:entries="@array/quickDurationLabels"
 	            android:entryValues="@array/quickDurationValues"
@@ -103,15 +103,15 @@
 
 	    <CheckBoxPreference 
 			android:key="log_location"
-			android:summary="Caution: privacy"
-			android:title="Log location history" 
+			android:summary="@string/pref_log_location_summary"
+			android:title="@string/pref_log_location_title" 
 			android:defaultValue="false"
 	    	android:enabled="true"
 	    />
 	    <CheckBoxPreference 
 			android:key="own_logfile"
-			android:summary="Write additional logfile to /"
-			android:title="Own logfile" 
+			android:summary="@string/pref_own_logfile_summary"
+			android:title="@string/pref_own_logfile_title" 
 			android:defaultValue="false"
 	    	android:enabled="true"
 	    />

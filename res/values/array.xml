@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string-array name="quickActionLabels" translatable="false">
-        <item>Set</item>
-        <item>Reset</item>
+    <string-array name="quickActionLabels">
+        <item>@string/quick_action_label_set</item>
+        <item>@string/quick_action_label_reset</item>
     </string-array>
 
     <string-array name="quickIntervalValues">
@@ -13,12 +13,12 @@
     
     <!-- Values for the update interval. -->
     <string-array name="quickIntervalLabels" translatable="false">
-        <item>Interval 5 s</item>
-        <item>Interval 10 s</item>
-        <item>Interval 30 s</item>
-        <item>Interval 1 Min.</item>
-        <item>Interval 5 Min.</item>
-        <item>Interval 15 Min.</item>
+        <item>5 s</item>
+        <item>10 s</item>
+        <item>30 s</item>
+        <item>1 Min.</item>
+        <item>5 Min.</item>
+        <item>15 Min.</item>
     </string-array>
 
     <string-array name="quickIntervalValues">
@@ -31,11 +31,11 @@
     </string-array>
         
     <string-array name="quickAccuracyLabels" translatable="false">
-        <item>Accuracy 10 m</item>
-        <item>Accuracy 50 m</item>
-        <item>Accuracy 100 m</item>
-        <item>Accuracy 500 m</item>
-        <item>Accuracy 1 Km</item>
+        <item>10 m</item>
+        <item>50 m</item>
+        <item>100 m</item>
+        <item>500 m</item>
+        <item>1 Km</item>
     </string-array>
 
     <string-array name="quickAccuracyValues">
@@ -47,10 +47,10 @@
     </string-array>
         
     <string-array name="quickDurationLabels" translatable="false">
-        <item>For 15 Min.</item>
-        <item>For 30 Min.</item>
-        <item>For 60 Min.</item>
-        <item>For 2 Hrs.</item>
+        <item>15 Min.</item>
+        <item>30 Min.</item>
+        <item>60 Min.</item>
+        <item>2 Hrs.</item>
     </string-array>
 
     <string-array name="quickDurationValues">
@@ -59,11 +59,11 @@
         <item name="3">2</item>
         <item name="4">3</item>
     </string-array>
-        
-    <string-array name="locProviderLabels" translatable="false">
-        <item>Passive</item>
-        <item>* Cell based</item>
-        <item>GPS based</item>
+<!--         
+    <string-array name="locProviderLabels">
+        <item>@string/loc_provider_label_passivePassive</item>
+        <item>@string/loc_provider_label_cell* Cell based</item>
+        <item>@string/loc_provider_label_gpsGPS based</item>
     </string-array>
  
      <string-array name="locProviderValues">
@@ -71,7 +71,7 @@
         <item name="2">1</item>
         <item name="3">2</item>
     </string-array>
-        
+ -->        
     <string-array name="intervalLabels" translatable="false">
         <item>5 Min.</item>
         <item>*15 Min.</item>
@@ -109,31 +109,6 @@
         <item name="5">5000</item>
     </string-array>
 
-    <string-array name="mapLocProviderLabels" translatable="false">
-        <item>Passive</item>
-        <item>* Cell based</item>
-        <item>GPS based</item>
-    </string-array>
- 
-     <string-array name="mapLocProviderValues">
-        <item name="1">0</item>
-        <item name="2">1</item>
-        <item name="3">2</item>
-    </string-array>
-
-    <string-array name="mapLocProviderIntervalLabels" translatable="false">
-        <item>5 Min.</item>
-        <item>*15 Min.</item>
-        <item>30 Min.</item>
-        <item>60 Min.</item>
-    </string-array>
- 
-     <string-array name="mapLocProviderIntervalValues">
-        <item name="1">5</item>
-        <item name="2">15</item>
-        <item name="3">30</item>
-        <item name="4">60</item>
-    </string-array>
 
     <!-- Values for the update precision. -->
     <string-array name="mapLocProviderAccuracyLabels" translatable="false">
