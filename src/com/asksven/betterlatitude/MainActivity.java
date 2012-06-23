@@ -211,7 +211,7 @@ public class MainActivity extends Activity
 		{
 			m_connectionUpdateReceiver = new ConnectionUpdateReceiver();
 		}
-		IntentFilter intentFilter = new IntentFilter(LocationService.BROADCAST_STATUS_CHANGED);
+		IntentFilter intentFilter = new IntentFilter(AltitudeConstants.getInstance(this).BROADCAST_STATUS_CHANGED);
 		registerReceiver(m_connectionUpdateReceiver, intentFilter);
 		
 		// update the status
@@ -322,7 +322,7 @@ public class MainActivity extends Activity
 		}
 		else
 		{
-			statusTextView.setText(LocationService.STATUS_SERVICE_NOT_STARTED);
+			statusTextView.setText(AltitudeConstants.getInstance(this).STATUS_SERVICE_NOT_STARTED);
 		}
 				
 	    // Show or hide log on button depending on the existence of the credentials
@@ -332,7 +332,7 @@ public class MainActivity extends Activity
 	    	buttonLogon.setVisibility(Button.VISIBLE);
 	    	if (myService != null)
 	    	{
-	    		myService.setStatus(LocationService.STATUS_NOT_LOGGED_IN);
+	    		myService.setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
 	    	}
 	    	
 	        buttonLogon.setOnClickListener(new View.OnClickListener()
@@ -462,7 +462,7 @@ public class MainActivity extends Activity
 	    @Override
 	    public void onReceive(Context context, Intent intent)
 	    {
-	        if (intent.getAction().equals(LocationService.BROADCAST_STATUS_CHANGED))
+	        if (intent.getAction().equals(AltitudeConstants.getInstance(MainActivity.this).BROADCAST_STATUS_CHANGED))
 	        {
 	        	TextView statusTextView = (TextView) findViewById(R.id.textViewStatus);
 	        	LocationService myService = LocationService.getInstance();
@@ -472,7 +472,7 @@ public class MainActivity extends Activity
 	        	}
 	        	else
 	        	{
-	        		statusTextView.setText(LocationService.STATUS_SERVICE_NOT_STARTED);
+	        		statusTextView.setText(AltitudeConstants.getInstance(MainActivity.this).STATUS_SERVICE_NOT_STARTED);
 	        	}
 	        }
 	    }
@@ -614,7 +614,7 @@ public class MainActivity extends Activity
     	}
     	else
     	{
-    		Toast.makeText(this, LocationService.STATUS_SERVICE_NOT_STARTED, Toast.LENGTH_SHORT).show();
+    		Toast.makeText(this, AltitudeConstants.getInstance(this).STATUS_SERVICE_NOT_STARTED, Toast.LENGTH_SHORT).show();
     	}
 	}
 	
@@ -652,7 +652,7 @@ public class MainActivity extends Activity
     	}
     	else
     	{
-    		text.setText(LocationService.STATUS_SERVICE_UNAVAILABLE);
+    		text.setText(AltitudeConstants.getInstance(this).STATUS_SERVICE_UNAVAILABLE);
     	}
     	dialog.show();
 	}

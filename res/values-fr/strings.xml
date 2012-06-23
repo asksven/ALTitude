@@ -23,7 +23,7 @@
     <string name="dialog_dismiss">Quitter</string>
     <string name="dialog_follow_me">Suivre</string>
     <string name="pref_update_duration_title">Durée</string>
-    <string name="pref_log_location_summary">Attention: vie privée</string>
+    <string name="pref_log_location_summary">Attention: vie privée</string> 
     <string name="pref_notify_geodata_summary">Affiche a localité/rue/adresse la plus proche</string>
     <string name="pref_update_interval_summary">Fréquence d\'actualisation de Latitude</string>
     <string name="pref_update_interval_title">Intervalle</string>

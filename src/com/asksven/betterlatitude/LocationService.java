@@ -89,20 +89,9 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private WifiStateHandler m_wifiHandler = new WifiStateHandler();
 
 	private static final String TAG = "LocationService";
-	
-	/** constants for the connection status */
-	public static final String STATUS_UPDATE_PENDING 		= Resources.getSystem().getString(R.string.status_update_pending);
-	public static final String STATUS_UPDATE_BUFFERED 		= Resources.getSystem().getString(R.string.status_update_buffered);
-	public static final String STATUS_NOTIFICATION_ON 		= Resources.getSystem().getString(R.string.status_notification_on);
-	public static final String STATUS_NOT_LOGGED_IN	 		= Resources.getSystem().getString(R.string.status_not_logged_in);
-	public static final String STATUS_SERVICE_NOT_STARTED 	= Resources.getSystem().getString(R.string.status_service_not_started);
-	public static final String STATUS_SERVICE_UNAVAILABLE 	= Resources.getSystem().getString(R.string.status_service_unavailable);
-	public static final String STATUS_FG_SERVICE_STARTED 	= Resources.getSystem().getString(R.string.status_fg_service_started);
-	public static final String STATUS_LOCATION_UPDATED 		= Resources.getSystem().getString(R.string.status_location_updated);
-	public static final String BROADCAST_STATUS_CHANGED 	= Resources.getSystem().getString(R.string.status_connection_changed);
-	
+		
 	/** the connection status */
-	private String m_strStatus = STATUS_NOT_LOGGED_IN;
+	private String m_strStatus = AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN;
 	
 	private boolean m_bRegistered = false;
 
@@ -166,7 +155,7 @@ public class LocationService extends Service implements LocationListener, OnShar
                 .registerOnSharedPreferenceChangeListener(this);
 
     	// set status
-    	setStatus(STATUS_UPDATE_PENDING);
+    	setStatus(AltitudeConstants.getInstance(this).STATUS_UPDATE_PENDING);
    }
     
     private void registerLocationListener()
@@ -288,7 +277,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     		// activate / deactivate the notification
     		if (prefs.getBoolean("notify_status", true))
     		{
-    			notifyStatus(STATUS_NOTIFICATION_ON);
+    			notifyStatus(AltitudeConstants.getInstance(this).STATUS_NOTIFICATION_ON);
     		}
     		else
     		{
@@ -310,7 +299,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	boolean bForegroundService = prefs.getBoolean("foreground_service", true);
     	if (bForegroundService)
     	{
-    		setupAsForeground(STATUS_FG_SERVICE_STARTED);
+    		setupAsForeground(AltitudeConstants.getInstance(this).STATUS_FG_SERVICE_STARTED);
     	}
         // We want this service to continue running until it is explicitly
         // stopped, so return sticky.
@@ -475,7 +464,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			{
 				notifyError(getString(R.string.not_logged_on_error));
 				bRet = false;
-				setStatus(STATUS_NOT_LOGGED_IN);
+				setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
 				return bRet;				
 			}
 			
@@ -521,7 +510,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    Insert myInsert = latitude.currentLocation.insert(currentLocation);
 
 				    String now = DateUtils.now("HH:mm:ss");
-				    setStatus(STATUS_LOCATION_UPDATED + ": " + now);
+				    setStatus(AltitudeConstants.getInstance(this).STATUS_LOCATION_UPDATED + ": " + now);
 
 				    if (myInsert != null)
 				    {
@@ -530,7 +519,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    }
 				    else
 				    {
-				    	setStatus(STATUS_UPDATE_BUFFERED + "(" + m_locationStack.size() + ")");
+				    	setStatus(AltitudeConstants.getInstance(this).STATUS_UPDATE_BUFFERED + "(" + m_locationStack.size() + ")");
 				    	throw new IOException("CurrentLocation.Insert failed");
 				    	
 				    }
@@ -547,7 +536,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			Logger.i(TAG, "An error occured in setLocationApiCall() '" +  ex.getMessage() + "'");
 			if (ex.getMessage().equals("401 Unauthorized"))
 			{
-				setStatus(STATUS_NOT_LOGGED_IN);
+				setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
 			}
 			notifyError(getString(R.string.latitude_error) + " '" + ex.getMessage() + "'");
 //			Logger.i(TAG, ex.getStackTrace());
@@ -591,7 +580,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void notifyCurrentLocation()
 	{
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-    	String strStatus = STATUS_LOCATION_UPDATED;
+    	String strStatus = AltitudeConstants.getInstance(this).STATUS_LOCATION_UPDATED;
     	
     	boolean bNotify 	= prefs.getBoolean("notify_status", true);
     	boolean bNotifyGeo 	= prefs.getBoolean("notify_geodata", false);
@@ -653,7 +642,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void setStatus(String strStatus)
 	{
 		m_strStatus = strStatus;
-		sendBroadcast(new Intent(BROADCAST_STATUS_CHANGED));
+		sendBroadcast(new Intent(AltitudeConstants.getInstance(this).BROADCAST_STATUS_CHANGED));
 	}
 	
 	/**
