@@ -34,6 +34,7 @@ public class AltitudeConstants
 	public String STATUS_NOT_LOGGED_IN	 		= "";
 	public String STATUS_SERVICE_NOT_STARTED 	= "";
 	public String STATUS_SERVICE_UNAVAILABLE 	= "";
+	public String STATUS_SERVICE_RUNNING	 	= "";
 	public String STATUS_FG_SERVICE_STARTED 	= "";
 	public String STATUS_LOCATION_UPDATED 		= "";
 	public String BROADCAST_STATUS_CHANGED 		= "";
@@ -51,11 +52,12 @@ public class AltitudeConstants
 			m_instance.STATUS_UPDATE_PENDING 		= ctx.getString(R.string.status_update_pending);
 			m_instance.STATUS_UPDATE_BUFFERED 		= ctx.getString(R.string.status_update_buffered);
 			m_instance.STATUS_NOTIFICATION_ON 		= ctx.getString(R.string.status_notification_on);
-			m_instance.STATUS_NOT_LOGGED_IN	 	= ctx.getString(R.string.status_not_logged_in);
+			m_instance.STATUS_NOT_LOGGED_IN	 		= ctx.getString(R.string.status_not_logged_in);
 			m_instance.STATUS_SERVICE_NOT_STARTED 	= ctx.getString(R.string.status_service_not_started);
+			m_instance.STATUS_SERVICE_RUNNING	 	= ctx.getString(R.string.status_service_running);
 			m_instance.STATUS_SERVICE_UNAVAILABLE 	= ctx.getString(R.string.status_service_unavailable);
 			m_instance.STATUS_FG_SERVICE_STARTED 	= ctx.getString(R.string.status_fg_service_started);
-			m_instance.STATUS_LOCATION_UPDATED 	= ctx.getString(R.string.status_location_updated);
+			m_instance.STATUS_LOCATION_UPDATED 		= ctx.getString(R.string.status_location_updated);
 			m_instance.BROADCAST_STATUS_CHANGED 	= ctx.getString(R.string.status_connection_changed);
 
 		}

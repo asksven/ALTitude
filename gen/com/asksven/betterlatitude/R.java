@@ -54,30 +54,32 @@ public final class R {
         public static final int twofortyfouram_locale_border=0x7f020005;
     }
     public static final class id {
-        public static final int ButtonCancel=0x7f060015;
-        public static final int ButtonOk=0x7f060014;
-        public static final int ButtonReset=0x7f060016;
+        public static final int ButtonCancel=0x7f060017;
+        public static final int ButtonOk=0x7f060016;
+        public static final int ButtonReset=0x7f060018;
         public static final int TextView03=0x7f060007;
         public static final int adView=0x7f060013;
-        public static final int buttonClose=0x7f060018;
+        public static final int buttonClose=0x7f06001a;
         public static final int buttonLogon=0x7f060012;
-        public static final int buttonMarket=0x7f06001a;
-        public static final int buttonTwitter=0x7f060019;
-        public static final int call_latitude=0x7f06001c;
+        public static final int buttonMarket=0x7f06001c;
+        public static final int buttonTwitter=0x7f06001b;
+        public static final int call_latitude=0x7f06001e;
         public static final int image=0x7f060004;
         public static final int imageView1=0x7f060010;
         public static final int layout_root=0x7f060003;
-        public static final int location_Status=0x7f06001e;
-        public static final int log_off=0x7f060020;
-        public static final int preferences=0x7f06001b;
-        public static final int quick_dialog=0x7f06001d;
-        public static final int release_notes=0x7f06001f;
+        public static final int location_Status=0x7f060020;
+        public static final int log_off=0x7f060022;
+        public static final int preferences=0x7f06001d;
+        public static final int quick_dialog=0x7f06001f;
+        public static final int release_notes=0x7f060021;
         public static final int spinnerAccuracy=0x7f06000a;
         public static final int spinnerAction=0x7f060008;
         public static final int spinnerDuration=0x7f06000b;
         public static final int spinnerInterval=0x7f060009;
         public static final int text=0x7f060006;
         public static final int textView1=0x7f06000f;
+        public static final int textView2=0x7f060014;
+        public static final int textView3=0x7f060015;
         public static final int textViewHint=0x7f06000d;
         public static final int textViewName=0x7f06000c;
         public static final int textViewStatus=0x7f060011;
@@ -92,7 +94,7 @@ public final class R {
         /**  Menu item to save the current Activity 
          */
         public static final int twofortyfouram_locale_menu_save=0x7f060002;
-        public static final int webview=0x7f060017;
+        public static final int webview=0x7f060019;
     }
     public static final class integer {
         /**  The maximum blurb length in characters.  This value is based on Latin characters 
@@ -146,8 +148,12 @@ public final class R {
         public static final int menu_status=0x7f05000e;
         public static final int not_logged_on_error=0x7f05003f;
         public static final int plugin_name=0x7f050011;
-        public static final int pref_foreground_service_summary=0x7f05001b;
-        public static final int pref_foreground_service_title=0x7f05001a;
+        public static final int pref_category_logging=0x7f050051;
+        public static final int pref_category_notification=0x7f050050;
+        public static final int pref_category_quick_action=0x7f05004f;
+        public static final int pref_category_service_settings=0x7f05004e;
+        public static final int pref_foreground_service_summary=0x7f05001a;
+        public static final int pref_foreground_service_title=0x7f05001b;
         public static final int pref_log_location_summary=0x7f050027;
         public static final int pref_log_location_title=0x7f050026;
         public static final int pref_notify_errors_summary=0x7f050017;
@@ -158,8 +164,8 @@ public final class R {
         public static final int pref_notify_status_title=0x7f050014;
         public static final int pref_own_logfile_summary=0x7f050029;
         public static final int pref_own_logfile_title=0x7f050028;
-        public static final int pref_passive_provider_summary=0x7f05001d;
-        public static final int pref_passive_provider_title=0x7f05001c;
+        public static final int pref_passive_provider_summary=0x7f05001c;
+        public static final int pref_passive_provider_title=0x7f05001d;
         public static final int pref_start_on_boot_summary=0x7f050013;
         public static final int pref_start_on_boot_title=0x7f05003d;
         public static final int pref_update_accuracy_summary=0x7f050021;
@@ -178,6 +184,7 @@ public final class R {
         public static final int status_not_logged_in=0x7f05003b;
         public static final int status_notification_on=0x7f05003e;
         public static final int status_service_not_started=0x7f050039;
+        public static final int status_service_running=0x7f050052;
         public static final int status_service_unavailable=0x7f05004d;
         public static final int status_update_buffered=0x7f050037;
         public static final int status_update_pending=0x7f05003c;

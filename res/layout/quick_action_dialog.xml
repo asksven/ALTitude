@@ -3,41 +3,68 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:padding="10dip">
+
+   	<TextView
+	    android:id="@+id/textView1"
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
+	    android:text="@string/label_select_interval" />
     
    	<Spinner android:id="@+id/spinnerInterval"
 		android:layout_width="match_parent"
+		android:layout_below="@id/textView1"
 		android:layout_height="wrap_content"/>
-	
-	<Spinner android:id="@+id/spinnerAccuracy"
+
+    <TextView
+	    android:id="@+id/textView2"
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
 	    android:layout_below="@id/spinnerInterval"
+	    android:text="@string/label_select_accuracy" />
+   			
+	<Spinner android:id="@+id/spinnerAccuracy"
+	    android:layout_below="@id/textView2"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"/>
 	
-	<Spinner android:id="@+id/spinnerDuration"
+    <TextView
+	    android:id="@+id/textView3"
+	    android:layout_height="wrap_content"
+	    android:layout_width="match_parent"
 	    android:layout_below="@id/spinnerAccuracy"
+	    android:text="@string/label_select_duration" />
+		
+	<Spinner android:id="@+id/spinnerDuration"
+	    android:layout_below="@id/textView3"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"/>
 	
-	<Button android:id="@+id/ButtonOk"
+	<Button
+	    android:id="@+id/ButtonOk"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignParentLeft="true"
 	    android:layout_below="@id/spinnerDuration"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content"
- 		android:layout_alignParentLeft="true"
- 		android:text="@string/dialog_ok" />
+	    android:text="@string/dialog_ok" />
 		
-	<Button android:id="@+id/ButtonCancel"
+	<Button
+	    android:id="@+id/ButtonCancel"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignTop="@id/ButtonOk"
 	    android:layout_below="@id/spinnerDuration"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content"
- 		android:layout_toRightOf="@id/ButtonOk"
-        android:layout_alignTop="@id/ButtonOk"
- 		android:text="@string/dialog_cancel" />
-	<Button android:id="@+id/ButtonReset"
+	    android:layout_marginLeft="3dp"
+	    android:layout_toRightOf="@id/ButtonOk"
+	    android:text="@string/dialog_cancel" />
+
+	<Button
+	    android:id="@+id/ButtonReset"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+	    android:layout_alignTop="@id/ButtonOk"
 	    android:layout_below="@id/spinnerDuration"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content"
- 		android:layout_toRightOf="@id/ButtonCancel"
-        android:layout_alignTop="@id/ButtonOk"
- 		android:text="@string/dialog_reset" />
+	    android:layout_marginLeft="3dp"
+	    android:layout_toRightOf="@id/ButtonCancel"
+	    android:text="@string/dialog_reset" />
 	
 </RelativeLayout>

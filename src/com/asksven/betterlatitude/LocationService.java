@@ -310,7 +310,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     void setupAsForeground(String strNotification)
     {
     	m_stickyNotification = new Notification(
-    			R.drawable.icon, "Service Running", System.currentTimeMillis());
+    			R.drawable.icon, AltitudeConstants.getInstance(this).STATUS_SERVICE_RUNNING, System.currentTimeMillis());
 		Intent i=new Intent(this, MainActivity.class);
 		
 		i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP|

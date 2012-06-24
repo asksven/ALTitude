@@ -8,7 +8,7 @@
 		android:defaultValue="false"
     android:enabled="true"/>
 
-	<PreferenceCategory android:title="Notification">
+	<PreferenceCategory android:title="@string/pref_category_notification">
 	    <CheckBoxPreference 
 			android:key="notify_status"
 			android:summary="@string/pref_notify_status_summary"
@@ -30,7 +30,7 @@
 			android:dependency="notify_status"
 	    	android:enabled="true"/>
 	</PreferenceCategory>        
-	<PreferenceCategory android:title="Service Settings">        
+	<PreferenceCategory android:title="@string/pref_category_service_settings">        
 
 	    <CheckBoxPreference 
 			android:key="foreground_service"
@@ -70,7 +70,7 @@
 	    	android:enabled="true"/>
 	    
 	</PreferenceCategory>        
-	<PreferenceCategory android:title="Quick Action Settings">        
+	<PreferenceCategory android:title="@string/pref_category_quick_action">        
 
 	    <ListPreference 
 	            android:key="quick_update_interval"
@@ -99,7 +99,7 @@
 	    
 	</PreferenceCategory>        
 	    
-	<PreferenceCategory android:title="Logging">
+	<PreferenceCategory android:title="@string/pref_category_logging">
 
 	    <CheckBoxPreference 
 			android:key="log_location"

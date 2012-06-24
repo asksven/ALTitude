@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8" standalone="no"?>
 <resources>
     <string name="app_name">ALTitude</string>
-    <string name="menu_preferences">Preferences</string>
+    <string name="menu_preferences">Einstellungen</string>
     <string name="menu_show_friends">Freunde</string>
     <string name="menu_change_precision">Genauigkeit ändern</string>
     <string name="menu_status">Status</string>
@@ -27,21 +27,21 @@
     <string name="pref_notify_geodata_summary">Anzeige des nächsten Orts/Straße/Adresse</string>
     <string name="pref_update_interval_summary">Wie oft wird Latitude aktualisiert</string>
     <string name="pref_update_interval_title">Intervall</string>
-    <string name="pref_notify_geodata_title">Geodaten anzeigen</string>
-    <string name="pref_notify_errors_title">Fehlermeldungen anzeigen</string>
+    <string name="pref_notify_geodata_title">Geodaten</string>
+    <string name="pref_notify_errors_title">Fehlermeldungen</string>
     <string name="pref_own_logfile_title">Eigene Logdatei</string>
-    <string name="pref_notify_status_summary">Status anzeigen</string>
+    <string name="pref_notify_status_summary">Status als Infomeldung anzeigen</string>
     <string name="pref_update_on_wifi_only_title">Aktualisieren nur wenn Wifi an</string>
-    <string name="pref_foreground_service_summary">Vordergrund-Dienst</string>
+    <string name="pref_foreground_service_title">Vordergrund-Dienst</string>
     <string name="pref_update_accuracy_title">Genauigkeit</string>
     <string name="pref_log_location_title">Historie protokollieren</string>
     <string name="pref_update_duration_summary">Dauer der Änderung</string>
-    <string name="pref_own_logfile_summary">Eigene Logatei im Pfad relative zu / schreiben</string>
-    <string name="pref_notify_status_title">Status anzeigen</string>
-    <string name="pref_passive_provider_summary">Passive Ortung</string>
-    <string name="pref_start_on_boot_summary">Service beim Hochfahren starten</string>
-    <string name="pref_passive_provider_title">Passive Ortung durch eine andere App (Achtung: Verhalten ist abhängig von anderen Apps)</string>
-    <string name="pref_foreground_service_title">Vermeidet, daß der Dienst von Android gestoppt wird</string>
+    <string name="pref_own_logfile_summary">Eigene Logatei nach /sdcard/betterlatitude.log</string>
+    <string name="pref_notify_status_title">Status</string>
+    <string name="pref_passive_provider_title">Passive Ortung</string>
+    <string name="pref_start_on_boot_summary">Dienst beim Hochfahren starten</string>
+    <string name="pref_passive_provider_summary">Passive Ortung durch eine andere App (Achtung: Verhalten ist abhängig von anderen Apps)</string>
+    <string name="pref_foreground_service_summary">Vermeidet, daß der Dienst von Android gestoppt wird</string>
     <string name="pref_update_on_wifi_only_summary">Latitude nur aktualisieren wenn eine Wifi Verbindung besteht</string>
     <string name="pref_update_accuracy_summary">Mit welcher Genauigkeit erfolgt die Latitude Aktualisierung</string>
     <string name="pref_notify_errors_summary">Fehlermeldungen bei der Anmeldung anzeigen</string>
@@ -68,4 +68,9 @@
     <string name="dialog_status_accuracy">Genauigkeit [m]</string>
     <string name="dialog_status_current_location">Aktuller Ort</string>
     <string name="status_service_unavailable">Ortungsdienst derzeit nicht verfügbar</string>
+    <string name="pref_category_service_settings">Serviceeinstellungen</string>
+    <string name="pref_category_quick_action">Schnell-Einstellungen</string>
+    <string name="pref_category_notification">Infomeldungen</string>
+    <string name="pref_category_logging">Logging</string>
+    <string name="status_service_running">Dienst gestartet</string>
 </resources>
