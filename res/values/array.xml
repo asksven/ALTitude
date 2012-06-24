@@ -5,7 +5,7 @@
         <item>@string/quick_action_label_reset</item>
     </string-array>
 
-    <string-array name="quickIntervalValues">
+    <string-array name="quickIntervalValues" translatable="false">
         <item name="1">0</item>
         <item name="2">1</item>
     </string-array>
@@ -21,7 +21,7 @@
         <item>15 Min.</item>
     </string-array>
 
-    <string-array name="quickIntervalValues">
+    <string-array name="quickIntervalValues" translatable="false">
         <item name="1">0</item>
         <item name="2">1</item>
         <item name="3">2</item>
@@ -38,7 +38,7 @@
         <item>1 Km</item>
     </string-array>
 
-    <string-array name="quickAccuracyValues">
+    <string-array name="quickAccuracyValues" translatable="false">
         <item name="1">0</item>
         <item name="2">1</item>
         <item name="3">2</item>
@@ -53,7 +53,7 @@
         <item>2 Hrs.</item>
     </string-array>
 
-    <string-array name="quickDurationValues">
+    <string-array name="quickDurationValues" translatable="false">
         <item name="1">0</item>
         <item name="2">1</item>
         <item name="3">2</item>
@@ -82,7 +82,7 @@
         <item>6 Hrs.</item>
     </string-array>
  
-     <string-array name="intervalValues">
+     <string-array name="intervalValues" translatable="false">
         <item name="1">5</item>
         <item name="2">15</item>
         <item name="3">30</item>
@@ -101,7 +101,7 @@
         <item>5 Km</item>
     </string-array>
  
-     <string-array name="accuracyValues">
+     <string-array name="accuracyValues" translatable="false">
         <item name="1">100</item>
         <item name="2">500</item>
         <item name="3">1000</item>
@@ -110,21 +110,5 @@
     </string-array>
 
 
-    <!-- Values for the update precision. -->
-    <string-array name="mapLocProviderAccuracyLabels" translatable="false">
-        <item>100 m</item>
-        <item>500 m</item>
-        <item>1 Km</item>
-        <item>*2 Km</item>
-        <item>5 Km</item>
-    </string-array>
- 
-     <string-array name="mapLocProviderAccuracyValues">
-        <item name="1">100</item>
-        <item name="2">500</item>
-        <item name="3">1000</item>
-        <item name="4">2000</item>
-        <item name="5">5000</item>
-    </string-array>
 
 </resources>

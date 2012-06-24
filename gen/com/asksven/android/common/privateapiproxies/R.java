@@ -29,10 +29,6 @@ public final class R {
          */
         public static final int intervalLabels=0x7f090007;
         public static final int intervalValues=0x7f090008;
-        /**  Values for the update precision. 
-         */
-        public static final int mapLocProviderAccuracyLabels=0x7f09000b;
-        public static final int mapLocProviderAccuracyValues=0x7f09000c;
         public static final int quickAccuracyLabels=0x7f090003;
         public static final int quickAccuracyValues=0x7f090004;
         public static final int quickActionLabels=0x7f090000;
