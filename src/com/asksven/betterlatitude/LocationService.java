@@ -91,7 +91,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	private static final String TAG = "LocationService";
 		
 	/** the connection status */
-	private String m_strStatus = AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN;
+	private String m_strStatus = "";
 	
 	private boolean m_bRegistered = false;
 

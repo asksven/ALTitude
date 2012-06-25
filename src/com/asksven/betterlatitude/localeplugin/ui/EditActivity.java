@@ -21,6 +21,7 @@ package com.asksven.betterlatitude.localeplugin.ui;
 
 import java.util.ArrayList;
 
+import android.annotation.TargetApi;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager.NameNotFoundException;
@@ -257,7 +258,8 @@ public final class EditActivity extends Activity implements AdapterView.OnItemSe
              */
             new Runnable()
             {
-                public void run()
+                @TargetApi(11)
+				public void run()
                 {
                     getActionBar().setSubtitle(BreadCrumber.generateBreadcrumb(getApplicationContext(), getIntent(), getString(R.string.plugin_name)));
                 }
@@ -275,7 +277,8 @@ public final class EditActivity extends Activity implements AdapterView.OnItemSe
              */
             new Runnable()
             {
-                public void run()
+                @TargetApi(14)
+				public void run()
                 {
                     getActionBar().setDisplayHomeAsUpEnabled(true);
 

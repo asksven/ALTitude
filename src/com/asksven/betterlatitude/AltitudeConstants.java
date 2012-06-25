@@ -45,7 +45,7 @@ public class AltitudeConstants
 	}
 	
 	public static AltitudeConstants getInstance(Context ctx)
-	{
+	{		
 		if (m_instance == null)
 		{
 			m_instance = new AltitudeConstants();
