@@ -434,7 +434,7 @@ public class MainActivity extends Activity
      */
 	private void startService()
 	{
-		if( !LocationService.getInstance().isMyServiceRunning() )
+		if( !LocationService.isServiceRunning(this) )
 		{
 			Intent i = new Intent();
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
