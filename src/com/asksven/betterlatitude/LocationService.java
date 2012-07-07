@@ -334,7 +334,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		m_stickyNotification.setLatestEventInfo(this, "ALTitude", strNotification, pi);
 		m_stickyNotification.flags|=Notification.FLAG_NO_CLEAR;
 		
-		if (isMyServiceRunning())
+		if (isServiceRunning(this))
 		{
 			Logger.i(TAG, "setupAsForeground was called to update the notification");
 		}
@@ -927,9 +927,9 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    }
 	 }
 
-	protected boolean isMyServiceRunning()
+	protected static boolean isServiceRunning(Context ctx)
 	{
-	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+	    ActivityManager manager = (ActivityManager) ctx.getSystemService(ACTIVITY_SERVICE);
 	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
 	    {
 	        if (LocationService.SERVICE_NAME.equals(service.service.getClassName()))
