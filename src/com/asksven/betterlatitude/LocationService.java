@@ -20,11 +20,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Calendar;
 
+import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.Service;
+import android.app.ActivityManager.RunningServiceInfo;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -126,7 +128,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     {
         public LocationService getService()
         {
-        	Log.i(TAG, "getService called");
+        	Logger.i(TAG, "getService called");
             return LocationService.this;
         }
     }
@@ -140,7 +142,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	{
     		m_locationStack = new ArrayList<Location>();
     	}
-    	Log.i(getClass().getSimpleName(), "onCreate called");
+    	Logger.i(getClass().getSimpleName(), "onCreate called");
 
         mNM = (NotificationManager)getSystemService(NOTIFICATION_SERVICE);
         
@@ -196,6 +198,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     
     public void clearLocationStack()
     {
+    	Logger.i(TAG, "clearing location stack");
     	m_locationStack.clear();
     	
     }
@@ -241,14 +244,16 @@ public class LocationService extends Service implements LocationListener, OnShar
 			if (!bUsePassiveProvider)
 			{
 		        m_strLocProvider = m_locationManager.getBestProvider(criteria, true);
-		        
+		        Logger.i(TAG, "");
 		        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
 		        m_iAccuracy = accuracyM;
 		        m_iIterval = intervalMs;
+		        Logger.i(TAG, "Using provider '" + m_strLocProvider + "'");
 			}
 			else
 			{
 				m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
+				Logger.i(TAG, "Using provider passive provider");
 				m_iAccuracy = 0;
 		        m_iIterval = 0;
 			}
@@ -257,6 +262,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		else
 		{
 			m_bRegistered = false;
+			Logger.i(TAG, "No location manager could be set");
 		}
     }
 
@@ -293,7 +299,7 @@ public class LocationService extends Service implements LocationListener, OnShar
      */
     public int onStartCommand(Intent intent, int flags, int startId)
     {
-        Log.i(getClass().getSimpleName(), "Received start id " + startId + ": " + intent);
+        Logger.i(getClass().getSimpleName(), "Service started, received start id " + startId + ": " + intent);
 
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	boolean bForegroundService = prefs.getBoolean("foreground_service", true);
@@ -321,7 +327,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 		m_stickyNotification.setLatestEventInfo(this, "ALTitude", strNotification, pi);
 		m_stickyNotification.flags|=Notification.FLAG_NO_CLEAR;
 		
-		
+		if (isMyServiceRunning())
+		{
+			Logger.i(TAG, "setupAsForeground was called to update the notification");
+		}
+		else
+		{
+			Logger.i(TAG, "setupAsForeground was called and started the service");
+		}
+			
 		startForeground(12245, m_stickyNotification);
     	
     }
@@ -365,6 +379,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 //			{
 				if (!updateLatitude())
 				{	
+					Logger.i(TAG, "Adding location to stack. The stack has " + m_locationStack.size() + " entries.");
 					notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
 				}
 //			}
@@ -394,7 +409,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void onProviderEnabled(String provider)
 	{
 		// we may have a better provider now, redefine
-		Log.e(TAG, "Provider " + provider + " was enabled. Maybe we want to use it");
+		Logger.e(TAG, "Provider " + provider + " was enabled. Maybe we want to use it");
 		if (bQuickChangeRunning)
 		{
 			registerLocationListener(m_iIterval, m_iAccuracy);
@@ -416,7 +431,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		// we may have to change providers if we use it right now
 		if (provider.equals(m_strLocProvider))
 		{
-			Log.e(TAG, "Provider " + provider + " was in use. Getting a new one");
+			Logger.e(TAG, "Provider " + provider + " was in use but got disabled. Getting a new one");
 			if (bQuickChangeRunning)
 			{
 				registerLocationListener(m_iIterval, m_iAccuracy);
@@ -440,14 +455,14 @@ public class LocationService extends Service implements LocationListener, OnShar
 			// if no data connection is present no need to try
 			if (!DataNetwork.hasDataConnection(this))
 			{
-				
+				Logger.i(TAG, "No data connection available, aborting");
 				return false;
 			}
 
 			// if updates are set to be done on wifi only and wifi is not connected do nothing
 			if ((bWifiUpdatesOnly) && (!DataNetwork.hasWifiConnection(this)))
 			{
-				
+				Logger.i(TAG, "Updates will happen only on wifi and wifi is not available. Aborting");
 				return false;
 			}
 
@@ -462,6 +477,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			// check if token is valid (not empty)
 			if (accessTokenResponse.accessToken.equals(""))
 			{
+				Logger.e(TAG, "No access token available: not logged in");
 				notifyError(getString(R.string.not_logged_on_error));
 				bRet = false;
 				setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
@@ -498,7 +514,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 			    	}
 			    	else
 			    	{
-			    		Logger.i(TAG, " Service Updating Latitude");
+			    		Logger.i(TAG, "Service Updating Latitude, stack entry " + i+1 + " of " + m_locationStack.size());
 			    	}
 
 				    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
@@ -520,6 +536,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    else
 				    {
 				    	setStatus(AltitudeConstants.getInstance(this).STATUS_UPDATE_BUFFERED + "(" + m_locationStack.size() + ")");
+				    	
 				    	throw new IOException("CurrentLocation.Insert failed");
 				    	
 				    }
@@ -884,16 +901,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    {
 	    	try
 	        {
-	    		Log.d(TAG, "before insert.execute");
+	    		Logger.d(TAG, "updating latitude (insert.execute)");
 	    		inserts[0].execute();
-	    		Log.d(TAG, "after insert.execute");
 	        	return null;
 	        }
 	        catch (Exception e)
 	        {
-	        	Log.d(TAG, "error in insert.execute");
+	        	Logger.d(TAG, "error in insert.execute");
 	            this.exception = e;
-	            Log.e(TAG, "An error occured in UpdateLatitude.doInBackground(): " + e.getMessage());
+	            Logger.e(TAG, "An error occured in UpdateLatitude.doInBackground(): " + e.getMessage());
 	            return null;
 	        }
 	    }
@@ -903,6 +919,21 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 	    }
 	 }
+
+	protected boolean isMyServiceRunning()
+	{
+	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
+	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
+	    {
+	        if (LocationService.SERVICE_NAME.equals(service.service.getClassName()))
+	        {
+	        	Logger.i(TAG, "isMyServiceRunning confirmed that service is running");
+	            return true;
+	        }
+	    }
+	    Logger.i(TAG, "isMyServiceRunning confirmed that service is not running");
+	    return false;
+	}
 
 
 }

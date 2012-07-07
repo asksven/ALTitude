@@ -434,27 +434,15 @@ public class MainActivity extends Activity
      */
 	private void startService()
 	{
-		if( !isMyServiceRunning() )
+		if( !LocationService.getInstance().isMyServiceRunning() )
 		{
 			Intent i = new Intent();
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
 			startService( i );
-			Log.i(getClass().getSimpleName(), "startService()");
+			Logger.i(getClass().getSimpleName(), "startService()");
 		}
 	}
 	
-	private boolean isMyServiceRunning()
-	{
-	    ActivityManager manager = (ActivityManager) getSystemService(ACTIVITY_SERVICE);
-	    for (RunningServiceInfo service : manager.getRunningServices(Integer.MAX_VALUE))
-	    {
-	        if (LocationService.SERVICE_NAME.equals(service.service.getClassName()))
-	        {
-	            return true;
-	        }
-	    }
-	    return false;
-	}
 	
 
 	private class ConnectionUpdateReceiver extends BroadcastReceiver
