@@ -244,16 +244,23 @@ public class LocationService extends Service implements LocationListener, OnShar
 			if (!bUsePassiveProvider)
 			{
 		        m_strLocProvider = m_locationManager.getBestProvider(criteria, true);
-		        Logger.i(TAG, "");
-		        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
-		        m_iAccuracy = accuracyM;
-		        m_iIterval = intervalMs;
-		        Logger.i(TAG, "Using provider '" + m_strLocProvider + "'");
+		        Logger.i(TAG, "registerLocationListener determined best provider: " + m_strLocProvider);
+		        if (m_strLocProvider != null)
+		        {
+			        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
+			        m_iAccuracy = accuracyM;
+			        Logger.i(TAG, "Using provider '" + m_strLocProvider + "'");
+				}
+		        else
+		        {
+		        	Logger.e(TAG, "requestLocationUpdates could not be called because there is no location provider available: m_strLocProvider='" + m_strLocProvider + "'");
+		        	m_bRegistered = false;
+		        }
 			}
 			else
 			{
 				m_locationManager.requestLocationUpdates(LocationManager.PASSIVE_PROVIDER, 0, 0, this);
-				Logger.i(TAG, "Using provider passive provider");
+				Logger.i(TAG, "Requesting passive provider");
 				m_iAccuracy = 0;
 		        m_iIterval = 0;
 			}
