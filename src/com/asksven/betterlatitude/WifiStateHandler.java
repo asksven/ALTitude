@@ -48,6 +48,7 @@ public class WifiStateHandler extends BroadcastReceiver
 				.getParcelableExtra(ConnectivityManager.EXTRA_NETWORK_INFO);
 		if (networkInfo.getType() == ConnectivityManager.TYPE_WIFI)
 		{
+			Logger.i(TAG, "Wifi network detected: calling updateLatitude() to update potentially buffered locations");
 			LocationService.getInstance().updateLatitude();
 		}
 	}
