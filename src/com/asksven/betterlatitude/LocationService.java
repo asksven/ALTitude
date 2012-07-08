@@ -149,9 +149,13 @@ public class LocationService extends Service implements LocationListener, OnShar
         // register the location listener
         this.registerLocationListener();
         
-        // register the Wifi state receiver
-        this.registerReceiver(m_wifiHandler, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
-
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	boolean bHandleWifi = prefs.getBoolean("update_on_wifi_only", false);
+    	if (bHandleWifi)
+    	{
+	        // register the Wifi state receiver
+	        this.registerReceiver(m_wifiHandler, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+    	}
         // Set up a listener whenever a key changes
     	PreferenceManager.getDefaultSharedPreferences(this)
                 .registerOnSharedPreferenceChangeListener(this);
@@ -298,6 +302,20 @@ public class LocationService extends Service implements LocationListener, OnShar
     	        mNM.cancel(R.string.app_name);
 
     		}
+    	}
+    	
+    	if (key.equals("update_on_wifi_only"))
+    	{
+        	if (prefs.getBoolean("update_on_wifi_only", false))
+        	{
+    	        // register the Wifi state receiver
+    	        this.registerReceiver(m_wifiHandler, new IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION));
+        	}
+        	else
+        	{
+        		// unregister Wifi state receiver
+        		unregisterReceiver(m_wifiHandler);
+        	}
     	}
     }
 
@@ -457,13 +475,14 @@ public class LocationService extends Service implements LocationListener, OnShar
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	boolean bWifiUpdatesOnly = prefs.getBoolean("update_on_wifi_only", false);
 
+    	Logger.i(TAG, "updateLatitude called, prepating to update " + m_locationStack.size() + " locations");
 		try
 		{
 			// if no data connection is present no need to try
 			if (!DataNetwork.hasDataConnection(this))
 			{
 				Logger.i(TAG, "No data connection available, aborting");
-				return false;
+				return false; 
 			}
 
 			// if updates are set to be done on wifi only and wifi is not connected do nothing
@@ -542,6 +561,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    }
 				    else
 				    {
+				    	Logger.i(TAG, "Location buffered, stack now has " + m_locationStack.size() + " elements");
 				    	setStatus(AltitudeConstants.getInstance(this).STATUS_UPDATE_BUFFERED + "(" + m_locationStack.size() + ")");
 				    	
 				    	throw new IOException("CurrentLocation.Insert failed");
@@ -557,13 +577,20 @@ public class LocationService extends Service implements LocationListener, OnShar
 		catch (IOException ex)
 		{
 			bRet = false;
-			Logger.i(TAG, "An error occured in setLocationApiCall() '" +  ex.getMessage() + "'");
+			Logger.e(TAG, "An error occured in updateLatitude() '" +  ex.getMessage() + "'");
 			if (ex.getMessage().equals("401 Unauthorized"))
 			{
 				setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
 			}
 			notifyError(getString(R.string.latitude_error) + " '" + ex.getMessage() + "'");
 //			Logger.i(TAG, ex.getStackTrace());
+			
+		}
+		catch (Exception ex)
+		{
+			bRet = false;
+			Logger.e(TAG, "An error occured in updateLatitude() '" +  ex.getMessage() + "'");
+			Logger.e(TAG, ex.getStackTrace());
 			
 		}
 		
@@ -914,7 +941,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	        }
 	        catch (Exception e)
 	        {
-	        	Logger.d(TAG, "error in insert.execute");
+	        	Logger.e(TAG, "error in insert.execute");
 	            this.exception = e;
 	            Logger.e(TAG, "An error occured in UpdateLatitude.doInBackground(): " + e.getMessage());
 	            return null;
