@@ -253,6 +253,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		        {
 			        m_locationManager.requestLocationUpdates(m_strLocProvider, intervalMs, accuracyM, this);
 			        m_iAccuracy = accuracyM;
+			        m_iIterval = intervalMs;
 			        Logger.i(TAG, "Using provider '" + m_strLocProvider + "'");
 				}
 		        else
