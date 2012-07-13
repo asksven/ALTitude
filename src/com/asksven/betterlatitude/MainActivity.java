@@ -138,11 +138,13 @@ public class MainActivity extends Activity
     		{
         		nameTextView.setText("ALTitude full");
         		hintTextView.setText("");
+        		Log.i(TAG, "full version was detected");
     		}
         	else
         	{
         		nameTextView.setText("ALTitude free");
         		hintTextView.setText(getString(R.string.full_version_available));
+        		Log.i(TAG, "free version was detected");
         	}
         	
         	versionTextView.setText(pinfo.versionName);

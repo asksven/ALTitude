@@ -22,6 +22,7 @@ import android.content.Context;
 import android.os.IBinder;
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 /**
  * Helper class that returns info about the configuration (free of full)
@@ -30,6 +31,7 @@ import android.os.Parcelable;
  */
 public class Configuration
 {
+	final static String TAG = "Configuration";
 	
 	public static boolean isFullVersion(Context ctx)
 	{
@@ -50,24 +52,31 @@ public class Configuration
 	          Class<?> c =
 	        		  foreignContext.getClassLoader().loadClass("com.asksven.betterlatitude.configuration.License");
 	         
-	          @SuppressWarnings("unchecked")
-			  Method methodGetVersion = c.getMethod("getVersion");
+	          Method methodGetVersion = c.getMethod("getVersion");
 	          	     
 	          iRet = (Integer) methodGetVersion.invoke(c); 
 
 	    }
 		catch( IllegalArgumentException e )
 		{
-	        iRet = 0;
+	        iRet = -1;
 	    }
 		catch (ClassNotFoundException e)
 		{
-	    	iRet = 0;
+	    	iRet = -2;
 	    }
 		catch( Exception e )
 		{
-	    	iRet = 0;
+	    	iRet = -3;
 	    }    
+		if (iRet > 0)
+		{
+			Log.i(TAG, "license was detected");
+		}
+		else
+		{
+			Log.i(TAG, "no license was detected: " + iRet);
+		}
 		
 		return iRet;
 	}
