@@ -317,6 +317,16 @@ public class LocationService extends Service implements LocationListener, OnShar
         		unregisterReceiver(m_wifiHandler);
         	}
     	}
+    	
+    	if (key.equals("foreground_service"))
+    	{
+    		// stop and start the service, starting it will lead to prefs being read
+			Intent i = new Intent();
+			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
+       		stopService(i);
+       		startService(i);
+    	}
+    		
     }
 
     /** 
@@ -374,7 +384,16 @@ public class LocationService extends Service implements LocationListener, OnShar
         mNM.cancel(R.string.app_name);
     	// unregister the receivers
 		m_locationManager.removeUpdates(this);
-		unregisterReceiver(m_wifiHandler);
+		
+		// hack: there is no way to test whether a receiver is registered so we have to try and ignore the exception
+		try
+		{
+			unregisterReceiver(m_wifiHandler);
+		}
+		catch (IllegalArgumentException e)
+		{
+			// do nothing
+		}
 		
         // Unregister the listener whenever a key changes
         PreferenceManager.getDefaultSharedPreferences(this)
