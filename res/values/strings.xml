@@ -73,4 +73,6 @@
     <string name="pref_category_notification">Notifications</string>
     <string name="pref_category_logging">Logging</string>
     <string name="status_service_running">Service running</string>
+    <string name="pref_force_interval_title">Enforce interval</string>
+    <string name="pref_force_interval_summary">Make sure that the last known location is fired at the freq. defined by the set interval</string>
 </resources>

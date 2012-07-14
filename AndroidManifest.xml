@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<manifest android:versionCode="10" android:versionName="0.10.0.1"
+<manifest android:versionCode="10" android:versionName="0.11.0.0"
     package="com.asksven.betterlatitude" xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-sdk android:minSdkVersion="7" android:targetSdkVersion="14"/>
+    <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="14"/>
     
 <!--     Access Accounts -->
 <!--     <uses-permission android:name="android.permission.GET_ACCOUNTS"/> -->

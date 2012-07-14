@@ -73,4 +73,6 @@
     <string name="pref_category_notification">Notifications</string>
     <string name="pref_category_logging">Logs</string>
     <string name="status_service_running">Service démarré</string>
+    <string name="pref_force_interval_title">Forcer l\'intervalle</string>
+    <string name="pref_force_interval_summary">Force le rafraîchissement de la dernière position connue à la fréquence définie par l\'intervalle</string>
 </resources>

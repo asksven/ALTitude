@@ -148,6 +148,8 @@ public final class R {
         public static final int pref_category_notification=0x7f050050;
         public static final int pref_category_quick_action=0x7f05004f;
         public static final int pref_category_service_settings=0x7f05004e;
+        public static final int pref_force_interval_summary=0x7f050054;
+        public static final int pref_force_interval_title=0x7f050053;
         public static final int pref_foreground_service_summary=0x7f05001a;
         public static final int pref_foreground_service_title=0x7f05001b;
         public static final int pref_log_location_summary=0x7f050027;

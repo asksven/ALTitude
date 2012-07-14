@@ -73,4 +73,7 @@
     <string name="pref_category_notification">Infomeldungen</string>
     <string name="pref_category_logging">Logging</string>
     <string name="status_service_running">Dienst gestartet</string>
+    <string name="pref_force_interval_summary">Intervall erzwingen</string>
+    <string name="pref_force_interval_summary">Stellt sicher, daß die letzte bekannte Position zur durch das Intervall definierte Frequenz aktualisiert wird</string>
+    
 </resources>

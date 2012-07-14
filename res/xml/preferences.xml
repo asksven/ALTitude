@@ -69,6 +69,14 @@
 			android:defaultValue="false"
 	    	android:enabled="true"/>
 	    
+	    <CheckBoxPreference 
+			android:key="force_interval"
+			android:summary="@string/pref_force_interval_summary"
+			android:title="@string/pref_force_interval_title" 
+			android:defaultValue="false"
+	    	android:enabled="true"/>
+	    	    
+	    
 	</PreferenceCategory>        
 	<PreferenceCategory android:title="@string/pref_category_quick_action">        
 

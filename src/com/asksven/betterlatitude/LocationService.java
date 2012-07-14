@@ -85,6 +85,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	
 	public static String SERVICE_NAME = "com.asksven.betterlatitude.LocationService";
 	private static int QUICK_ACTION = 1234567;
+	private static int QOS_ALARM 	= 1234568;
 
 	private LocationManager m_locationManager;
 	
@@ -327,7 +328,22 @@ public class LocationService extends Service implements LocationListener, OnShar
        		stopService(i);
        		startService(i);
     	}
-    		
+
+    	if (key.equals("force_interval"))
+    	{
+        	if (prefs.getBoolean("force_interval", false))
+        	{
+        		// set the QoS alarm
+        		this.setQosAlarm();
+        	}
+        	else
+        	{
+        		// cancel the running QoS alarm 
+        		this.cancelQosAlarm();
+
+        	}
+    	}
+
     }
 
     /** 
@@ -416,6 +432,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void onLocationChanged(Location location)
 	{
     	Logger.i(TAG, "onLocationChanged called");
+    	
+    	// we may have QoS: as the location was just updated we need to reset the alarm counter
+    	setQosAlarm();
+    	
 		m_locationStack.add(location);
 
 		try
@@ -440,7 +460,43 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 	}
 
-	@Override
+    /** 
+     * forces an update with the last known location
+     */
+	public void forceLocationUpdate()
+	{
+    	
+    	
+    	
+    	if (m_strLocProvider == null)
+    	{
+    		Logger.i(TAG, "forceLocationChanged aborted: no location provider defined");
+    		return;
+    	}
+    	
+    	Location here = m_locationManager.getLastKnownLocation(m_strLocProvider);
+    	
+    	// we need to change the timestamp to "now"
+    	long now =System.currentTimeMillis();
+    	here.setTime(now);
+    	
+    	m_locationStack.add(here);
+
+		try
+		{
+			if (!updateLatitude())
+			{	
+				Logger.i(TAG, "Adding location to stack. The stack has " + m_locationStack.size() + " entries.");
+				notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
+			}
+		}
+		catch (Exception e)
+		{
+			notifyStatus(m_locationStack + " " + getString(R.string.locations_buffered));
+		}
+	}
+
+    @Override
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
 		Logger.e(TAG, "onStatusChanged called with status=" + status);
@@ -989,6 +1045,67 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    Logger.i(TAG, "isMyServiceRunning confirmed that service is not running");
 	    return false;
 	}
+	
+	/**
+	 * Adds an alarm to schedule a wakeup to retrieve the current location
+	 */
+	public boolean setQosAlarm()
+	{
+		Logger.i(TAG, "setQosAlarm called");
+		
+		// cancel any exiting alarms
+		cancelQosAlarm();
+
+		// create a new one starting to count NOW
+		Calendar cal = Calendar.getInstance();
+		
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	String strInterval = prefs.getString("update_interval", "15");
+    	    	
+		int iInterval = 15 * 60 * 1000;
+		try
+    	{
+			iInterval = Integer.valueOf(strInterval) * 60 * 1000;
+    	}
+    	catch (Exception e)
+    	{
+    	}
+
+		cal.add(Calendar.MINUTE, iInterval);
+
+		Intent intent = new Intent(this, QosAlarmReceiver.class);
+
+		PendingIntent sender = PendingIntent.getBroadcast(this, QOS_ALARM,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		// Get the AlarmManager service
+		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+
+		return true;
+	}
+	
+	/**
+	 * Cancels the current alarm (if existing)
+	 */
+	public void cancelQosAlarm()
+	{
+		Logger.i(TAG, "cancelQosAlarm");
+		// check if there is an intent pending
+		Intent intent = new Intent(this, AlarmReceiver.class);
+
+		PendingIntent sender = PendingIntent.getBroadcast(this, QOS_ALARM,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+
+		if (sender != null)
+		{
+			// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.cancel(sender);
+		}
+	}
+
+
 
 
 }
