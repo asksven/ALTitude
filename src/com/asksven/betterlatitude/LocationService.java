@@ -443,6 +443,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	@Override
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{
+		Logger.e(TAG, "onStatusChanged called with status=" + status);
 	}
 
 	/* 
