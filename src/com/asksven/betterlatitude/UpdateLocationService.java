@@ -1,6 +1,5 @@
 /*
-
- * Copyright (C) 2012 asksven
+ * Copyright (C) 2011-12 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -14,37 +13,46 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-
 package com.asksven.betterlatitude;
 
 import com.asksven.betterlatitude.utils.Logger;
 
-import android.content.BroadcastReceiver;
-import android.content.Context;
+import android.app.Service;
 import android.content.Intent;
+import android.os.IBinder;
+import android.util.Log;
 
 /**
- * Handles alarms set for quick changes by the service
  * @author sven
  *
  */
-public class QosAlarmReceiver extends BroadcastReceiver
-{		 
-	private static String TAG = "QosAlarmReceiver";
-	
+public class UpdateLocationService extends Service
+{
+	private static final String TAG = "UpdateLocationService";
+
 	@Override
-	public void onReceive(Context context, Intent intent)
+	public void onStart(Intent intent, int startId)
 	{
+
+		Logger.i(TAG, "on Start Called");
 		try
 		{
-			Logger.i(TAG, "QoS alarm triggered");
-			Intent serviceIntent = new Intent(context, UpdateLocationService.class);
-			context.startService(serviceIntent);
-
+			LocationService.getInstance().forceLocationUpdate();			
 		}
 		catch (Exception e)
 		{
-			Logger.e(TAG, "An error occured processing the QoS alarm: " + e.getMessage());
+			Logger.e(TAG, "An error occured: " + e.getMessage());
 		}
+
+		
+		stopSelf();
+
+		super.onStart(intent, startId);
+	}
+
+	@Override
+	public IBinder onBind(Intent intent)
+	{
+		return null;
 	}
 }

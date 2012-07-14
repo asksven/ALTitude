@@ -87,6 +87,7 @@
 	    	    <action android:name="com.asksven.betterlatitude.localeplugin.receiver.UpdaterService"></action>
 	        </intent-filter>
 	    </service>
+	    <service android:name="com.asksven.betterlatitude.UpdateLocationService"/>
 	    
         
         <receiver android:name=".BroadcastHandler">
@@ -96,7 +97,7 @@
             </intent-filter>    
         </receiver>
         <receiver  android:process=":remote" android:name=".AlarmReceiver"/>
+        <receiver  android:process=":remote" android:name=".QosAlarmReceiver"/>
         
-        <uses-library android:name="com.google.android.maps"/>
     </application>
 </manifest>

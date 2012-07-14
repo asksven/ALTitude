@@ -464,13 +464,13 @@ public class LocationService extends Service implements LocationListener, OnShar
      * forces an update with the last known location
      */
 	public void forceLocationUpdate()
-	{
-    	
-    	
+	{    	
+    	// we may have QoS: as the location was just updated we need to reset the alarm counter
+    	setQosAlarm();
     	
     	if (m_strLocProvider == null)
     	{
-    		Logger.i(TAG, "forceLocationChanged aborted: no location provider defined");
+    		Logger.i(TAG, "forceLocationUpdate aborted: no location provider defined");
     		return;
     	}
     	
@@ -1062,16 +1062,16 @@ public class LocationService extends Service implements LocationListener, OnShar
     	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	String strInterval = prefs.getString("update_interval", "15");
     	    	
-		int iInterval = 15 * 60 * 1000;
+		int iInterval = 15;
 		try
     	{
-			iInterval = Integer.valueOf(strInterval) * 60 * 1000;
+			iInterval = Integer.valueOf(strInterval);
     	}
     	catch (Exception e)
     	{
     	}
 
-		cal.add(Calendar.MINUTE, iInterval);
+		long fireAt = System.currentTimeMillis() + (iInterval * 60 * 1000);
 
 		Intent intent = new Intent(this, QosAlarmReceiver.class);
 
@@ -1080,7 +1080,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		// Get the AlarmManager service
 		AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-		am.set(AlarmManager.RTC_WAKEUP, cal.getTimeInMillis(), sender);
+		am.set(AlarmManager.RTC_WAKEUP, fireAt, sender);
 
 		return true;
 	}
@@ -1092,7 +1092,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
 		Logger.i(TAG, "cancelQosAlarm");
 		// check if there is an intent pending
-		Intent intent = new Intent(this, AlarmReceiver.class);
+		Intent intent = new Intent(this, QosAlarmReceiver.class);
 
 		PendingIntent sender = PendingIntent.getBroadcast(this, QOS_ALARM,
 				intent, PendingIntent.FLAG_UPDATE_CURRENT);
