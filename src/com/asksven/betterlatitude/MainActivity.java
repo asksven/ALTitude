@@ -388,7 +388,7 @@ public class MainActivity extends Activity
 	private boolean getLocationApiCall()
 	{
 		boolean bRet = true;
-		Logger.i(TAG, "getLocationApiCall called");
+		Logger.i(TAG, "getLocationApiCall called", this);
 		try
 		{
 			JsonFactory jsonFactory = new JacksonFactory();
@@ -422,7 +422,7 @@ public class MainActivity extends Activity
 		}
 		catch (IOException ex)
 		{
-			Logger.e(TAG, "Exception in getLocationApiCall");
+			Logger.e(TAG, "Exception in getLocationApiCall", this);
 			bRet = false;
 			ex.printStackTrace();
 		}
@@ -441,7 +441,7 @@ public class MainActivity extends Activity
 			Intent i = new Intent();
 			i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
 			startService( i );
-			Logger.i(getClass().getSimpleName(), "startService()");
+			Logger.i(getClass().getSimpleName(), "startService()", this);
 		}
 	}
 	

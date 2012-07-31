@@ -15,6 +15,7 @@
  */
 package com.asksven.betterlatitude.utils;
 
+import android.content.Context;
 import android.content.SharedPreferences;
 import android.preference.PreferenceManager;
 import android.util.Log;
@@ -37,29 +38,58 @@ public class Logger
 	/**
 	 * 
 	 */
-	public static void d(String strTag, String strMessage)
+	public static void d(String strTag, String strMessage, Context ctx)
 	{
-		GenericLogger.d(LOGFILE, strTag, strMessage);
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    	if (prefs.getBoolean("own_logfile", false))
+    	{
+    		GenericLogger.d(LOGFILE, strTag, strMessage);
+    	}
+    	else
+    	{
+    		Log.d(strTag, strMessage);
+    	}
 	}
 	
-	public static void e(String strTag, String strMessage)
+	public static void e(String strTag, String strMessage, Context ctx)
 	{
-		GenericLogger.e(LOGFILE, strTag, strMessage);
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    	if (prefs.getBoolean("own_logfile", false))
+    	{
+    		GenericLogger.e(LOGFILE, strTag, strMessage);
+    	}
+    	else
+    	{
+    		Log.e(strTag, strMessage);
+    	}
+    		
 	}
 
-	public static void i(String strTag, String strMessage)
+	public static void i(String strTag, String strMessage, Context ctx)
 	{
-		GenericLogger.d(LOGFILE, strTag, strMessage);
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    	if (prefs.getBoolean("own_logfile", false))
+    	{
+    		GenericLogger.d(LOGFILE, strTag, strMessage);
+    	}
+    	else
+    	{
+    		Log.d(strTag, strMessage);
+    	}
 	}
 	
-	public static void e(String strTag, StackTraceElement[] stack)
+	public static void e(String strTag, StackTraceElement[] stack, Context ctx)
 	{
 		Log.e(strTag, "An Exception occured. Stacktrace:");
 		for (int i=0; i < stack.length; i++)
 		{
 			Log.e(strTag, stack[i].toString());
 		}
-		DataStorage.LogToFile(LOGFILE, stack);
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(ctx);
+    	if (prefs.getBoolean("own_logfile", false))
+    	{
+    		DataStorage.LogToFile(LOGFILE, stack);
+    	}
 	}
 	
 //	private boolean logToFile()

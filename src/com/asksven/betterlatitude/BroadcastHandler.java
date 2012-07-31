@@ -47,7 +47,7 @@ public class BroadcastHandler extends BroadcastReceiver
  
         if (intent.getAction().equals(Intent.ACTION_BOOT_COMPLETED))
 		{
-			Logger.i(TAG, "Received Broadcast ACTION_BOOT_COMPLETED");
+			Logger.i(TAG, "Received Broadcast ACTION_BOOT_COMPLETED", context);
 			
 			// retrieve default selections for spinners
 			SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(context);
@@ -55,7 +55,7 @@ public class BroadcastHandler extends BroadcastReceiver
 			
 			if (bAutostart)
 			{
-				Logger.i(TAG, "Autostart is set to run, starting service");
+				Logger.i(TAG, "Autostart is set to run, starting service", context);
 				context.startService(new Intent(context, LocationService.class));
 //				Intent i = new Intent();
 //				i.setClassName( "com.asksven.betterlatitude", LocationService.SERVICE_NAME );
@@ -65,7 +65,7 @@ public class BroadcastHandler extends BroadcastReceiver
 			{
 				if (bAutostart)
 				{
-					Logger.i(TAG, "Autostart is not set to run");
+					Logger.i(TAG, "Autostart is not set to run", context);
 				}
 
 			}

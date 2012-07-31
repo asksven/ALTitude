@@ -37,14 +37,14 @@ public class QosAlarmReceiver extends BroadcastReceiver
 	{
 		try
 		{
-			Logger.i(TAG, "QoS alarm triggered");
+			Logger.i(TAG, "QoS alarm triggered", context);
 			Intent serviceIntent = new Intent(context, UpdateLocationService.class);
 			context.startService(serviceIntent);
 
 		}
 		catch (Exception e)
 		{
-			Logger.e(TAG, "An error occured processing the QoS alarm: " + e.getMessage());
+			Logger.e(TAG, "An error occured processing the QoS alarm: " + e.getMessage(), context);
 		}
 	}
 }

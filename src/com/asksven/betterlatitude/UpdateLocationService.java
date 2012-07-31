@@ -17,6 +17,7 @@ package com.asksven.betterlatitude;
 
 import com.asksven.betterlatitude.utils.Logger;
 
+import android.app.Application;
 import android.app.Service;
 import android.content.Intent;
 import android.os.IBinder;
@@ -34,14 +35,14 @@ public class UpdateLocationService extends Service
 	public void onStart(Intent intent, int startId)
 	{
 
-		Logger.i(TAG, "on Start Called");
+		Log.i(TAG, "on Start Called");
 		try
 		{
 			LocationService.getInstance().forceLocationUpdate();			
 		}
 		catch (Exception e)
 		{
-			Logger.e(TAG, "An error occured: " + e.getMessage());
+			Log.e(TAG, "An error occured: " + e.getMessage());
 		}
 
 		
