@@ -520,6 +520,22 @@ public class LocationService extends Service implements LocationListener, OnShar
 		{
 			registerLocationListener();
 		}
+		
+		if (LocationManager.GPS_PROVIDER.equals(provider) && !isQuickChangeRunning())
+		{
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    	if (prefs.getBoolean("auto_on_when_gps", false))
+	    	{
+	    		setQuickChange();
+	        	// refresh widget
+	    		Intent intent = new Intent(this.getApplicationContext(),
+	    				MyWidgetProvider.class);
+	    		intent.setAction(MyWidgetProvider.ACTION_REFRESH);
+	    		this.sendBroadcast(intent);
+
+	    	}
+			
+		}
 	}
 
 	/* 
@@ -543,6 +559,23 @@ public class LocationService extends Service implements LocationListener, OnShar
 				registerLocationListener();
 			}		
 		}
+		
+		if (LocationManager.GPS_PROVIDER.equals(provider))
+		{
+			SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+	    	if (prefs.getBoolean("auto_on_when_gps", false) && isQuickChangeRunning())
+	    	{
+	    		resetQuickChange();
+	        	// refresh widget
+	    		Intent intent = new Intent(this.getApplicationContext(),
+	    				MyWidgetProvider.class);
+	    		intent.setAction(MyWidgetProvider.ACTION_REFRESH);
+	    		this.sendBroadcast(intent);
+
+	    	}
+			
+		}
+
 	}	
 
 	protected boolean updateLatitude()

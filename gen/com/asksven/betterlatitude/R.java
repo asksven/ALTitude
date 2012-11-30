@@ -150,6 +150,8 @@ public final class R {
         public static final int menu_status=0x7f05000e;
         public static final int not_logged_on_error=0x7f05003f;
         public static final int plugin_name=0x7f050011;
+        public static final int pref_auto_on_when_gps_summary=0x7f050056;
+        public static final int pref_auto_on_when_gps_title=0x7f050055;
         public static final int pref_category_logging=0x7f050051;
         public static final int pref_category_notification=0x7f050050;
         public static final int pref_category_quick_action=0x7f05004f;

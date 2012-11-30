@@ -105,6 +105,13 @@
 	            android:entryValues="@array/quickDurationValues"
 	        />
 	    
+	    <CheckBoxPreference 
+			android:key="auto_on_when_gps"
+			android:summary="@string/pref_auto_on_when_gps_summary"
+			android:title="@string/pref_auto_on_when_gps_title" 
+			android:defaultValue="false"
+	    	android:enabled="true"/>
+	    	    
 	</PreferenceCategory>        
 	    
 	<PreferenceCategory android:title="@string/pref_category_logging">
