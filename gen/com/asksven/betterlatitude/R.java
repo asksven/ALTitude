@@ -47,7 +47,10 @@ public final class R {
         public static final int icon_dontsave=0x7f020002;
         public static final int icon_help=0x7f020003;
         public static final int icon_save=0x7f020004;
-        public static final int twofortyfouram_locale_border=0x7f020005;
+        public static final int icon_widget_normal=0x7f020005;
+        public static final int icon_widget_quick=0x7f020006;
+        public static final int myshape=0x7f020007;
+        public static final int twofortyfouram_locale_border=0x7f020008;
     }
     public static final class id {
         public static final int ButtonCancel=0x7f060017;
@@ -59,15 +62,17 @@ public final class R {
         public static final int buttonLogon=0x7f060012;
         public static final int buttonMarket=0x7f06001c;
         public static final int buttonTwitter=0x7f06001b;
-        public static final int call_latitude=0x7f06001e;
+        public static final int call_latitude=0x7f060020;
+        public static final int icon=0x7f06001e;
         public static final int image=0x7f060004;
         public static final int imageView1=0x7f060010;
+        public static final int layout=0x7f06001d;
         public static final int layout_root=0x7f060003;
-        public static final int location_Status=0x7f060020;
-        public static final int log_off=0x7f060022;
-        public static final int preferences=0x7f06001d;
-        public static final int quick_dialog=0x7f06001f;
-        public static final int release_notes=0x7f060021;
+        public static final int location_Status=0x7f060022;
+        public static final int log_off=0x7f060024;
+        public static final int preferences=0x7f06001f;
+        public static final int quick_dialog=0x7f060021;
+        public static final int release_notes=0x7f060023;
         public static final int spinnerAccuracy=0x7f06000a;
         public static final int spinnerAction=0x7f060008;
         public static final int spinnerDuration=0x7f06000b;
@@ -104,6 +109,7 @@ public final class R {
         public static final int quick_action_dialog=0x7f030003;
         public static final int readmewebview=0x7f030004;
         public static final int webview=0x7f030005;
+        public static final int widget_layout=0x7f030006;
     }
     public static final class menu {
         public static final int mainmenu=0x7f0a0000;
@@ -230,5 +236,6 @@ public final class R {
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
+        public static final int widget_info=0x7f040001;
     }
 }

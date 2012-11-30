@@ -927,6 +927,32 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 	
 	/**
+	 * Start a quick change with the default values 
+	 */
+	public void setQuickChange()
+	{
+    	int iAccuracy = 0;
+    	int iInterval = 0;
+    	int iDuration = 0;
+    	try
+    	{
+    		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+        	
+    		iAccuracy = Integer.valueOf(sharedPrefs.getString("quick_update_accuracy", "0"));
+    		iInterval = Integer.valueOf(sharedPrefs.getString("quick_update_interval", "0"));
+    		iDuration = Integer.valueOf(sharedPrefs.getString("quick_update_duration", "0"));
+    	}
+    	catch (Exception e)
+    	{
+    		Log.e(TAG, "An error occured while reading quick action preferences");
+    	}
+
+    	// start a quick setting with defaults
+		this.setQuickChange(iInterval, iAccuracy, iDuration);
+
+	}
+
+	/**
 	 * Reset (void) any running quick action
 	 */
 	public void resetQuickChange()

@@ -530,6 +530,13 @@ public class MainActivity extends Activity
     			     public void onClick(View v)
     			     {
     			    	 LocationService.getInstance().resetQuickChange();
+    			    	 
+			        	// refresh widget
+			    		Intent intent = new Intent(MainActivity.this.getApplicationContext(),
+			    				MyWidgetProvider.class);
+			    		intent.setAction(MyWidgetProvider.ACTION_REFRESH);
+			    		MainActivity.this.sendBroadcast(intent);
+
     			         dialog.dismiss();
     			     }
     			 });
@@ -585,6 +592,12 @@ public class MainActivity extends Activity
 									spinnerAccuracy.getSelectedItemPosition(),
 									spinnerDuration.getSelectedItemPosition());
 						
+			        	// refresh widget
+			    		Intent intent = new Intent(MainActivity.this.getApplicationContext(),
+			    				MyWidgetProvider.class);
+			    		intent.setAction(MyWidgetProvider.ACTION_REFRESH);
+			    		MainActivity.this.sendBroadcast(intent);
+
 						dialog.dismiss();
 					}
 				});
