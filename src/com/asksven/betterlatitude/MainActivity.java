@@ -590,6 +590,15 @@ public class MainActivity extends Activity
     			         updateStatus();
     			     }
     			 });
+				buttonCancel.setOnClickListener(new Button.OnClickListener()
+				{
+					@Override
+					public void onClick(View v)
+					{
+						// do nothing
+						dialog.dismiss();
+					}
+				});
     			
     			// set selections
     			spinnerAccuracy.setSelection(myService.getAccuracyIndex());
