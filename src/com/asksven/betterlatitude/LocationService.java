@@ -111,11 +111,16 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/** precision for current location manager */
 	private int m_iIterval = 0;
 	private int m_iAccuracy = 0;
+	private int m_iDuration = 0;
+	
 	
 	/** spinner indexes for quick actions */
 	int m_iIntervalIndex = 0;
 	int m_iAccuracyIndex = 0;
 	int m_iDurationIndex = 0;
+	
+	long m_lUpdated = 0;
+	long m_lQuickUntil = 0;
 	
 	Notification m_stickyNotification = null;
 
@@ -814,7 +819,16 @@ public class LocationService extends Service implements LocationListener, OnShar
 	{
 		return m_strStatus;
 	}
-	
+
+	/**
+	 * Returns until when the quick change is active
+	 * @return
+	 */
+	public long getUntil()
+	{
+		return m_lQuickUntil;
+	}
+
 	/**
 	 * Returns the sigleton instance of the service
 	 * @return
@@ -941,8 +955,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 		m_iIterval = intervalMs;
 		m_iAccuracy = accuracyM;		
+		m_iDuration = minutes;
 
 		cal.add(Calendar.MINUTE, minutes);
+		m_lQuickUntil = cal.getTimeInMillis();
 
 		Intent intent = new Intent(this, AlarmReceiver.class);
 
@@ -1013,7 +1029,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 
 	/**
-	 * Returns the update interval requested from the LocationProvider
+	 * Returns the update interval requested from the LocationProvider in ms
 	 * @return the interval in ms
 	 */
 	public int getInterval()
@@ -1022,7 +1038,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 	
 	/**
-	 * Returns the accuracy requested from the LocationProvider
+	 * Returns the accuracy requested from the LocationProvider in m
 	 * @return the accuracy in m
 	 */
 	public int getAccuracy()
@@ -1030,6 +1046,24 @@ public class LocationService extends Service implements LocationListener, OnShar
 		return m_iAccuracy;
 	}
 			
+	/**
+	 * Returns the duration of the quick setting in ms
+	 * @return the duration in ms
+	 */
+	public int getDuration()
+	{
+		return m_iDuration;
+	}
+	
+	/**
+	 * Returns the time (in ms) when the last update took place
+	 * @return
+	 */
+	public long getUpdated()
+	{
+		return m_lUpdated;
+	}
+
 	/**
 	 * Return the current address (if geo is on)
 	 * @return the current location as a string
@@ -1073,6 +1107,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	        {
 	    		Logger.d(TAG, "updating latitude (insert.execute)", LocationService.this);
 	    		inserts[0].execute();
+	    		m_lUpdated = System.currentTimeMillis();
 	        	return null;
 	        }
 	        catch (Exception e)

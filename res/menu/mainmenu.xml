@@ -6,8 +6,6 @@
           android:title="@string/menu_show_friends" />
     <item android:id="@+id/quick_dialog"
           android:title="@string/menu_change_precision" />
-    <item android:id="@+id/location_Status"
-          android:title="@string/menu_status" />
     <item android:id="@+id/release_notes"
           android:title="@string/menu_release_notes" />
     

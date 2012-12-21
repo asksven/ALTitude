@@ -73,9 +73,14 @@
     <string name="pref_category_notification">Infomeldungen</string>
     <string name="pref_category_logging">Logging</string>
     <string name="status_service_running">Dienst gestartet</string>
-    <string name="pref_force_interval_summary">Intervall erzwingen</string>
+    <string name="pref_force_interval_summary">Stellt sicher, daß die letzte bekannte Position zur durch das Intervall definierte Frequenz aktualisiert wird</string>
     <string name="pref_force_interval_summary">Stellt sicher, daß die letzte bekannte Position zur durch das Intervall definierte Frequenz aktualisiert wird</string>
     <string name="pref_auto_on_when_gps_title">An wenn GPS an</string>
     <string name="pref_auto_on_when_gps_summary">Automatisch wen GPS angeht (nur Android 2.3+)</string>
-    
+    <string name="layout_main_mode_label">Modus:</string>
+    <string name="layout_main_mode_normal">normal</string>
+    <string name="layout_main_mode_quick">geänderte Genauigkeit</string>
+    <string name="layout_main_state_label">Status</string>
+    <string name="layout_main_remaining_label">Verbleibend</string>
+    <string name="layout_main_updated_label">Aktualisiert</string>
 </resources>

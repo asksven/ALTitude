@@ -77,4 +77,11 @@
     <string name="pref_force_interval_summary">Make sure that the last known location is fired at the freq. defined by the set interval</string>
     <string name="pref_auto_on_when_gps_title">Turn on when GPS detected</string>
     <string name="pref_auto_on_when_gps_summary">Turn on quick settings automatically when GPS detected (Android 2.3+ only)</string>
+    <string name="layout_main_mode_label">Current mode:</string>
+    <string name="layout_main_mode_normal">normal</string>
+    <string name="layout_main_mode_quick">changed precision</string>
+    <string name="layout_main_state_label">Status</string>
+    <string name="layout_main_remaining_label">Remaining</string>
+    <string name="layout_main_updated_label">Updated</string>
+    
 </resources>

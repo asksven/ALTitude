@@ -44,10 +44,12 @@ import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
 
+import com.asksven.android.common.utils.DateUtils;
 import com.asksven.betterlatitude.ReadmeActivity;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.LatitudeApi;
@@ -184,8 +186,6 @@ public class MainActivity extends Activity
 	        editor.putString("last_release", strCurrentRelease);
 	        editor.commit();
     	}
-
-        
   	}
 
     /**
@@ -299,9 +299,6 @@ public class MainActivity extends Activity
 	        case R.id.quick_dialog:
 	        	showQuickDialog(this);
 	        	break;
-	        case R.id.location_Status:
-	        	showLocationStatus(this);
-	        	break;
 	        case R.id.release_notes:
             	// Release notes
             	Intent intentReleaseNotes = new Intent(this, ReadmeActivity.class);
@@ -327,11 +324,13 @@ public class MainActivity extends Activity
 			statusTextView.setText(AltitudeConstants.getInstance(this).STATUS_SERVICE_NOT_STARTED);
 		}
 				
-	    // Show or hide log on button depending on the existence of the credentials
+	    // Show or hide log on button / status depending on the existence of the credentials
 	    final Button buttonLogon = (Button) findViewById(R.id.buttonLogon);
+	    final TableLayout statusLayout = (TableLayout) findViewById(R.id.layoutStatus);
 	    if (!LatitudeApi.hasCredentials(this))
 	    {
 	    	buttonLogon.setVisibility(Button.VISIBLE);
+	    	statusLayout.setVisibility(View.INVISIBLE);
 	    	if (myService != null)
 	    	{
 	    		myService.setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
@@ -349,10 +348,60 @@ public class MainActivity extends Activity
 	    else
 	    {
 	    	buttonLogon.setVisibility(Button.INVISIBLE);
+	    	statusLayout.setVisibility(View.VISIBLE);
 	    	if (myService != null)
 	    	{
 	    		myService.setStatus(myService.getStatus());
 	    	}
+	    }
+	    
+	    if (statusLayout.getVisibility() == View.VISIBLE)
+	    {
+			// update the status info
+			TextView tvMode = (TextView) findViewById(R.id.textViewMode);
+			TextView tvRemaining 	= (TextView) findViewById(R.id.textViewRemaing);
+			TextView tvAccuracy 	= (TextView) findViewById(R.id.textViewValueAccuracy);
+			TextView tvInterval 	= (TextView) findViewById(R.id.textViewValueInterval);
+			TextView tvUpdated 		= (TextView) findViewById(R.id.textViewValueUpdated);
+			
+			LocationService service = LocationService.getInstance();
+			if (service != null)
+			{
+				// mode
+				if (!service.isQuickChangeRunning())
+				{
+					tvMode.setText(getString(R.string.layout_main_mode_normal));
+					tvRemaining.setText("-");
+				}
+				else
+				{
+					tvMode.setText(getString(R.string.layout_main_mode_quick));
+					tvRemaining.setText(DateUtils.formatDuration(service.getUntil() - System.currentTimeMillis()));
+				}
+				
+				tvAccuracy.setText(String.valueOf(service.getAccuracy() + " m"));
+				tvInterval.setText(DateUtils.formatDuration(service.getInterval()) );
+				
+				long updated = service.getUpdated();
+				long since = service.getUpdated(); //System.currentTimeMillis() - service.getUpdated();
+				if (updated != 0)
+				{
+					tvUpdated.setText(DateUtils.formatShort(since));
+				}
+				else
+				{
+					tvUpdated.setText("-");
+				}
+			}
+			else
+			{
+				tvMode.setText("-");
+				tvAccuracy.setText("-");
+				tvInterval.setText("-");
+				tvUpdated.setText("-");
+				tvRemaining.setText("-");
+
+			}
 	    }
     }
 
@@ -538,6 +587,7 @@ public class MainActivity extends Activity
 			    		MainActivity.this.sendBroadcast(intent);
 
     			         dialog.dismiss();
+    			         updateStatus();
     			     }
     			 });
     			
@@ -597,6 +647,7 @@ public class MainActivity extends Activity
 			    				MyWidgetProvider.class);
 			    		intent.setAction(MyWidgetProvider.ACTION_REFRESH);
 			    		MainActivity.this.sendBroadcast(intent);
+			    		updateStatus();
 
 						dialog.dismiss();
 					}
@@ -620,47 +671,6 @@ public class MainActivity extends Activity
     		Toast.makeText(this, AltitudeConstants.getInstance(this).STATUS_SERVICE_NOT_STARTED, Toast.LENGTH_SHORT).show();
     	}
 	}
-	
-	/**
-	 * Shows a dialog with the current location info
-	 * @param context
-	 */
-	private void showLocationStatus(Context context)
-	{
-    	Dialog dialog = new Dialog(context);
-
-    	dialog.setContentView(R.layout.information_dialog);
-    	dialog.setTitle(getString(R.string.dialog_status_title));
-
-    	TextView title = (TextView) dialog.findViewById(R.id.title);
-    	TextView text = (TextView) dialog.findViewById(R.id.text);
-    	title.setText(getString(R.string.dialog_status_text));
-    	
-    	
-    	LocationService myService = LocationService.getInstance();
-    	if (myService != null)
-    	{
-	    	String strText = getString(R.string.dialog_status_provider) + ": " + myService.getLocationProvider() + "\n";
-	    	strText = strText + getString(R.string.dialog_status_buffered) + ": " + myService.getBufferSize() + "\n";
-	    	strText = strText + getString(R.string.dialog_status_accuracy) + ": " + myService.getAccuracy() + "\n";
-	    	strText = strText + getString(R.string.dialog_status_interval) + ": " + myService.getInterval() / 1000;
-	    	    	
-	    	if (!myService.getCurrentLocation().equals(""))
-	    	{
-	    		strText = strText + "\n" + getString(R.string.dialog_status_current_location) + ": " +  myService.getCurrentLocation();
-	    	}
-	
-	    	text.setText(strText);
-    	
-    	}
-    	else
-    	{
-    		text.setText(AltitudeConstants.getInstance(this).STATUS_SERVICE_UNAVAILABLE);
-    	}
-    	dialog.show();
-	}
-	
-	
 	
 	
 	@Override
