@@ -42,48 +42,61 @@ public final class R {
     public static final class attr {
     }
     public static final class drawable {
-        public static final int ic_launcher=0x7f020000;
-        public static final int icon=0x7f020001;
-        public static final int icon_dontsave=0x7f020002;
-        public static final int icon_help=0x7f020003;
-        public static final int icon_save=0x7f020004;
-        public static final int icon_widget_normal=0x7f020005;
-        public static final int icon_widget_quick=0x7f020006;
-        public static final int myshape=0x7f020007;
-        public static final int twofortyfouram_locale_border=0x7f020008;
+        public static final int border=0x7f020000;
+        public static final int ic_launcher=0x7f020001;
+        public static final int icon=0x7f020002;
+        public static final int icon_dontsave=0x7f020003;
+        public static final int icon_help=0x7f020004;
+        public static final int icon_save=0x7f020005;
+        public static final int icon_widget_normal=0x7f020006;
+        public static final int icon_widget_quick=0x7f020007;
+        public static final int myshape=0x7f020008;
+        public static final int twofortyfouram_locale_border=0x7f020009;
     }
     public static final class id {
-        public static final int ButtonCancel=0x7f060017;
-        public static final int ButtonOk=0x7f060016;
-        public static final int ButtonReset=0x7f060018;
+        public static final int ButtonCancel=0x7f060024;
+        public static final int ButtonOk=0x7f060023;
+        public static final int ButtonReset=0x7f060025;
         public static final int TextView03=0x7f060007;
-        public static final int adView=0x7f060013;
-        public static final int buttonClose=0x7f06001a;
+        public static final int adView=0x7f060020;
+        public static final int buttonClose=0x7f060027;
         public static final int buttonLogon=0x7f060012;
-        public static final int buttonMarket=0x7f06001c;
-        public static final int buttonTwitter=0x7f06001b;
-        public static final int call_latitude=0x7f060020;
-        public static final int icon=0x7f06001e;
+        public static final int buttonMarket=0x7f060029;
+        public static final int buttonTwitter=0x7f060028;
+        public static final int call_latitude=0x7f06002d;
+        public static final int checkBoxEnabled=0x7f06001f;
+        public static final int icon=0x7f06002b;
         public static final int image=0x7f060004;
         public static final int imageView1=0x7f060010;
-        public static final int layout=0x7f06001d;
+        public static final int layout=0x7f06002a;
+        public static final int layoutStatus=0x7f060013;
         public static final int layout_root=0x7f060003;
-        public static final int location_Status=0x7f060022;
-        public static final int log_off=0x7f060024;
-        public static final int preferences=0x7f06001f;
-        public static final int quick_dialog=0x7f060021;
-        public static final int release_notes=0x7f060023;
+        public static final int log_off=0x7f060030;
+        public static final int preferences=0x7f06002c;
+        public static final int quick_dialog=0x7f06002e;
+        public static final int release_notes=0x7f06002f;
         public static final int spinnerAccuracy=0x7f06000a;
         public static final int spinnerAction=0x7f060008;
         public static final int spinnerDuration=0x7f06000b;
         public static final int spinnerInterval=0x7f060009;
         public static final int text=0x7f060006;
         public static final int textView1=0x7f06000f;
-        public static final int textView2=0x7f060014;
-        public static final int textView3=0x7f060015;
+        public static final int textView2=0x7f060021;
+        public static final int textView3=0x7f060022;
         public static final int textViewHint=0x7f06000d;
+        public static final int textViewLabelAccuracy=0x7f060019;
+        public static final int textViewLabelInterval=0x7f06001b;
+        public static final int textViewLabelMode=0x7f060015;
+        public static final int textViewLabelRemaining=0x7f060017;
+        public static final int textViewLabelState=0x7f060014;
+        public static final int textViewLabelUpdated=0x7f06001d;
+        public static final int textViewMode=0x7f060016;
         public static final int textViewName=0x7f06000c;
+        public static final int textViewRemaing=0x7f060018;
         public static final int textViewStatus=0x7f060011;
+        public static final int textViewValueAccuracy=0x7f06001a;
+        public static final int textViewValueInterval=0x7f06001c;
+        public static final int textViewValueUpdated=0x7f06001e;
         public static final int textViewVersion=0x7f06000e;
         public static final int title=0x7f060005;
         /**  Menu item to cancel the current Activity 
@@ -95,7 +108,7 @@ public final class R {
         /**  Menu item to save the current Activity 
          */
         public static final int twofortyfouram_locale_menu_save=0x7f060002;
-        public static final int webview=0x7f060019;
+        public static final int webview=0x7f060026;
     }
     public static final class integer {
         /**  The maximum blurb length in characters.  This value is based on Latin characters 
@@ -141,6 +154,12 @@ public final class R {
         public static final int latitude_error=0x7f050040;
         public static final int layout_main_author=0x7f05002d;
         public static final int layout_main_logon=0x7f05002c;
+        public static final int layout_main_mode_label=0x7f050057;
+        public static final int layout_main_mode_normal=0x7f050058;
+        public static final int layout_main_mode_quick=0x7f050059;
+        public static final int layout_main_remaining_label=0x7f05005b;
+        public static final int layout_main_state_label=0x7f05005a;
+        public static final int layout_main_updated_label=0x7f05005c;
         public static final int locations_buffered=0x7f050041;
         public static final int menu_change_precision=0x7f05000d;
         public static final int menu_log_off=0x7f050010;
@@ -156,6 +175,8 @@ public final class R {
         public static final int pref_category_notification=0x7f050050;
         public static final int pref_category_quick_action=0x7f05004f;
         public static final int pref_category_service_settings=0x7f05004e;
+        public static final int pref_enabled_summary=0x7f05005e;
+        public static final int pref_enabled_title=0x7f05005d;
         public static final int pref_force_interval_summary=0x7f050054;
         public static final int pref_force_interval_title=0x7f050053;
         public static final int pref_foreground_service_summary=0x7f05001a;

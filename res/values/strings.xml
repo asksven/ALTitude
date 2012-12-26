@@ -83,5 +83,7 @@
     <string name="layout_main_state_label">Status</string>
     <string name="layout_main_remaining_label">Remaining</string>
     <string name="layout_main_updated_label">Updated</string>
+    <string name="pref_enabled_title">Enabled</string>
+    <string name="pref_enabled_summary">Enables location updates</string>
     
 </resources>

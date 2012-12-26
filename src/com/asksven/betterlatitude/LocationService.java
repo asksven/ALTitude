@@ -590,6 +590,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	boolean bWifiUpdatesOnly = prefs.getBoolean("update_on_wifi_only", false);
 
+    	boolean bEnabled = prefs.getBoolean("enabled", true);
+    	
+    	// if not enabled forget the location
+    	if (!bEnabled)
+    	{
+    		clearLocationStack();
+    		return true;
+    	}
+    	
     	Logger.i(TAG, "updateLatitude called, prepating to update " + m_locationStack.size() + " locations", this);
 		try
 		{

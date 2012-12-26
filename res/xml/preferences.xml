@@ -7,7 +7,14 @@
 		android:title="@string/pref_start_on_boot_title" 
 		android:defaultValue="false"
     android:enabled="true"/>
-
+	
+	<CheckBoxPreference 
+		android:key="enabled"
+		android:summary="@string/pref_enabled_summary"
+		android:title="@string/pref_enabled_title" 
+		android:defaultValue="true"
+    android:enabled="true"/>
+	
 	<PreferenceCategory android:title="@string/pref_category_notification">
 	    <CheckBoxPreference 
 			android:key="notify_status"

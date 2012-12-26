@@ -43,6 +43,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.Spinner;
 import android.widget.TableLayout;
 import android.widget.TextView;
@@ -186,6 +187,12 @@ public class MainActivity extends Activity
 	        editor.putString("last_release", strCurrentRelease);
 	        editor.commit();
     	}
+		
+		// update the enabled stats
+    	CheckBox enabledCheckBox = (CheckBox) findViewById(R.id.checkBoxEnabled);
+		boolean bEnabled	= sharedPrefs.getBoolean("enabled", true);
+		enabledCheckBox.setChecked(bEnabled);
+		
   	}
 
     /**
@@ -310,6 +317,28 @@ public class MainActivity extends Activity
         return true;
     }
 
+    /**
+     * Handler when a checkbox on the layout was checked/unchecked
+     * @param view
+     */
+    public void onCheckboxClicked(View view)
+    {
+        // Is the view now checked?
+        boolean checked = ((CheckBox) view).isChecked();
+        
+        // Check which checkbox was clicked
+        switch(view.getId())
+        {
+            case R.id.checkBoxEnabled:
+                // save the current release to properties so that the dialog won't be shown till next version
+        		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	        SharedPreferences.Editor editor = sharedPrefs.edit();
+    	        editor.putBoolean("enabled", checked);
+    	        editor.commit();
+                break;
+        }
+    }
+    
     private void updateStatus()
     {
 	    // Set the connection state

@@ -83,4 +83,7 @@
     <string name="layout_main_state_label">Status</string>
     <string name="layout_main_remaining_label">Verbleibend</string>
     <string name="layout_main_updated_label">Aktualisiert</string>
+    <string name="pref_enabled_title">Aktiv</string>
+    <string name="pref_enabled_summary">Aktiviert die automatische Ortung</string>
+    
 </resources>
