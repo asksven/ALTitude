@@ -168,6 +168,8 @@ public class LocationService extends Service implements LocationListener, OnShar
 
     	// set status
     	setStatus(AltitudeConstants.getInstance(this).STATUS_UPDATE_PENDING);
+    	
+    	// trigger QoS alarm (will do nothing if settings say not to
    }
     
     private void registerLocationListener()
@@ -1154,6 +1156,13 @@ public class LocationService extends Service implements LocationListener, OnShar
 	 */
 	public boolean setQosAlarm()
 	{
+    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+    	if (!prefs.getBoolean("force_interval", false))
+    	{
+    		cancelQosAlarm();
+    		return false;
+    	}
+
 		Logger.i(TAG, "setQosAlarm called", this);
 		
 		// cancel any exiting alarms
@@ -1162,7 +1171,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 		// create a new one starting to count NOW
 		Calendar cal = Calendar.getInstance();
 		
-    	SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
     	String strInterval = prefs.getString("update_interval", "15");
     	    	
 		int iInterval = 15;
