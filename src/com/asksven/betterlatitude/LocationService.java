@@ -234,14 +234,19 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Criteria criteria = new Criteria();
     	criteria.setSpeedRequired(false);
     	criteria.setAltitudeRequired(false);
-    	criteria.setCostAllowed(true);
-    	if (accuracyM < 100)
+    	criteria.setCostAllowed(false);
+    	criteria.setBearingRequired(false);
+    	
+    	if (accuracyM <= 100)
     	{
     		criteria.setAccuracy(Criteria.ACCURACY_FINE);
+    		criteria.setPowerRequirement(Criteria.POWER_HIGH);
+    		//criteria.setBearingRequired(true);
     	}
     	else
     	{
     		criteria.setAccuracy(Criteria.ACCURACY_COARSE);
+    		criteria.setPowerRequirement(Criteria.POWER_LOW);
     	}
     	
 
