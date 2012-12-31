@@ -1131,6 +1131,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 	        	Logger.e(TAG, "error in insert.execute", LocationService.this);
 	            this.exception = e;
 	            Logger.e(TAG, "An error occured in UpdateLatitude.doInBackground(): " + e.getMessage(), LocationService.this);
+	            Log.e(TAG, "Exception info: "+Log.getStackTraceString(e));
 	            return null;
 	        }
 	    }
