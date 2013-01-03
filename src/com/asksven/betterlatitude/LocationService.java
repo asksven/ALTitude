@@ -1178,6 +1178,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 		Calendar cal = Calendar.getInstance();
 		
     	String strInterval = prefs.getString("update_interval", "15");
+    	if (!Configuration.isFullVersion(this))
+		{
+    		strInterval = "15";
+		}
     	    	
 		int iInterval = 15;
 		try
@@ -1188,6 +1192,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	{
     	}
 
+		Logger.i(TAG, "QoS alarm scheduled in " + iInterval + " minutes", this);
 		long fireAt = System.currentTimeMillis() + (iInterval * 60 * 1000);
 
 		Intent intent = new Intent(this, QosAlarmReceiver.class);
