@@ -683,7 +683,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 				    Insert myInsert = latitude.currentLocation.insert(currentLocation);
 
 				    String now = DateUtils.now("HH:mm:ss");
-				    setStatus(AltitudeConstants.getInstance(this).STATUS_LOCATION_UPDATED + ": " + now);
+				    setStatus(AltitudeConstants.getInstance(this).STATUS_LOCATION_UPDATED);
 
 				    if (myInsert != null)
 				    {
