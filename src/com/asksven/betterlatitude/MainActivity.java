@@ -405,11 +405,11 @@ public class MainActivity extends Activity
 				else
 				{
 					tvMode.setText(getString(R.string.layout_main_mode_quick));
-					tvRemaining.setText(DateUtils.formatDuration(service.getUntil() - System.currentTimeMillis()));
+					tvRemaining.setText(DateUtils.formatDurationLong(service.getUntil() - System.currentTimeMillis()));
 				}
 				
 				tvAccuracy.setText(String.valueOf(service.getAccuracy() + " m"));
-				tvInterval.setText(DateUtils.formatDuration(service.getInterval()) );
+				tvInterval.setText(DateUtils.formatDurationLong(service.getInterval()) );
 				
 				long updated = service.getUpdated();
 				long since = service.getUpdated(); //System.currentTimeMillis() - service.getUpdated();
