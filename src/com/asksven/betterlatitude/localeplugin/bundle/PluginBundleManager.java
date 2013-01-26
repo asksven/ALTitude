@@ -45,10 +45,12 @@ public final class PluginBundleManager
      * <p>
      * String message to display in a Toast message.
      */
-    public static final String BUNDLE_EXTRA_INT_ACTION 		= "com.asksven.betterlatitude.localeplugin.extra.INT_ACTION"; //$NON-NLS-1$
+    public static final String BUNDLE_EXTRA_INT_ACTION 			= "com.asksven.betterlatitude.localeplugin.extra.INT_ACTION"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_INTERVAL 		= "com.asksven.betterlatitude.localeplugin.extra.INT_INTERVAL"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_ACCURACY 		= "com.asksven.betterlatitude.localeplugin.extra.INT_ACCURACY"; //$NON-NLS-1$
     public static final String BUNDLE_EXTRA_INT_DURATION 		= "com.asksven.betterlatitude.localeplugin.extra.INT_DURATION"; //$NON-NLS-1$
+    public static final String BUNDLE_EXTRA_FLOAT_LATITUDE		= "com.asksven.betterlatitude.localeplugin.extra.FLOAT_LATITUDE"; //$NON-NLS-1$
+    public static final String BUNDLE_EXTRA_FLOAT_LONGITUDE		= "com.asksven.betterlatitude.localeplugin.extra.FLOAT_LONGITUDE"; //$NON-NLS-1$
 
     
     /**
@@ -96,16 +98,34 @@ public final class PluginBundleManager
          * error message is more useful. (E.g. the caller will see what extras are missing, rather than just a message that there
          * is the wrong number).
          */
-        if (5 != bundle.keySet().size())
+        // we must distiguish between the two plugins
+        // a) set quick action: BUNDLE_EXTRA_INT_ACTION is in the bundle -> 5 elements are required
+        // b) set location: BUNDLE_EXTRA_INT_ACTION is not present, 3 elements are required
+        if (bundle.containsKey(BUNDLE_EXTRA_INT_ACTION))
         {
-            if (Constants.IS_LOGGABLE)
-            {
-                Log.e(Constants.LOG_TAG, String.format("bundle must contain 2 keys, but currently contains %d keys: %s", Integer.valueOf(bundle.keySet().size()), bundle.keySet() //$NON-NLS-1$
-                                                                                                                                                                       .toString()));
-            }
-            return false;
+	        if (5 != bundle.keySet().size())
+	        {
+	            if (Constants.IS_LOGGABLE)
+	            {
+	                Log.e(Constants.LOG_TAG, String.format("bundle must contain 2 keys, but currently contains %d keys: %s", Integer.valueOf(bundle.keySet().size()), bundle.keySet() //$NON-NLS-1$
+	                                                                                                                                                                       .toString()));
+	            }
+	            return false;
+	        }
         }
-        
+        else
+        {
+	        if (3 != bundle.keySet().size())
+	        {
+	            if (Constants.IS_LOGGABLE)
+	            {
+	                Log.e(Constants.LOG_TAG, String.format("bundle must contain 2 keys, but currently contains %d keys: %s", Integer.valueOf(bundle.keySet().size()), bundle.keySet() //$NON-NLS-1$
+	                                                                                                                                                                       .toString()));
+	            }
+	            return false;
+	        }
+        	
+        }
         /*
          * Make sure the extra is the correct type
          */

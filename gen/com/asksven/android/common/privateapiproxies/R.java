@@ -8,10 +8,10 @@ package com.asksven.android.common.privateapiproxies;
 
 public final class R {
 	public static final class id {
-		public static final int webview = 0x7f060026;
-		public static final int buttonTwitter = 0x7f060028;
-		public static final int buttonClose = 0x7f060027;
-		public static final int buttonMarket = 0x7f060029;
+		public static final int webview = 0x7f060028;
+		public static final int buttonTwitter = 0x7f06002a;
+		public static final int buttonClose = 0x7f060029;
+		public static final int buttonMarket = 0x7f06002b;
 	}
 	public static final class string {
 		public static final int hello = 0x7f050000;
@@ -28,8 +28,8 @@ public final class R {
 		public static final int app_name = 0x7f050001;
 	}
 	public static final class layout {
-		public static final int readmewebview = 0x7f030004;
-		public static final int main = 0x7f030002;
+		public static final int readmewebview = 0x7f030005;
+		public static final int main = 0x7f030003;
 	}
 	public static final class drawable {
 		public static final int icon = 0x7f020002;

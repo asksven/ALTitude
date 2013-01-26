@@ -311,7 +311,7 @@ public class MainActivity extends Activity
             	Intent intentReleaseNotes = new Intent(this, ReadmeActivity.class);
             	intentReleaseNotes.putExtra("filename", "readme.html");
                 this.startActivity(intentReleaseNotes);
-            	break;	
+            	break;
         }
         
         return true;

@@ -8,6 +8,7 @@
     <string name="menu_release_notes">Release Notes</string>
     <string name="menu_log_off">Log Off</string>
     <string name="plugin_name">ALTitude settings</string>
+    <string name="plugin_set_loc_name">ALTitude force location</string>
     <string name="label_select_action">Action</string>
     <string name="pref_start_on_boot_summary">Start service on boot</string>
     <string name="pref_notify_status_title">Status</string>
@@ -85,5 +86,8 @@
     <string name="layout_main_updated_label">Updated</string>
     <string name="pref_enabled_title">Enabled</string>
     <string name="pref_enabled_summary">Enables location updates</string>
+    <string name="label_latlongformat">Format: ##.####</string>
+    <string name="label_latitude">Lat.</string>
+    <string name="label_longitude">Long.</string>
     
 </resources>

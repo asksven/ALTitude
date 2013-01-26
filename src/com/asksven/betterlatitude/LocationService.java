@@ -508,6 +508,44 @@ public class LocationService extends Service implements LocationListener, OnShar
 		}
 	}
 
+    /** 
+     * forces an update with the last known location
+     */
+	public void forceLocationUpdate(float latitude, float longitude)
+	{    	
+    	// we may have QoS: as the location was just updated we need to reset the alarm counter
+    	setQosAlarm();
+    	
+    	if (m_strLocProvider == null)
+    	{
+    		Logger.i(TAG, "forceLocationUpdate aborted: no location provider defined", this);
+    		return;
+    	}
+    	
+    	Location here = m_locationManager.getLastKnownLocation(m_strLocProvider);
+    	here.setLatitude(latitude);
+    	here.setLongitude(longitude);
+    	
+    	// we need to change the timestamp to "now"
+    	long now =System.currentTimeMillis();
+    	here.setTime(now);
+    	
+    	m_locationStack.add(here);
+
+		try
+		{
+			if (!updateLatitude())
+			{	
+				Logger.i(TAG, "Adding location to stack. The stack has " + m_locationStack.size() + " entries.", this);
+				notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
+			}
+		}
+		catch (Exception e)
+		{
+			notifyStatus(m_locationStack + " " + getString(R.string.locations_buffered));
+		}
+	}
+
     @Override
 	public void onStatusChanged(String provider, int status, Bundle extras)
 	{

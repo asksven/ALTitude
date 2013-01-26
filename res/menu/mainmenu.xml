@@ -13,4 +13,5 @@
 <!--           android:title="Log on" /> -->
     <item android:id="@+id/log_off"
           android:title="@string/menu_log_off" />
+    
 </menu>
