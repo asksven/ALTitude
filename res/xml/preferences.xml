@@ -1,150 +1,143 @@
 <?xml version="1.0" encoding="utf-8"?>
-<PreferenceScreen
-  xmlns:android="http://schemas.android.com/apk/res/android">
-	<CheckBoxPreference 
-		android:key="start_on_boot"
-		android:summary="@string/pref_start_on_boot_summary"
-		android:title="@string/pref_start_on_boot_title" 
-		android:defaultValue="false"
-    android:enabled="true"/>
-	
-	<CheckBoxPreference 
-		android:key="enabled"
-		android:summary="@string/pref_enabled_summary"
-		android:title="@string/pref_enabled_title" 
-		android:defaultValue="true"
-    android:enabled="true"/>
-	
-	<PreferenceCategory android:title="@string/pref_category_notification">
-	    <CheckBoxPreference 
-			android:key="notify_status"
-			android:summary="@string/pref_notify_status_summary"
-			android:title="@string/pref_notify_status_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"/>
-	    <CheckBoxPreference 
-			android:key="notify_errors"
-			android:summary="@string/pref_notify_errors_summary"
-			android:title="@string/pref_notify_errors_title" 
-			android:defaultValue="true"
-	    	android:enabled="true"/>
-	    
-	    <CheckBoxPreference 
-			android:key="notify_geodata"
-			android:summary="@string/pref_notify_geodata_summary"
-			android:title="@string/pref_notify_geodata_title" 
-			android:defaultValue="false"
-			android:dependency="notify_status"
-	    	android:enabled="true"/>
-	</PreferenceCategory>        
-	<PreferenceCategory android:title="@string/pref_category_service_settings">        
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android" >
 
-	    <CheckBoxPreference 
-			android:key="foreground_service"
-			android:summary="@string/pref_foreground_service_summary"
-			android:title="@string/pref_foreground_service_title" 
-			android:defaultValue="true"
-	    	android:enabled="true"/>
-	    	    
-	    <CheckBoxPreference 
-			android:key="passive_provider"
-			android:summary="@string/pref_passive_provider_summary"
-			android:title="@string/pref_passive_provider_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"/>
-	    
-	    <ListPreference 
-	            android:key="update_interval"
-	            android:title="@string/pref_update_interval_title"
-	            android:summary="@string/pref_update_interval_summary"
-	            android:defaultValue="15" 
-	            android:entries="@array/intervalLabels"
-	            android:entryValues="@array/intervalValues"
-	        />
-	    <ListPreference 
-	            android:key="update_accuracy"
-	            android:title="@string/pref_update_accuracy_title"
-	            android:summary="@string/pref_update_accuracy_summary"
-	            android:defaultValue="2000" 
-	            android:entries="@array/accuracyLabels"
-	            android:entryValues="@array/accuracyValues"
-	        />
-	    <CheckBoxPreference 
-			android:key="update_on_wifi_only"
-			android:summary="@string/pref_update_on_wifi_only_summary"
-			android:title="@string/pref_update_on_wifi_only_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"/>
-	    
-	    <CheckBoxPreference 
-			android:key="force_interval"
-			android:summary="@string/pref_force_interval_summary"
-			android:title="@string/pref_force_interval_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"/>
-	    	    
-	    
-	</PreferenceCategory>        
-	<PreferenceCategory android:title="@string/pref_category_quick_action">        
+    <CheckBoxPreference
+        android:defaultValue="false"
+        android:enabled="true"
+        android:key="start_on_boot"
+        android:summary="@string/pref_start_on_boot_summary"
+        android:title="@string/pref_start_on_boot_title" />
 
-	    <ListPreference 
-	            android:key="quick_update_interval"
-	            android:title="@string/pref_update_interval_title"
-	            android:summary="@string/pref_update_interval_summary"
-	            android:defaultValue="0" 
-	            android:entries="@array/quickIntervalLabels"
-	            android:entryValues="@array/quickIntervalValues"
-	        />
-	    <ListPreference 
-	            android:key="quick_update_accuracy"
-	            android:title="@string/pref_update_accuracy_title"
-	            android:summary="@string/pref_update_accuracy_summary"
-	            android:defaultValue="0" 
-	            android:entries="@array/quickAccuracyLabels"
-	            android:entryValues="@array/quickAccuracyValues"
-	        />
-	    <ListPreference 
-	            android:key="quick_update_duration"
-	            android:title="@string/pref_update_duration_title"
-	            android:summary="@string/pref_update_duration_summary"
-	            android:defaultValue="0" 
-	            android:entries="@array/quickDurationLabels"
-	            android:entryValues="@array/quickDurationValues"
-	        />
-	    
-	    <CheckBoxPreference 
-			android:key="auto_on_when_gps"
-			android:summary="@string/pref_auto_on_when_gps_summary"
-			android:title="@string/pref_auto_on_when_gps_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"/>
-	    	    
-	</PreferenceCategory>        
-	    
-	<PreferenceCategory android:title="@string/pref_category_logging">
+    <ListPreference
+        android:defaultValue="1"
+        android:entries="@array/themeLabels"
+        android:entryValues="@array/themeValues"
+        android:key="theme"
+        android:summary="@string/pref_theme_summary"
+        android:title="@string/pref_theme_title" />
 
-	    <CheckBoxPreference 
-			android:key="log_location"
-			android:summary="@string/pref_log_location_summary"
-			android:title="@string/pref_log_location_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"
-	    />
-	    <CheckBoxPreference 
-			android:key="own_logfile"
-			android:summary="@string/pref_own_logfile_summary"
-			android:title="@string/pref_own_logfile_title" 
-			android:defaultValue="false"
-	    	android:enabled="true"
-	    />
+    <CheckBoxPreference
+        android:defaultValue="true"
+        android:enabled="true"
+        android:key="enabled"
+        android:summary="@string/pref_enabled_summary"
+        android:title="@string/pref_enabled_title" />
+
+    <PreferenceCategory android:title="@string/pref_category_notification" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="notify_status"
+            android:summary="@string/pref_notify_status_summary"
+            android:title="@string/pref_notify_status_title" />
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="notify_errors"
+            android:summary="@string/pref_notify_errors_summary"
+            android:title="@string/pref_notify_errors_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:dependency="notify_status"
+            android:enabled="true"
+            android:key="notify_geodata"
+            android:summary="@string/pref_notify_geodata_summary"
+            android:title="@string/pref_notify_geodata_title" />
     </PreferenceCategory>
-<!-- 	<PreferenceCategory android:title="Advanced"> -->
-<!-- 	    <CheckBoxPreference  -->
-<!-- 			android:key="use_account_manager" -->
-<!-- 			android:summary="Use integrated accounts" -->
-<!-- 			android:title="Use AccountManager"  -->
-<!-- 			android:defaultValue="false" -->
-<!-- 	    	android:enabled="true" -->
-<!-- 	    />     -->
-<!--     </PreferenceCategory> -->
+    <PreferenceCategory android:title="@string/pref_category_service_settings" >
+        <CheckBoxPreference
+            android:defaultValue="true"
+            android:enabled="true"
+            android:key="foreground_service"
+            android:summary="@string/pref_foreground_service_summary"
+            android:title="@string/pref_foreground_service_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="passive_provider"
+            android:summary="@string/pref_passive_provider_summary"
+            android:title="@string/pref_passive_provider_title" />
+
+        <ListPreference
+            android:defaultValue="15"
+            android:entries="@array/intervalLabels"
+            android:entryValues="@array/intervalValues"
+            android:key="update_interval"
+            android:summary="@string/pref_update_interval_summary"
+            android:title="@string/pref_update_interval_title" />
+        <ListPreference
+            android:defaultValue="2000"
+            android:entries="@array/accuracyLabels"
+            android:entryValues="@array/accuracyValues"
+            android:key="update_accuracy"
+            android:summary="@string/pref_update_accuracy_summary"
+            android:title="@string/pref_update_accuracy_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="update_on_wifi_only"
+            android:summary="@string/pref_update_on_wifi_only_summary"
+            android:title="@string/pref_update_on_wifi_only_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="force_interval"
+            android:summary="@string/pref_force_interval_summary"
+            android:title="@string/pref_force_interval_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_quick_action" >
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/quickIntervalLabels"
+            android:entryValues="@array/quickIntervalValues"
+            android:key="quick_update_interval"
+            android:summary="@string/pref_update_interval_summary"
+            android:title="@string/pref_update_interval_title" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/quickAccuracyLabels"
+            android:entryValues="@array/quickAccuracyValues"
+            android:key="quick_update_accuracy"
+            android:summary="@string/pref_update_accuracy_summary"
+            android:title="@string/pref_update_accuracy_title" />
+        <ListPreference
+            android:defaultValue="0"
+            android:entries="@array/quickDurationLabels"
+            android:entryValues="@array/quickDurationValues"
+            android:key="quick_update_duration"
+            android:summary="@string/pref_update_duration_summary"
+            android:title="@string/pref_update_duration_title" />
+
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="auto_on_when_gps"
+            android:summary="@string/pref_auto_on_when_gps_summary"
+            android:title="@string/pref_auto_on_when_gps_title" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/pref_category_logging" >
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="log_location"
+            android:summary="@string/pref_log_location_summary"
+            android:title="@string/pref_log_location_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="own_logfile"
+            android:summary="@string/pref_own_logfile_summary"
+            android:title="@string/pref_own_logfile_title" />
+    </PreferenceCategory>
+    <!-- <PreferenceCategory android:title="Advanced"> -->
+    <!-- <CheckBoxPreference -->
+    <!-- android:key="use_account_manager" -->
+    <!-- android:summary="Use integrated accounts" -->
+    <!-- android:title="Use AccountManager" -->
+    <!-- android:defaultValue="false" -->
+    <!-- android:enabled="true" -->
+    <!-- /> -->
+    <!-- </PreferenceCategory> -->
+
 </PreferenceScreen>

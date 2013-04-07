@@ -89,5 +89,11 @@
     <string name="label_latlongformat">Format: ##.####</string>
     <string name="label_latitude">Lat.</string>
     <string name="label_longitude">Long.</string>
+    <string name="label_theme_dark">Dark</string>
+    <string name="label_theme_light">Light</string>
+    <string name="pref_theme_title">Theme</string>
+    <string name="pref_theme_summary">Switch themes</string>
+    
+    
     
 </resources>

@@ -85,5 +85,10 @@
     <string name="layout_main_updated_label">Actualisé</string>
     <string name="pref_enabled_title">Actif</string>
     <string name="pref_enabled_summary">Active la localisation automatique</string>
+    <string name="label_theme_dark">Foncé</string>
+    <string name="label_theme_light">Clair</string>
+    <string name="pref_theme_title">Thème</string>
+    <string name="pref_theme_summary">Changer le thème</string>
+    
     
 </resources>
