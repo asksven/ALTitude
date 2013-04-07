@@ -16,11 +16,14 @@
 
 package com.asksven.betterlatitude;
 
+import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.asksven.betterlatitude.utils.Configuration;
 
 import android.app.Activity;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceActivity;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 /**
@@ -35,7 +38,7 @@ import android.util.Log;
  * @author sven
  *
  */
-public class PreferencesActivity extends PreferenceActivity
+public class PreferencesActivity extends SherlockPreferenceActivity
 {
 	private static String TAG = "PreferencesActivity";
 	/**
@@ -44,6 +47,17 @@ public class PreferencesActivity extends PreferenceActivity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String theme = sharedPrefs.getString("theme", "1");
+		if (theme.equals("1"))
+		{
+			this.setTheme(R.style.Theme_Sherlock);
+		}
+		else
+		{
+			this.setTheme(R.style.Theme_Sherlock_Light_DarkActionBar);
+		}
+
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
 		

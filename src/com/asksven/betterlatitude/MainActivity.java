@@ -1,5 +1,5 @@
 /*
- * Copyright (C) 2011-2012 asksven
+ * Copyright (C) 2011-2013 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -19,12 +19,9 @@ import java.io.IOException;
 
 import android.accounts.Account;
 import android.accounts.AccountManager;
-import android.app.Activity;
-import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.app.ProgressDialog;
-import android.app.ActivityManager.RunningServiceInfo;
 import android.content.ActivityNotFoundException;
 import android.content.BroadcastReceiver;
 import android.content.Context;
@@ -37,9 +34,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.util.Log;
-import android.view.Menu;
-import android.view.MenuInflater;
-import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
@@ -49,7 +43,10 @@ import android.widget.TableLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-
+import com.actionbarsherlock.app.SherlockActivity;
+import com.actionbarsherlock.view.Menu;
+import com.actionbarsherlock.view.MenuInflater;
+import com.actionbarsherlock.view.MenuItem;
 import com.asksven.android.common.utils.DateUtils;
 import com.asksven.betterlatitude.ReadmeActivity;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
@@ -67,7 +64,7 @@ import com.google.api.client.json.jackson.JacksonFactory;
 import com.google.api.services.latitude.Latitude;
 import com.google.ads.*;
 
-public class MainActivity extends Activity
+public class MainActivity extends SherlockActivity
 
 {
 	/**
@@ -101,6 +98,17 @@ public class MainActivity extends Activity
 	@Override
 	public void onCreate(Bundle savedInstanceState)
 	{
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String theme = sharedPrefs.getString("theme", "1");
+		if (theme.equals("1"))
+		{
+			this.setTheme(R.style.Theme_Sherlock);
+		}
+		else
+		{
+			this.setTheme(R.style.Theme_Sherlock_Light_DarkActionBar);
+		}
+
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.main);
 	
@@ -160,7 +168,6 @@ public class MainActivity extends Activity
         	
 
         // Show release notes when first starting a new version
-		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
 		String strLastRelease	= sharedPrefs.getString("last_release", "0");
 		String strCurrentRelease = "";
 
@@ -248,7 +255,7 @@ public class MainActivity extends Activity
      */
     public boolean onCreateOptionsMenu(Menu menu)
     {  
-    	MenuInflater inflater = getMenuInflater();
+    	MenuInflater inflater = getSupportMenuInflater();
         inflater.inflate(R.menu.mainmenu, menu);
         return true;
     }

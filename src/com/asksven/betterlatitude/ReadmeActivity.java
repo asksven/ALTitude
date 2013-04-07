@@ -15,18 +15,21 @@
  */
 package com.asksven.betterlatitude;
 
+import com.actionbarsherlock.app.SherlockActivity;
 import com.asksven.betterlatitude.R;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.view.View;
 import android.webkit.WebSettings;
 import android.webkit.WebView;
 import android.widget.Button;
 
-public class ReadmeActivity extends Activity
+public class ReadmeActivity extends SherlockActivity
 {
 	/**
 	 * @see android.app.Activity#onCreate(Bundle)
@@ -34,6 +37,17 @@ public class ReadmeActivity extends Activity
 	@Override
 	protected void onCreate(Bundle savedInstanceState)
 	{
+		SharedPreferences sharedPrefs = PreferenceManager.getDefaultSharedPreferences(this);
+		String theme = sharedPrefs.getString("theme", "1");
+		if (theme.equals("1"))
+		{
+			this.setTheme(R.style.Theme_Sherlock);
+		}
+		else
+		{
+			this.setTheme(R.style.Theme_Sherlock_Light_DarkActionBar);
+		}
+
 		super.onCreate(savedInstanceState);
 		
 		setContentView(R.layout.readmewebview);
