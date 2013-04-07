@@ -7,6 +7,7 @@
     <string name="menu_status">Status</string>
     <string name="menu_release_notes">Release Notes</string>
     <string name="menu_log_off">Log Off</string>
+    <string name="menu_credits">Credits</string>
     <string name="plugin_name">ALTitude settings</string>
     <string name="plugin_set_loc_name">ALTitude force location</string>
     <string name="label_select_action">Action</string>

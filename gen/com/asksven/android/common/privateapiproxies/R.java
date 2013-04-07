@@ -8,30 +8,30 @@ package com.asksven.android.common.privateapiproxies;
 
 public final class R {
 	public static final class id {
-		public static final int webview = 0x7f060028;
-		public static final int buttonTwitter = 0x7f06002a;
-		public static final int buttonClose = 0x7f060029;
-		public static final int buttonMarket = 0x7f06002b;
+		public static final int webview = 0x7f05005d;
+		public static final int buttonTwitter = 0x7f05005f;
+		public static final int buttonClose = 0x7f05005e;
+		public static final int buttonMarket = 0x7f050060;
 	}
 	public static final class string {
-		public static final int hello = 0x7f050000;
-		public static final int text_dialog_rate = 0x7f050006;
-		public static final int label_button_rate = 0x7f050004;
-		public static final int twitter_link = 0x7f050007;
-		public static final int dialog_dismiss = 0x7f05000a;
-		public static final int app_pname = 0x7f050002;
-		public static final int market_link = 0x7f050008;
-		public static final int label_button_remind = 0x7f050003;
-		public static final int label_button_no = 0x7f050005;
-		public static final int dialog_follow_me = 0x7f05000b;
-		public static final int dialog_apps = 0x7f050009;
-		public static final int app_name = 0x7f050001;
+		public static final int hello = 0x7f0a000f;
+		public static final int text_dialog_rate = 0x7f0a0015;
+		public static final int label_button_rate = 0x7f0a0013;
+		public static final int twitter_link = 0x7f0a0016;
+		public static final int dialog_dismiss = 0x7f0a0019;
+		public static final int app_pname = 0x7f0a0011;
+		public static final int market_link = 0x7f0a0017;
+		public static final int label_button_remind = 0x7f0a0012;
+		public static final int label_button_no = 0x7f0a0014;
+		public static final int dialog_follow_me = 0x7f0a001a;
+		public static final int dialog_apps = 0x7f0a0018;
+		public static final int app_name = 0x7f0a0010;
 	}
 	public static final class layout {
-		public static final int readmewebview = 0x7f030005;
-		public static final int main = 0x7f030003;
+		public static final int readmewebview = 0x7f03001e;
+		public static final int main = 0x7f03001c;
 	}
 	public static final class drawable {
-		public static final int icon = 0x7f020002;
+		public static final int icon = 0x7f020071;
 	}
 }

@@ -7,6 +7,7 @@
     <string name="menu_status">Status</string>
     <string name="menu_release_notes">Release Notes</string>
     <string name="menu_log_off">Abmelden</string>
+    <string name="menu_credits">Credits</string>
     <string name="plugin_name">ALTitude einstellungen</string>
     <string name="label_select_action">Aktion</string>
     <string name="label_select_interval">Intervall</string>
