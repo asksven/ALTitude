@@ -94,6 +94,14 @@
     <string name="label_theme_light">Light</string>
     <string name="pref_theme_title">Theme</string>
     <string name="pref_theme_summary">Switch themes</string>
+    <string name="pref_max_update_interval_title">Max. Interval</string>
+    <string name="pref_max_update_interval_summary">How often will the service update Latitude at max.</string>
+    <string name="pref_max_update_accuracy_title">Min. Accuracy</string>
+    <string name="pref_max_update_accuracy_summary">With what minimal precision will the service update Latitude</string>
+    <string name="pref_limit_update_interval_title">Limit interval</string>
+    <string name="pref_limit_update_interval_summary">Limit the update frequency</string>
+    <string name="pref_limit_update_accuracy_title">Limit accuracy</string>
+    <string name="pref_limit_update_accuracy_summary">Limit the accuracy for updates</string>
     
     
     

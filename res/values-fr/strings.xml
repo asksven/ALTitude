@@ -10,7 +10,7 @@
     <string name="menu_credits">Crédits</string>
     <string name="plugin_name">Configuration d\'ALTitude</string>
     <string name="label_select_action">Action</string>
-    <string name="label_select_interval">Intervalle</string>
+    <string name="label_select_interval">Fréquence</string>
     <string name="label_select_accuracy">Précision</string>
     <string name="label_select_duration">Durée</string>
     <string name="quick_action_label_set">Fixer</string>
@@ -27,7 +27,7 @@
     <string name="pref_log_location_summary">Attention: vie privée</string>
     <string name="pref_notify_geodata_summary">Affiche a localité/rue/adresse la plus proche</string>
     <string name="pref_update_interval_summary">Fréquence d\'actualisation de Latitude</string>
-    <string name="pref_update_interval_title">Intervalle</string>
+    <string name="pref_update_interval_title">Fréquence</string>
     <string name="pref_notify_geodata_title">Données geographiques</string>
     <string name="pref_notify_errors_title">Messages d\' erreur</string>
     <string name="pref_own_logfile_title">Propre log</string>
@@ -74,8 +74,8 @@
     <string name="pref_category_notification">Notifications</string>
     <string name="pref_category_logging">Logs</string>
     <string name="status_service_running">Service démarré</string>
-    <string name="pref_force_interval_title">Forcer l\'intervalle</string>
-    <string name="pref_force_interval_summary">Force le rafraîchissement de la dernière position connue à la fréquence définie par l\'intervalle</string>
+    <string name="pref_force_interval_title">Forcer la fréquence</string>
+    <string name="pref_force_interval_summary">Force le rafraîchissement de la dernière position connue à une certaine fréquence</string>
     <string name="pref_auto_on_when_gps_title">Démarrer quand le GPS est allumé</string>
     <string name="pref_auto_on_when_gps_summary">Démarrer automatiquementquand le GPS est détecté (Android 2.3+ seulement)</string>
     <string name="layout_main_mode_label">Mode:</string>
@@ -90,6 +90,14 @@
     <string name="label_theme_light">Clair</string>
     <string name="pref_theme_title">Thème</string>
     <string name="pref_theme_summary">Changer le thème</string>
+    <string name="pref_update_interval_summary">Fréquence maximale d\'actualisation de Latitude</string>
+    <string name="pref_update_interval_title">Intervalle</string>
+    <string name="pref_update_accuracy_title">Précision min.</string>
+    <string name="pref_update_accuracy_summary">Précision minimale de la mise à jour de Latitude</string>
+    <string name="pref_limit_update_interval_title">Limite la fréquence</string>
+    <string name="pref_limit_update_interval_summary">Limite la frequence de mise à jour</string>
+    <string name="pref_limit_update_accuracy_title">Limite la précision</string>
+    <string name="pref_limit_update_accuracy_summary">Limite la précision de mise à jour</string>
     
     
 </resources>

@@ -19,10 +19,10 @@ package com.asksven.betterlatitude;
 import com.actionbarsherlock.app.SherlockPreferenceActivity;
 import com.asksven.betterlatitude.utils.Configuration;
 
-import android.app.Activity;
 import android.content.SharedPreferences;
+import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
-import android.preference.PreferenceActivity;
+import android.preference.CheckBoxPreference;
 import android.preference.PreferenceManager;
 import android.util.Log;
 
@@ -38,7 +38,7 @@ import android.util.Log;
  * @author sven
  *
  */
-public class PreferencesActivity extends SherlockPreferenceActivity
+public class PreferencesActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener
 {
 	private static String TAG = "PreferencesActivity";
 	/**
@@ -83,6 +83,12 @@ public class PreferencesActivity extends SherlockPreferenceActivity
 				findPreference("quick_update_duration").setEnabled(false);
 				findPreference("use_account_manager").setEnabled(false);
 				findPreference("update_on_wifi_only").setEnabled(false);
+				findPreference("limit_update_accuracy").setEnabled(false);
+				findPreference("limit_update_interval").setEnabled(false);
+				findPreference("max_update_accuracy").setEnabled(false);
+				findPreference("max_update_interval").setEnabled(false);
+
+
 			}
 			catch (Exception e)
 			{
@@ -90,4 +96,44 @@ public class PreferencesActivity extends SherlockPreferenceActivity
 			}
 		}
 	}
+	
+    public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
+    {
+    	
+    	// make sure that only one of QoS and max update frequency is selected
+    	if (key.equals("limit_update_interval"))
+    	{
+    		// if this value was just turned on make sure "force_interval" gets disabled
+    		if (prefs.getBoolean("limit_update_interval", true))
+    		{
+				if (prefs.getBoolean("force_interval", true))
+				{
+	    	        SharedPreferences.Editor editor = prefs.edit();
+	    	        editor.putBoolean("force_interval", false);
+	    	        editor.commit();
+	    	        CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("wifi_on_when_screen_on");
+	    	        checkboxPref.setChecked(false);
+	    	        
+	    		}
+    		}
+    	}
+
+    	if (key.equals("force_interval"))
+    	{
+    		// if this value was just turned o make sure "limit_update_interval" gets disabled
+    		if (prefs.getBoolean("force_interval", true))
+    		{
+    			if (prefs.getBoolean("limit_update_interval", true))
+	    		{
+	    	        SharedPreferences.Editor editor = prefs.edit();
+	    	        editor.putBoolean("limit_update_interval", false);
+	    	        editor.commit();
+	    	        CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("wifi_on_when_screen_unlock");
+	    	        checkboxPref.setChecked(false);
+	    		}
+    		}
+    	}
+
+    }
+
 }

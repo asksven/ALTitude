@@ -76,6 +76,34 @@
         <CheckBoxPreference
             android:defaultValue="false"
             android:enabled="true"
+            android:key="limit_update_interval"
+            android:summary="@string/pref_limit_update_interval_summary"
+            android:title="@string/pref_limit_update_interval_title" />
+        
+        <ListPreference
+            android:defaultValue="15"
+            android:entries="@array/intervalLabels"
+            android:entryValues="@array/intervalValues"
+            android:key="max_update_interval"
+            android:summary="@string/pref_max_update_interval_summary"
+            android:title="@string/pref_max_update_interval_title" />
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
+            android:key="limit_update_accuracy"
+            android:summary="@string/pref_limit_update_accuracy_summary"
+            android:title="@string/pref_limit_update_accuracy_title" />
+        <ListPreference
+            android:defaultValue="2000"
+            android:entries="@array/accuracyLabels"
+            android:entryValues="@array/accuracyValues"
+            android:key="max_update_accuracy"
+            android:summary="@string/pref_max_update_accuracy_summary"
+            android:title="@string/pref_max_update_accuracy_title" />
+        
+        <CheckBoxPreference
+            android:defaultValue="false"
+            android:enabled="true"
             android:key="update_on_wifi_only"
             android:summary="@string/pref_update_on_wifi_only_summary"
             android:title="@string/pref_update_on_wifi_only_title" />

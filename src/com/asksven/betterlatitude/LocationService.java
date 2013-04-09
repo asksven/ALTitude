@@ -44,9 +44,11 @@ import android.os.Bundle;
 import android.os.IBinder;
 import android.preference.PreferenceManager;
 import android.util.Log;
+
 import com.asksven.android.common.location.GeoUtils;
 import com.asksven.android.common.networkutils.DataNetwork;
 import com.asksven.android.common.utils.DateUtils;
+import com.asksven.android.common.utils.MathUtils;
 import com.asksven.betterlatitude.credentialstore.CredentialStore;
 import com.asksven.betterlatitude.credentialstore.SharedPreferencesCredentialStore;
 import com.asksven.betterlatitude.localeplugin.Constants;
@@ -108,6 +110,12 @@ public class LocationService extends Service implements LocationListener, OnShar
 	/** the current location (is geo is on) */
 	String m_strCurrentLocation  = "";
 	
+	/** the last updated location */
+	Location m_lastUpdatedLoc = null;
+
+	/** the time of last update */
+	long m_lastUpdatedTime = 0;
+
 	/** precision for current location manager */
 	private int m_iIterval = 0;
 	private int m_iAccuracy = 0;
@@ -444,27 +452,93 @@ public class LocationService extends Service implements LocationListener, OnShar
 	public void onLocationChanged(Location location)
 	{
     	Logger.i(TAG, "onLocationChanged called", this);
-    	
+		SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+
     	// we may have QoS: as the location was just updated we need to reset the alarm counter
     	setQosAlarm();
     	
-		m_locationStack.add(location);
+    	// if we are not in quick change mode the we need to check if there are limitiations
+    	// to the update frequency / distance to be applied
+    	if (isQuickChangeRunning())
+    	{
+    		m_locationStack.add(location);
+    	}
+    	else
+    	{
+    		// check if we are limiting the update frequency
+    		boolean intervalBelowLimit = false;
+    		boolean distanceBelowLimit = false;
+    		
+    		if (prefs.getBoolean("limit_update_interval", false))
+    		{
+    			long interval = (System.currentTimeMillis() - m_lastUpdatedTime) / 1000 / 60;
+    	    	int iMinInterval = 0;
+    	    	try
+    	    	{
+    	    		iMinInterval = Integer.valueOf(prefs.getString("max_update_interval", "0"));
+    	    		
+    	    	}
+    	    	catch (Exception e)
+    	    	{
+    	    		Log.e(TAG, "An error occured while reading quick action preferences");
+    	    	}
+    	    	
+    	    	Log.i(TAG, "Time since last update [Min.]: " + interval);
+    	    
+    	    	if (interval < iMinInterval)
+    	    	{
+    	    		Log.i(TAG, "Interval is below limit");
+    	    		intervalBelowLimit = true;
+    	    	}
+    		}
+    		
+    		// check if we are limiting distance between updates
+    		if (prefs.getBoolean("limit_update_accuracy", false))
+    		{
+    			if (m_lastUpdatedLoc != null)
+    			{
+	    			double distance = MathUtils.getDistanceGreatCircle(m_lastUpdatedLoc, location);
+	    			Log.i(TAG, "Distance from last update: " + distance);
+	    	    	int iMinDistance = 0;
+	    	    	try
+	    	    	{    	        	
+	    	    		iMinDistance = Integer.valueOf(prefs.getString("max_update_accuracy", "0"));
+	    	    	}
+	    	    	catch (Exception e)
+	    	    	{
+	    	    		Log.e(TAG, "An error occured while reading quick action preferences");
+	    	    	}
+	    	    	
+	    	    	if (distance < iMinDistance)
+	    	    	{
+	    	    		Log.i(TAG, "Distance is below limit");
+	    	    		distanceBelowLimit = true;
+	    	    	}
+    			}
+    			
+    		}
+    		
+    		// if both values are below limit we don't update
+    		if (distanceBelowLimit && intervalBelowLimit)
+    		{
+    			// do nothing
+    			Log.i(TAG, "Both interval and distance are below limits: location will not be queued");
+    		}
+    		else
+    		{
+    			Log.i(TAG, "Interval or distance is above limit: location is being queued");    			
+        		m_locationStack.add(location);    			
+    		}
+
+    	}
 
 		try
 		{
-//			if (!LatitudeApi.useAccountManager(this))
-//			{
-				if (!updateLatitude())
-				{	
-					Logger.i(TAG, "Adding location to stack. The stack has " + m_locationStack.size() + " entries.", this);
-					notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
-				}
-//			}
-//			else
-//			{
-//				// headless call
-//				LatitudeApi.getInstance(this).useAccount(null, false);
-//			}
+			if (!updateLatitude())
+			{	
+				Logger.i(TAG, "Location added to stack. The stack has " + m_locationStack.size() + " entries.", this);
+				notifyStatus(m_locationStack.size() + " " + getString(R.string.locations_buffered));
+			}
 		}
 		catch (Exception e)
 		{
@@ -688,10 +762,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 			
 		    final Latitude latitude = new Latitude(transport, accessProtectedResource, jsonFactory);
 		    
-//		    final Latitude.Builder builder = Latitude.builder(transport, jsonFactory);
-//		    builder.setHttpRequestInitializer(accessProtectedResource);
-//		    builder.setApplicationName("ALTitude");
-//			final Latitude latitude = builder.build();
 		    latitude.apiKey = OAuth2ClientConstants.API_KEY;
 		    
 		    // empty the stack and update all locations with the right timestamp
@@ -713,7 +783,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 			    	}
 
 				    LatitudeCurrentlocationResourceJson currentLocation = new LatitudeCurrentlocationResourceJson();
-//			    	com.google.api.services.latitude.model.Location currentLocation = new com.google.api.services.latitude.model.Location();
 				    currentLocation.set("latitude", location.getLatitude());
 				    currentLocation.set("longitude", location.getLongitude());
 				    currentLocation.set("timestampMs", location.getTime());
@@ -725,8 +794,11 @@ public class LocationService extends Service implements LocationListener, OnShar
 
 				    if (myInsert != null)
 				    {
-				    	//myInsert.execute();
 				    	new UpdateLatitudeTask().execute(myInsert);
+				    	
+				    	// write down the last updated location and update time
+				    	m_lastUpdatedLoc 	= location;
+				    	m_lastUpdatedTime 	= System.currentTimeMillis();
 				    }
 				    else
 				    {
@@ -739,6 +811,7 @@ public class LocationService extends Service implements LocationListener, OnShar
 		    	}
 		    	
 		    	// if we got here all updates were OK, delete the stack
+		    	
 		    	notifyCurrentLocation();
 		    	m_locationStack.clear();
 		    }
@@ -1030,6 +1103,33 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 	
 	/**
+	 * Reset (void) any running quick action
+	 */
+	public void resetQuickChange()
+	{
+		Logger.i(TAG, "resetQuickChange called", this);
+		// check if there is an intent pending
+		Intent intent = new Intent(this, AlarmReceiver.class);
+	
+		PendingIntent sender = PendingIntent.getBroadcast(this, QUICK_ACTION,
+				intent, PendingIntent.FLAG_UPDATE_CURRENT);
+	
+		if (sender != null)
+		{
+			// Get the AlarmManager service
+			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
+			am.cancel(sender);
+		}
+		// reset to pref values
+		registerLocationListener();
+		bQuickChangeRunning = false;
+		m_iIntervalIndex = 0;
+		m_iAccuracyIndex = 0;
+		m_iDurationIndex = 0;
+	
+	}
+
+	/**
 	 * Start a quick change with the default values 
 	 */
 	public void setQuickChange()
@@ -1052,33 +1152,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 
     	// start a quick setting with defaults
 		this.setQuickChange(iInterval, iAccuracy, iDuration);
-
-	}
-
-	/**
-	 * Reset (void) any running quick action
-	 */
-	public void resetQuickChange()
-	{
-		Logger.i(TAG, "resetQuickChange called", this);
-		// check if there is an intent pending
-		Intent intent = new Intent(this, AlarmReceiver.class);
-
-		PendingIntent sender = PendingIntent.getBroadcast(this, QUICK_ACTION,
-				intent, PendingIntent.FLAG_UPDATE_CURRENT);
-
-		if (sender != null)
-		{
-			// Get the AlarmManager service
-			AlarmManager am = (AlarmManager) getSystemService(ALARM_SERVICE);
-			am.cancel(sender);
-		}
-		// reset to pref values
-		registerLocationListener();
-		bQuickChangeRunning = false;
-		m_iIntervalIndex = 0;
-		m_iAccuracyIndex = 0;
-		m_iDurationIndex = 0;
 
 	}
 
@@ -1193,7 +1266,10 @@ public class LocationService extends Service implements LocationListener, OnShar
 	    }
 	    Log.i(TAG, "isMyServiceRunning confirmed that service is not running");
 	    return false;
-	}
+	}/**
+	 * 
+	 */
+
 	
 	/**
 	 * Adds an alarm to schedule a wakeup to retrieve the current location
@@ -1264,9 +1340,6 @@ public class LocationService extends Service implements LocationListener, OnShar
 			am.cancel(sender);
 		}
 	}
-
-
-
 
 }
 
