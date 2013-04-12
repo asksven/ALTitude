@@ -14,18 +14,18 @@ public final class R {
 		public static final int buttonMarket = 0x7f050060;
 	}
 	public static final class string {
-		public static final int hello = 0x7f0a000f;
-		public static final int text_dialog_rate = 0x7f0a0015;
-		public static final int label_button_rate = 0x7f0a0013;
-		public static final int twitter_link = 0x7f0a0016;
-		public static final int dialog_dismiss = 0x7f0a0019;
-		public static final int app_pname = 0x7f0a0011;
-		public static final int market_link = 0x7f0a0017;
-		public static final int label_button_remind = 0x7f0a0012;
-		public static final int label_button_no = 0x7f0a0014;
-		public static final int dialog_follow_me = 0x7f0a001a;
-		public static final int dialog_apps = 0x7f0a0018;
-		public static final int app_name = 0x7f0a0010;
+		public static final int hello = 0x7f070014;
+		public static final int text_dialog_rate = 0x7f07001a;
+		public static final int label_button_rate = 0x7f070018;
+		public static final int twitter_link = 0x7f07001b;
+		public static final int dialog_dismiss = 0x7f07001e;
+		public static final int app_pname = 0x7f070016;
+		public static final int market_link = 0x7f07001c;
+		public static final int label_button_remind = 0x7f070017;
+		public static final int label_button_no = 0x7f070019;
+		public static final int dialog_follow_me = 0x7f07001f;
+		public static final int dialog_apps = 0x7f07001d;
+		public static final int app_name = 0x7f070015;
 	}
 	public static final class layout {
 		public static final int readmewebview = 0x7f03001e;
