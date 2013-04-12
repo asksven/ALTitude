@@ -38,7 +38,7 @@ import android.util.Log;
  * @author sven
  *
  */
-public class PreferencesActivity extends SherlockPreferenceActivity implements OnSharedPreferenceChangeListener
+public class PreferencesActivity extends SherlockPreferenceActivity
 {
 	private static String TAG = "PreferencesActivity";
 	/**
@@ -96,44 +96,4 @@ public class PreferencesActivity extends SherlockPreferenceActivity implements O
 			}
 		}
 	}
-	
-    public void onSharedPreferenceChanged(SharedPreferences prefs, String key)
-    {
-    	
-    	// make sure that only one of QoS and max update frequency is selected
-    	if (key.equals("limit_update_interval"))
-    	{
-    		// if this value was just turned on make sure "force_interval" gets disabled
-    		if (prefs.getBoolean("limit_update_interval", true))
-    		{
-				if (prefs.getBoolean("force_interval", true))
-				{
-	    	        SharedPreferences.Editor editor = prefs.edit();
-	    	        editor.putBoolean("force_interval", false);
-	    	        editor.commit();
-	    	        CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("wifi_on_when_screen_on");
-	    	        checkboxPref.setChecked(false);
-	    	        
-	    		}
-    		}
-    	}
-
-    	if (key.equals("force_interval"))
-    	{
-    		// if this value was just turned o make sure "limit_update_interval" gets disabled
-    		if (prefs.getBoolean("force_interval", true))
-    		{
-    			if (prefs.getBoolean("limit_update_interval", true))
-	    		{
-	    	        SharedPreferences.Editor editor = prefs.edit();
-	    	        editor.putBoolean("limit_update_interval", false);
-	    	        editor.commit();
-	    	        CheckBoxPreference checkboxPref = (CheckBoxPreference) getPreferenceManager().findPreference("wifi_on_when_screen_unlock");
-	    	        checkboxPref.setChecked(false);
-	    		}
-    		}
-    	}
-
-    }
-
 }
