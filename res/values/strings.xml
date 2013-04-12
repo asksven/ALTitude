@@ -26,7 +26,7 @@
     <string name="pref_update_interval_summary">How often will the service update Latitude</string>
     <string name="pref_update_accuracy_title">Accuracy</string>
     <string name="pref_update_accuracy_summary">With what precision will the service update Latitude</string>
-    <string name="pref_update_on_wifi_only_title">Update Latitude only when on Wifi</string>
+    <string name="pref_update_on_wifi_only_title">Update only when on Wifi</string>
     <string name="pref_update_on_wifi_only_summary">Update Latitude only when a wifi connection is available (does not affect data collection)</string>
     <string name="pref_update_duration_title">Duration</string>
     <string name="pref_update_duration_summary">How long will the change last</string>
