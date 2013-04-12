@@ -49,7 +49,7 @@ import com.twofortyfouram.locale.BreadCrumber;
 /**
  * This is the "Edit" activity for a Locale Plug-in.
  */
-public final class EditLocActivity extends Activity implements AdapterView.OnItemSelectedListener
+public final class EditLocActivity extends AbstractPluginActivity implements AdapterView.OnItemSelectedListener
 {
 
 	static final String TAG = "CommandCenterStatsLocalePlugin:EditLocActivity"; 
@@ -202,138 +202,7 @@ public final class EditLocActivity extends Activity implements AdapterView.OnIte
         super.finish();
     }
 
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onCreateOptionsMenu(final Menu menu)
-    {
-        super.onCreateOptionsMenu(menu);
 
-        /*
-         * inflate the default menu layout from XML
-         */
-        getMenuInflater().inflate(com.twofortyfouram.locale.platform.R.menu.twofortyfouram_locale_help_save_dontsave, menu);
-
-        /*
-         * Set up the breadcrumbs for the ActionBar
-         */
-        if (Build.VERSION.SDK_INT >= 11)
-        {
-            /*
-             * Lazily instantiated class ensures compatibility with Dalvik on Android 1.6 devices
-             */
-            new Runnable()
-            {
-                @TargetApi(11)
-				public void run()
-                {
-                    getActionBar().setSubtitle(BreadCrumber.generateBreadcrumb(getApplicationContext(), getIntent(), getString(R.string.plugin_name)));
-                }
-            }.run();
-        }
-        /*
-         * Dynamically load the home icon from the host package for Ice Cream Sandwich or later. Note that this leaves Honeycomb
-         * devices without the host's icon in the ActionBar, but eventually all Honeycomb devices should receive an OTA to Ice
-         * Cream Sandwich so this problem will go away.
-         */
-        if (Build.VERSION.SDK_INT >= 14)
-        {
-            /*
-             * Lazily instantiated class ensures compatibility with Dalvik on Android 1.6 devices
-             */
-            new Runnable()
-            {
-                @TargetApi(14)
-				public void run()
-                {
-                    getActionBar().setDisplayHomeAsUpEnabled(true);
-
-                    /*
-                     * Note: There is a small TOCTOU error here, in that the host could be uninstalled right after launching the
-                     * plug-in. That would cause getApplicationIcon() to return the default application icon. It won't fail, but
-                     * it will return an incorrect icon.
-                     *
-                     * In practice, the chances that the host will be uninstalled while the plug-in UI is running are very slim.
-                     */
-                    try
-                    {
-                        getActionBar().setIcon(getPackageManager().getApplicationIcon(getCallingPackage()));
-                    }
-                    catch (final NameNotFoundException e)
-                    {
-                        if (Constants.IS_LOGGABLE)
-                        {
-                            Log.w(Constants.LOG_TAG, "An error occurred loading the host's icon", e); //$NON-NLS-1$
-                        }
-                    }
-                }
-            }.run();
-        }
-
-        return true;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public boolean onMenuItemSelected(final int featureId, final MenuItem item)
-    {
-        final int id = item.getItemId();
-
-        /*
-         * Royal pain in the butt to support the home button in SDK 11's ActionBar
-         */
-        if (Build.VERSION.SDK_INT >= 11)
-        {
-            try
-            {
-                if (id == android.R.id.class.getField("home").getInt(null)) //$NON-NLS-1$
-                {
-                    finish();
-                    return true;
-                }
-            }
-            catch (final NoSuchFieldException e)
-            {
-                // this should never happen under API 11 or greater
-                throw new RuntimeException(e);
-            }
-            catch (final IllegalAccessException e)
-            {
-                // this should never happen under API 11 or greater
-                throw new RuntimeException(e);
-            }
-        }
-
-        if (id == com.twofortyfouram.locale.platform.R.id.twofortyfouram_locale_menu_help)
-        {
-            try
-            {
-                startActivity(new Intent(Intent.ACTION_VIEW).setData(Uri.parse(HELP_URL)));
-            }
-            catch (final Exception e)
-            {
-                Toast.makeText(getApplicationContext(), com.twofortyfouram.locale.platform.R.string.twofortyfouram_locale_application_not_available, Toast.LENGTH_LONG).show();
-            }
-
-            return true;
-        }
-        else if (id == com.twofortyfouram.locale.platform.R.id.twofortyfouram_locale_menu_dontsave)
-        {
-            mIsCancelled = true;
-            finish();
-            return true;
-        }
-        else if (id == com.twofortyfouram.locale.platform.R.id.twofortyfouram_locale_menu_save)
-        {
-            finish();
-            return true;
-        }
-
-        return super.onOptionsItemSelected(item);
-    }
     
 	/**
 	 * Take the change of selection from the spinners into account and refresh the ListView
