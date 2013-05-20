@@ -365,8 +365,8 @@ public class MainActivity extends SherlockActivity
 	    final TableLayout statusLayout = (TableLayout) findViewById(R.id.layoutStatus);
 	    if (!LatitudeApi.hasCredentials(this))
 	    {
-	    	buttonLogon.setVisibility(Button.VISIBLE);
-	    	statusLayout.setVisibility(View.INVISIBLE);
+	    	buttonLogon.setVisibility(View.VISIBLE);
+	    	statusLayout.setVisibility(View.GONE);
 	    	if (myService != null)
 	    	{
 	    		myService.setStatus(AltitudeConstants.getInstance(this).STATUS_NOT_LOGGED_IN);
@@ -383,7 +383,7 @@ public class MainActivity extends SherlockActivity
 	    }
 	    else
 	    {
-	    	buttonLogon.setVisibility(Button.INVISIBLE);
+	    	buttonLogon.setVisibility(View.GONE);//Button.INVISIBLE);
 	    	statusLayout.setVisibility(View.VISIBLE);
 	    	if (myService != null)
 	    	{
