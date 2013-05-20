@@ -543,7 +543,15 @@ public class MainActivity extends SherlockActivity
 	        	LocationService myService = LocationService.getInstance();
 	        	if (myService != null)
 	        	{
-	        		statusTextView.setText(myService.getStatus());
+	        		String address = myService.getAddress();
+	        		if (!address.equals(""))
+	        		{
+	        			statusTextView.setText(myService.getStatus() + ": " + address);
+	        		}
+	        		else
+	        		{ 
+	        			statusTextView.setText(myService.getStatus());
+	        		}
 	        	}
 	        	else
 	        	{

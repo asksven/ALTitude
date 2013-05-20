@@ -948,6 +948,15 @@ public class LocationService extends Service implements LocationListener, OnShar
 	}
 
 	/**
+	 * Returns the last known location address (if enabled)
+	 * @return the last known address
+	 */
+	public String getAddress()
+	{
+		return m_strCurrentLocation;
+	}
+
+	/**
 	 * Returns until when the quick change is active
 	 * @return
 	 */
