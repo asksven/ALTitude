@@ -30,7 +30,7 @@
 	    android:layout_height="wrap_content"/>
 	<EditText
 	    android:text=""
-	    android:id="@+id/EditLongitude"
+	    android:id="@+id/EditLatitude"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:editable="true"/>
@@ -43,7 +43,7 @@
 	    android:layout_height="wrap_content"/>
 	<EditText
 	    android:text=""
-	    android:id="@+id/EditLatitude"
+	    android:id="@+id/EditLongitude"
 	    android:layout_width="fill_parent"
 	    android:layout_height="wrap_content"
 	    android:editable="true"/>
