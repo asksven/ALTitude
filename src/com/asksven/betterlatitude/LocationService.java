@@ -599,6 +599,7 @@ public class LocationService extends Service implements LocationListener, OnShar
     	Location here = m_locationManager.getLastKnownLocation(m_strLocProvider);
     	here.setLatitude(latitude);
     	here.setLongitude(longitude);
+    	here.setAccuracy(10f);
     	
     	// we need to change the timestamp to "now"
     	long now =System.currentTimeMillis();
