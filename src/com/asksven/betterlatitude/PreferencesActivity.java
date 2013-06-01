@@ -60,40 +60,5 @@ public class PreferencesActivity extends SherlockPreferenceActivity
 
 		super.onCreate(savedInstanceState);
 		addPreferencesFromResource(R.xml.preferences);
-		
-		// disable all LocationListener prefs in free version
-		if (!Configuration.isFullVersion(this))
-		{
-			try
-			{
-				findPreference("notify_errors").setEnabled(false);
-				findPreference("start_on_boot").setEnabled(false);
-				findPreference("update_interval").setEnabled(false);
-				findPreference("update_interval").setSummary("Latitude update interval: 15 minutes");
-				findPreference("update_accuracy").setEnabled(false);
-				findPreference("update_accuracy").setSummary("Latitude update accuracy: 2 Km");
-				findPreference("map_loc_provider").setEnabled(false);
-				findPreference("map_loc_provider").setSummary("Map location provider: cell network");
-				findPreference("map_update_interval").setEnabled(false);
-				findPreference("map_update_interval").setSummary("Map update interval: 15 minutes");
-				findPreference("map_update_accuracy").setEnabled(false);
-				findPreference("map_update_accuracy").setSummary("Map update accuracy: 2 Km");
-				findPreference("quick_update_interval").setEnabled(false);
-				findPreference("quick_update_accuracy").setEnabled(false);
-				findPreference("quick_update_duration").setEnabled(false);
-				findPreference("use_account_manager").setEnabled(false);
-				findPreference("update_on_wifi_only").setEnabled(false);
-				findPreference("limit_update_accuracy").setEnabled(false);
-				findPreference("limit_update_interval").setEnabled(false);
-				findPreference("max_update_accuracy").setEnabled(false);
-				findPreference("max_update_interval").setEnabled(false);
-
-
-			}
-			catch (Exception e)
-			{
-				Log.e(TAG, "An error occured while loading the preferences.");
-			}
-		}
 	}
 }
