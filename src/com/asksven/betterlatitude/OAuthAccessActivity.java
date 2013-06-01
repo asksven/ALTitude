@@ -1,5 +1,5 @@
 /*
-1 * Copyright (C) 2011 asksven
+ * Copyright (C) 2011 asksven
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -85,32 +85,22 @@ public class OAuthAccessActivity extends Activity
             	
             	if (url.startsWith(OAuth2ClientConstants.REDIRECT_URI))
             	{
-//            		try
-//            		{
-						
-            			if (url.indexOf("code=")!=-1)
-            			{
-            			
-	            			String code = extractCodeFromUrl(url);
-	            			Object[] myArgs = {code, view};
-							new GetCredentialsTask().execute(myArgs);
+        			if (url.indexOf("code=")!=-1)
+        			{
+        			
+            			String code = extractCodeFromUrl(url);
+            			Object[] myArgs = {code, view};
+						view.setVisibility(View.INVISIBLE);
 
-//							view.setVisibility(View.INVISIBLE);
-//				  		    startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
-            			}
-            			else if (url.indexOf("error=")!=-1)
-            			{
-            				view.setVisibility(View.INVISIBLE);
-            				new SharedPreferencesCredentialStore(prefs).clearCredentials();
-            				startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
-            			}
+						new GetCredentialsTask().execute(myArgs);
+        			}
+        			else if (url.indexOf("error=")!=-1)
+        			{
+        				view.setVisibility(View.INVISIBLE);
+        				new SharedPreferencesCredentialStore(prefs).clearCredentials();
+        				startActivity(new Intent(OAuthAccessActivity.this,MainActivity.class));
+        			}
             			
-//					}
-//            		catch (IOException e)
-//            		{
-//						e.printStackTrace();
-//					}
-
             	}
                 System.out.println("onPageFinished : " + url);
   		      
