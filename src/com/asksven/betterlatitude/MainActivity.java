@@ -126,18 +126,6 @@ public class MainActivity extends SherlockActivity
 			Log.e(TAG, "Exception: " + e.getMessage());
 		}
 
-		// detect free/full version and enable/disable ads
-		if (!Configuration.isFullVersion(this))
-		{
-			AdView adView = (AdView)this.findViewById(R.id.adView);
-		    adView.loadAd(new AdRequest());
-		}
-		
-
-	    // Initiate a generic request to load it with an ad
-        // retrieve the version name and display it
-		
-		
         try
         {
         	PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
@@ -145,18 +133,9 @@ public class MainActivity extends SherlockActivity
         	TextView nameTextView = (TextView) findViewById(R.id.textViewName);
         	TextView hintTextView = (TextView) findViewById(R.id.textViewHint);
         	
-        	if (Configuration.isFullVersion(this))
-    		{
-        		nameTextView.setText("ALTitude full");
-        		hintTextView.setText("");
-        		Log.i(TAG, "full version was detected");
-    		}
-        	else
-        	{
-        		nameTextView.setText("ALTitude free");
-        		hintTextView.setText(getString(R.string.full_version_available));
-        		Log.i(TAG, "free version was detected");
-        	}
+    		nameTextView.setText("ALTitude full");
+    		hintTextView.setText("");
+    		Log.i(TAG, "full version was detected");
         	
         	versionTextView.setText(pinfo.versionName);
         }

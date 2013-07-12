@@ -36,7 +36,7 @@ public class Configuration {
 	final static String TAG = "Configuration";
 
 	public static boolean isFullVersion(Context ctx) {
-		return (getVersion(ctx) >= 0);
+		return true; // (getVersion(ctx) >= 0);
 	}
 
 	private static int getVersion(Context ctx) {
