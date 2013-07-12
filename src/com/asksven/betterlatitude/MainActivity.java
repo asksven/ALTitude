@@ -126,6 +126,9 @@ public class MainActivity extends SherlockActivity
 			Log.e(TAG, "Exception: " + e.getMessage());
 		}
 
+		AdView adView = (AdView)this.findViewById(R.id.adView);
+	    adView.loadAd(new AdRequest());
+	    
         try
         {
         	PackageInfo pinfo = getPackageManager().getPackageInfo(getPackageName(), 0);
